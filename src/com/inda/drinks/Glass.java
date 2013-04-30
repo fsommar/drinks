@@ -1,5 +1,5 @@
 package com.inda.drinks;
 
-public class Drink {
+public class Glass {
 
 }

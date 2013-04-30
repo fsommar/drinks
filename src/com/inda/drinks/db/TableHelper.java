@@ -4,12 +4,16 @@ import java.util.prefs.Preferences;
 
 import com.inda.drinks.exceptions.VersionMismatchException;
 
-public abstract class DBHelper {
-	protected DBHelper(DBWrapper db, String name, int version)
+/**
+ * Should allow for easier management of multiple tables.
+ * @author Fredrik Sommar
+ */
+public abstract class TableHelper {
+	protected TableHelper(DbWrapper db, String name, int version)
 			throws VersionMismatchException {
 		Preferences prefs = Preferences.userRoot().node(name);
-		final boolean b = prefs.getBoolean("exists", false);
-		if (!b) {
+		final boolean exists = prefs.getBoolean("exists", false);
+		if (!exists) {
 			onCreate(db);
 			prefs.putBoolean("exists", true);
 		}
@@ -19,10 +23,10 @@ public abstract class DBHelper {
 					"Database version %d is greater than previous, %d", n, version));
 		} else if (n < version) {
 			onUpgrade(db, version, n);
-			prefs.putInt("version", version);
 		}
+		prefs.putInt("version", version);
 	}
 
-	public abstract void onCreate(DBWrapper db);
-	public abstract void onUpgrade(DBWrapper db, int from, int to);
+	public abstract void onCreate(DbWrapper db);
+	public abstract void onUpgrade(DbWrapper db, int from, int to);
 }
