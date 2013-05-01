@@ -1,10 +1,11 @@
 package com.inda.drinks.db.tables;
 
-import com.inda.drinks.db.TableHelper;
 import com.inda.drinks.db.DbWrapper;
+import com.inda.drinks.db.TableHelper;
 import com.inda.drinks.exceptions.VersionMismatchException;
+import com.inda.drinks.properties.Category;
 
-public class Categories extends TableHelper {
+public class Categories extends TableHelper<Category> {
 	private static final int TABLE_VERSION = 1;
 	private static final String TABLE_NAME = "Categories";
 	
@@ -13,13 +14,19 @@ public class Categories extends TableHelper {
 	}
 
 	@Override
-	public void onCreate(DbWrapper db) {
+	public void onCreate() {
 //		db.execSQL("");
 	}
 
 	@Override
-	public void onUpgrade(DbWrapper db, int from, int to) {
+	public void onUpgrade(int from, int to) {
 		// Nothing here yet
+	}
+
+	@Override
+	public void insert(Category value) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

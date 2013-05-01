@@ -17,8 +17,9 @@ public class H2Db implements DbWrapper {
 	}
 
 	@Override
-	public void execute(String sql) throws SQLException {
+	public ResultSet execute(String sql) throws SQLException {
 		getStatement().execute(sql);
+		return getStatement().getResultSet();
 	}
 	
 	@Override

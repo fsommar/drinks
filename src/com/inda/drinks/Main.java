@@ -15,12 +15,17 @@ public class Main {
 			db.execute("DROP TABLE IF EXISTS Test;");
 			db.execute("CREATE TABLE Test (id INT IDENTITY PRIMARY KEY,"+
 					" lastName VARCHAR(255) NOT NULL, firstName VARCHAR(255));");
-			PreparedStatement prepare = db.prepare("INSERT INTO Test (lastName, firstName) VALUES(?, ?);");
-			prepare.setString(1, "Sommar");
+			PreparedStatement prepare = db.prepare("INSERT INTO Test VALUES(default, ?, ?);");
+			prepare.setString(1, "Wikingsson");
 			prepare.setString(2, "Fredrik");
+			prepare.executeUpdate();
+			prepare.setString(1, "Reinfeldt");
+			prepare.executeUpdate();
+			prepare.setString(2, "Filippa");
 			prepare.executeUpdate();
 			ResultSet result = db.query("SELECT * FROM Test;");
 			System.out.println("Table: "+result.getMetaData().getTableName(1));
+			System.out.println("Schema: "+result.getMetaData().getSchemaName(1));
 			for (int i = 1; i <= result.getMetaData().getColumnCount(); i++) {
 				System.out.println("Column "+i+" "+result.getMetaData().getColumnName(i));
 			}
@@ -28,15 +33,12 @@ public class Main {
 				String fname = result.getString("firstName");
 				String lname = result.getString("lastName");
 				int id = result.getInt("id");
-				System.out.println("["+id+"] " +fname + " " +lname);
+				System.out.println("["+id+"] " +lname + " | " +fname);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			db.close();
 		}
-
-		
 	}
-
 }

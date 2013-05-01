@@ -1,5 +1,25 @@
 package com.inda.drinks.properties;
 
-public class Glass {
+/**
+ * 
+ * @author Fredrik Sommar
+ * @version database 1
+ */
+public enum Glass {
+	LOWBALL("lowball"), HIGHBALL("highball");
 
+	private String s;
+
+	private Glass(String s) {
+		this.s = s;
+	}
+
+	public int getID() {
+		return ordinal() + 1;
+	}
+
+	@Override
+	public String toString() {
+		return s;
+	}
 }
