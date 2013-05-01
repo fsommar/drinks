@@ -14,7 +14,7 @@ public class VolumeUnits extends TableHelper {
 
 	@Override
 	public void onCreate(DbWrapper db) {
-		db.execSQL("");
+//		db.execSQL("");
 	}
 
 	@Override

@@ -14,7 +14,7 @@ public class Recipes extends TableHelper {
 
 	@Override
 	public void onCreate(DbWrapper db) {
-		db.execSQL("");
+//		db.execSQL("");
 	}
 
 	@Override

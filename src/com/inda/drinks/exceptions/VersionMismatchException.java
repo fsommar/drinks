@@ -1,6 +1,8 @@
 package com.inda.drinks.exceptions;
 
-public class VersionMismatchException extends DatabaseException {
+import java.sql.SQLException;
+
+public class VersionMismatchException extends SQLException {
 
 	public VersionMismatchException(String s) {
 		super(s);
