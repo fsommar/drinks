@@ -33,6 +33,7 @@ public class Recipes extends TableHelper<Recipe> {
 		insert.setInt(3, e.getGlass().getID());
 		insert.setInt(4, e.getContent().getID());
 		// TODO: insert Content as well
+		// SELECT MAX(id) FROM <TABLE_NAME>;
 		insert.executeUpdate();
 	}
 
