@@ -27,8 +27,8 @@ public class Recipe {
 	}
 
 	/**
-	 * 
-	 * @return -1 if failed.
+	 * Time complexity: O(n) where n is the number of ingredients.
+	 * @return -1 if failed, else ABV in percent.
 	 */
 	public double calculateABV() {
 		double n = 0;

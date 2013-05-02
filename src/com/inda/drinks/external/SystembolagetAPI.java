@@ -14,7 +14,7 @@ import com.inda.drinks.tools.IngredientFactory;
 import com.inda.drinks.tools.Web;
 import com.inda.drinks.tools.XML;
 
-public class Systembolaget {
+public class SystembolagetAPI {
 	public static final String URL = "http://www.systembolaget.se/Assortment.aspx?Format=Xml";
 	private static File file = new File("data/systembolaget.xml");
 

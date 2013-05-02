@@ -8,13 +8,13 @@ import com.inda.drinks.db.TableHelper;
 import com.inda.drinks.properties.Glass;
 
 public class Glasses extends TableHelper<Glass> {
-	private static final int TABLE_VERSION = 1;
-	private static final String TABLE_NAME = "Glasses";
+	public static final String TABLE_NAME = "Glasses";
+	public static final int TABLE_VERSION = 1;
 	private PreparedStatement insert;
-	
+
 	public Glasses(DbWrapper db) throws SQLException {
 		super(db, TABLE_NAME, TABLE_VERSION);
-		insert = db.prepare("INSERT INTO "+TABLE_NAME+" VALUES(?, ?);");
+		insert = db.prepare("INSERT INTO " + TABLE_NAME + " VALUES(?, ?);");
 	}
 
 	@Override
@@ -28,8 +28,9 @@ public class Glasses extends TableHelper<Glass> {
 
 	@Override
 	public void onUpgrade(int from, int to) throws SQLException {
-		db.execute("DROP TABLE IF EXISTS "+TABLE_NAME+";");
-		onCreate();
+		// First make sure all references are intact
+		// db.execute("DROP TABLE IF EXISTS "+TABLE_NAME+";");
+		// onCreate();
 	}
 
 	@Override

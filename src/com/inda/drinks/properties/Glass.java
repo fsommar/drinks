@@ -1,7 +1,6 @@
 package com.inda.drinks.properties;
 
 /**
- * 
  * @author Fredrik Sommar
  * @version database 1
  */
@@ -14,6 +13,9 @@ public enum Glass {
 		this.s = s;
 	}
 
+	/**
+	 * @return the ID of the glass in the Glasses table.
+	 */
 	public int getID() {
 		return ordinal() + 1;
 	}

@@ -6,15 +6,16 @@ import java.sql.SQLException;
 import java.text.ParseException;
 
 import com.inda.drinks.db.H2Db;
-import com.inda.drinks.external.Systembolaget;
+import com.inda.drinks.external.SystembolagetAPI;
+import com.inda.drinks.tools.Tables;
 
 public class Main {
 
 	public static void main(String[] args) throws ParseException {
-		// testDB();
+		testDB();
 		try {
-			// Systembolaget.fetchXML();
-			// Systembolaget.parseXML();
+			// SystembolagetAPI.fetchXML();
+			// SystembolagetAPI.parseXML();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -37,20 +38,9 @@ public class Main {
 			prepare.setString(2, "Filippa");
 			prepare.executeUpdate();
 			ResultSet result = db.query("SELECT * FROM Test;");
-			System.out
-					.println("Table: " + result.getMetaData().getTableName(1));
-			System.out.println("Schema: "
-					+ result.getMetaData().getSchemaName(1));
-			for (int i = 1; i <= result.getMetaData().getColumnCount(); i++) {
-				System.out.println("Column " + i + " "
-						+ result.getMetaData().getColumnName(i));
-			}
-			while (result.next()) {
-				String fname = result.getString("firstName");
-				String lname = result.getString("lastName");
-				int id = result.getInt("id");
-				System.out.println("[" + id + "] " + lname + " | " + fname);
-			}
+			System.out.println(Tables.getTableInfo(result));
+			System.out.println(Tables.getColumnInfo(result));
+			System.out.println(Tables.getRowInfo(result));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
