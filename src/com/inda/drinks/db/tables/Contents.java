@@ -8,7 +8,6 @@ import com.inda.drinks.db.DbWrapper;
 import com.inda.drinks.db.TableHelper;
 import com.inda.drinks.properties.Content;
 import com.inda.drinks.properties.Ingredient;
-import com.inda.drinks.properties.Volume;
 
 public class Contents extends TableHelper<Content> {
 	private static final int TABLE_VERSION = 1;
@@ -31,13 +30,11 @@ public class Contents extends TableHelper<Content> {
 
 	@Override
 	public void insert(Content e) throws SQLException {
-		for (Map.Entry<Ingredient, Volume> entry : e.getIngredients().entrySet()) {
+		for (Map.Entry<Ingredient, Integer> entry : e.getIngredients().entrySet()) {
 			Ingredient i = entry.getKey();
-			Volume v = entry.getValue();
 			insert.setInt(1, e.getID());			
 			insert.setInt(2, i.getID());
-			insert.setInt(3, v.getAmount());
-			insert.setInt(4, v.getUnit().getID());
+			insert.setInt(3, entry.getValue());
 			insert.executeUpdate();
 		}
 	}

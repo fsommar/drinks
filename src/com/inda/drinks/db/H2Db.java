@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.prefs.Preferences;
 
 public class H2Db implements DbWrapper {
 	private Connection conn;

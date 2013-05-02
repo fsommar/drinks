@@ -4,13 +4,13 @@ import java.util.Map;
 
 public class Content {
 	private int id;
-	private Map<Ingredient, Volume> ingredients;
+	private Map<Ingredient, Integer> ingredients;
 
 	public int getID() {
 		return id;
 	}
 	
-	public Map<Ingredient, Volume> getIngredients() {
+	public Map<Ingredient, Integer> getIngredients() {
 		return ingredients;
 	}
 
