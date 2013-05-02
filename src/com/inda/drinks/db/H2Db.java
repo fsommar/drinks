@@ -35,7 +35,7 @@ public class H2Db implements DbWrapper {
 			// Do we want to reveal what kind of driver we are using?
 			throw new SQLException("Unable to instantiate SQL driver.");
 		}
-		conn = DriverManager.getConnection("jdbc:h2:/data/really_unique_name", "usr", "pwd");
+		conn = DriverManager.getConnection("jdbc:h2:file:data/really_unique_name", "usr", "pwd");
 	}
 
 	@Override
