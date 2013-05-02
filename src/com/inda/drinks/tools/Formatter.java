@@ -8,13 +8,13 @@ import java.util.Locale;
 public class Formatter {
 	private static NumberFormat nf;
 	static {
-		nf = NumberFormat.getNumberInstance(Locale.FRENCH);
+		nf = NumberFormat.getNumberInstance(Locale.US);
 		nf.setRoundingMode(RoundingMode.HALF_EVEN);
 		nf.setMaximumFractionDigits(1);
 	}
 
 	public static double oneDecHalfEven(String s) throws ParseException {
-		return (Double) nf.parse(s);
+		return nf.parse(s).doubleValue();
 	}
 	
 	public static double oneDecHalfEven(double d) throws ParseException {
