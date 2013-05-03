@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 
 import com.inda.drinks.db.H2Db;
+import com.inda.drinks.db.tables.Systembolaget;
 import com.inda.drinks.external.SystembolagetAPI;
 import com.inda.drinks.tools.Tables;
 
@@ -14,8 +15,8 @@ public class Main {
 	public static void main(String[] args) throws ParseException {
 		testDB();
 		try {
-			// SystembolagetAPI.fetchXML();
-			// SystembolagetAPI.parseXML();
+//			 SystembolagetAPI.fetchXML();
+			 SystembolagetAPI.parseXML();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

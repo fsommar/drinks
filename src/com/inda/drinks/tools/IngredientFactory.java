@@ -28,7 +28,7 @@ public class IngredientFactory {
 			name = "";
 			subtitle = "";
 			ABV = -1;
-			category = Category.DEFAULT;
+			category = null;
 		}
 
 		public IngredientFactory setName(String name) {
