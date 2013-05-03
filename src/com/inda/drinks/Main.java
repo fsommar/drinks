@@ -5,7 +5,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 
+import com.inda.drinks.db.DbWrapper;
 import com.inda.drinks.db.H2Db;
+import com.inda.drinks.db.tables.Categories;
+import com.inda.drinks.db.tables.Contents;
+import com.inda.drinks.db.tables.Glasses;
+import com.inda.drinks.db.tables.Ingredients;
+import com.inda.drinks.db.tables.Recipes;
 import com.inda.drinks.db.tables.Systembolaget;
 import com.inda.drinks.external.SystembolagetAPI;
 import com.inda.drinks.tools.Tables;
@@ -48,5 +54,17 @@ public class Main {
 			db.close();
 		}
 	}
+	/*
+	private static void registerTables(DbWrapper db) throws SQLException {
+		// TODO: Prettier solution; not static, tables shouldn't be able to have more than one instance (singleton?)
+		Tables.register(new Categories(db));
+		Tables.register(new Contents(db));
+		Tables.register(new Glasses(db));
+		Tables.register(new Ingredients(db));
+		Tables.register(new Recipes(db));
+		Tables.register(new Systembolaget(db));
+		Tables.get(Recipes.class).insert(recipe);
+	}
+	*/
 
 }

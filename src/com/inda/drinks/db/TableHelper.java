@@ -7,11 +7,12 @@ import com.inda.drinks.exceptions.VersionMismatchException;
 
 /**
  * Should allow for easier management of multiple tables.
+ * 
  * @author Fredrik Sommar
  */
-public abstract class TableHelper<T> {
+public abstract class TableHelper<E> {
 	protected final DbWrapper db;
-	
+
 	protected TableHelper(DbWrapper db, String name, int version)
 			throws VersionMismatchException {
 		this.db = db;
@@ -24,12 +25,13 @@ public abstract class TableHelper<T> {
 				prefs.putInt("version", version);
 			} catch (SQLException e) {
 				e.printStackTrace();
-			}			
+			}
 		} else {
 			final int n = prefs.getInt("version", version);
 			if (n > version) {
 				throw new VersionMismatchException(String.format(
-						"Database version %d is greater than previous, %d.", n, version));
+						"Database version %d is greater than previous, %d.", n,
+						version));
 			} else if (n < version) {
 				try {
 					onUpgrade(version, n);
@@ -43,6 +45,8 @@ public abstract class TableHelper<T> {
 	}
 
 	public abstract void onCreate() throws SQLException;
+
 	public abstract void onUpgrade(int from, int to) throws SQLException;
-	public abstract void insert(T e) throws SQLException;
+
+	public abstract void insert(E e) throws SQLException;
 }

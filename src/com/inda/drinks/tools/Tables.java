@@ -3,9 +3,24 @@ package com.inda.drinks.tools;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.Map;
+
+import com.inda.drinks.db.TableHelper;
 
 public class Tables {
+	// Will have to be static for now. Not sure if it's optimal...
+	private static Map<Class<? extends TableHelper<?>>, TableHelper<?>> tables;
 
+	@SuppressWarnings("unchecked")
+	public static <V extends TableHelper<?>> V get(Class<V> c) {
+		return (V) tables.get(c);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <V extends TableHelper<?>> void register(V v) {
+		tables.put((Class<? extends TableHelper<?>>) v.getClass(), v);
+	}
+	
 	public static String getTableInfo(ResultSet result) {
 		StringBuilder sb = new StringBuilder();
 		try {

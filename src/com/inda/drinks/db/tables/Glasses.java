@@ -10,7 +10,7 @@ import com.inda.drinks.properties.Glass;
 public class Glasses extends TableHelper<Glass> {
 	public static final String TABLE_NAME = "Glasses";
 	public static final int TABLE_VERSION = 1;
-	private PreparedStatement insert;
+	private final PreparedStatement insert;
 
 	public Glasses(DbWrapper db) throws SQLException {
 		super(db, TABLE_NAME, TABLE_VERSION);
@@ -19,10 +19,11 @@ public class Glasses extends TableHelper<Glass> {
 
 	@Override
 	public void onCreate() throws SQLException {
-		db.execute("CREATE TABLE " + TABLE_NAME
+		super.db.execute("CREATE TABLE " + TABLE_NAME
 				+ " (id INT IDENTITY PRIMARY KEY, name VARCHAR(255));");
+		// Add enum values immediately to table
 		for (Glass glass : Glass.values()) {
-			insert(glass);
+			this.insert(glass);
 		}
 	}
 

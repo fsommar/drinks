@@ -10,7 +10,7 @@ import com.inda.drinks.properties.SystembolagetItem;
 public class Systembolaget extends TableHelper<SystembolagetItem> {
 	public static final String TABLE_NAME = "Systembolaget";
 	public static final int TABLE_VERSION = 1;
-	private PreparedStatement insert;
+	private final PreparedStatement insert;
 
 	public Systembolaget(DbWrapper db) throws SQLException {
 		super(db, TABLE_NAME, TABLE_VERSION);
@@ -20,7 +20,7 @@ public class Systembolaget extends TableHelper<SystembolagetItem> {
 
 	@Override
 	public void onCreate() throws SQLException {
-		db.execute("CREATE TABLE " + TABLE_NAME
+		super.db.execute("CREATE TABLE " + TABLE_NAME
 				+ " (id INT NOT NULL PRIMARY KEY,"
 				+ " varunummer INT NOT NULL, price DOUBLE NOT NULL,"
 				+ " volume_ml INT NOT NULL);");

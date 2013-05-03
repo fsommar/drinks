@@ -12,7 +12,7 @@ import com.inda.drinks.properties.Ingredient;
 public class Contents extends TableHelper<Content> {
 	public static final String TABLE_NAME = "Contents";
 	public static final int TABLE_VERSION = 1;
-	private PreparedStatement insert;
+	private final PreparedStatement insert;
 
 	public Contents(DbWrapper db) throws SQLException {
 		super(db, TABLE_NAME, TABLE_VERSION);
@@ -21,7 +21,7 @@ public class Contents extends TableHelper<Content> {
 
 	@Override
 	public void onCreate() throws SQLException {
-		db.execute("CREATE TABLE " + TABLE_NAME
+		super.db.execute("CREATE TABLE " + TABLE_NAME
 				+ " (recipe_id INT NOT NULL, ingredient_id INT NOT NULL,"
 				+ " volume_cl INT NOT NULL,"
 				+ " CONSTRAINT pk PRIMARY KEY(recipe_id, ingredient_id),"
@@ -39,9 +39,8 @@ public class Contents extends TableHelper<Content> {
 	public void insert(Content e) throws SQLException {
 		for (Map.Entry<Ingredient, Integer> entry : e.getIngredients()
 				.entrySet()) {
-			Ingredient i = entry.getKey();
 			insert.setInt(1, e.getID());
-			insert.setInt(2, i.getID());
+			insert.setInt(2, entry.getKey().getID());
 			insert.setInt(3, entry.getValue());
 			insert.executeUpdate();
 		}

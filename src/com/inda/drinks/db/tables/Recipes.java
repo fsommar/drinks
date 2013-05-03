@@ -10,7 +10,7 @@ import com.inda.drinks.properties.Recipe;
 public class Recipes extends TableHelper<Recipe> {
 	public static final String TABLE_NAME = "Recipes";
 	public static final int TABLE_VERSION = 1;
-	private PreparedStatement insert;
+	private final PreparedStatement insert;
 
 	public Recipes(DbWrapper db) throws SQLException {
 		super(db, TABLE_NAME, TABLE_VERSION);
@@ -20,7 +20,7 @@ public class Recipes extends TableHelper<Recipe> {
 
 	@Override
 	public void onCreate() throws SQLException {
-		db.execute("CREATE TABLE " + TABLE_NAME
+		super.db.execute("CREATE TABLE " + TABLE_NAME
 				+ " (id INT IDENTITY PRIMARY KEY, name VARCHAR(30) NOT NULL,"
 				+ " instructions TEXT NOT NULL, glass INT NOT NULL,"
 				+ " FOREIGN KEY(glass) REFERENCES " + Glasses.TABLE_NAME
@@ -37,7 +37,6 @@ public class Recipes extends TableHelper<Recipe> {
 		insert.setString(1, e.getName());
 		insert.setString(2, e.getInstructions());
 		insert.setInt(3, e.getGlass().getID());
-		// insert.setInt(4, e.getContent().getID());
 		// TODO: insert Content as well
 		// SELECT MAX(id) FROM <TABLE_NAME>;
 		insert.executeUpdate();
