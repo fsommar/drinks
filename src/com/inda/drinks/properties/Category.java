@@ -6,7 +6,7 @@ public final class Category {
 	private final String name;
 	private final int parent;
 	
-	public Category(int id, String name, int parent) {
+	private Category(int id, String name, int parent) {
 		if (id <= 0) {
 			throw new IllegalArgumentException("Category id should be > 0.");
 		}
