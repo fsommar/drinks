@@ -6,7 +6,7 @@ import java.util.prefs.Preferences;
 import com.inda.drinks.exceptions.VersionMismatchException;
 
 /**
- * Should allow for easier management of multiple tables.
+ * Allows for easier management of multiple tables.
  * 
  * @author Fredrik Sommar
  */

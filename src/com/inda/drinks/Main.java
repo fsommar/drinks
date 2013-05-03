@@ -5,24 +5,28 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 
-import com.inda.drinks.db.DbWrapper;
 import com.inda.drinks.db.H2Db;
-import com.inda.drinks.db.tables.Categories;
-import com.inda.drinks.db.tables.Contents;
-import com.inda.drinks.db.tables.Glasses;
-import com.inda.drinks.db.tables.Ingredients;
-import com.inda.drinks.db.tables.Recipes;
-import com.inda.drinks.db.tables.Systembolaget;
 import com.inda.drinks.external.SystembolagetAPI;
 import com.inda.drinks.tools.Tables;
 
+/*
+ * TODO:
+ *  [ ] Documentation
+ *    [ ] Use log tool (log4j?) for misc actions
+ *    [ ] Javadoc
+ *  [ ] JUnit test code
+ *    [ ] Insert statements (focus on negative tests)
+ *    [ ] Queries, of long list and of single items
+ *    
+ * LEGEND: [ ] not done, [x] done, [-] skipped.
+ */
 public class Main {
 
 	public static void main(String[] args) throws ParseException {
 		testDB();
 		try {
-//			 SystembolagetAPI.fetchXML();
-			 SystembolagetAPI.parseXML();
+			// SystembolagetAPI.fetchXML();
+			SystembolagetAPI.parseXML();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -55,16 +59,13 @@ public class Main {
 		}
 	}
 	/*
-	private static void registerTables(DbWrapper db) throws SQLException {
-		// TODO: Prettier solution; not static, tables shouldn't be able to have more than one instance (singleton?)
-		Tables.register(new Categories(db));
-		Tables.register(new Contents(db));
-		Tables.register(new Glasses(db));
-		Tables.register(new Ingredients(db));
-		Tables.register(new Recipes(db));
-		Tables.register(new Systembolaget(db));
-		Tables.get(Recipes.class).insert(recipe);
-	}
-	*/
+	 * private static void registerTables(DbWrapper db) throws SQLException { //
+	 * TODO: Prettier solution; not static, tables shouldn't be able to have
+	 * more than one instance (singleton?) Tables.register(new Categories(db));
+	 * Tables.register(new Contents(db)); Tables.register(new Glasses(db));
+	 * Tables.register(new Ingredients(db)); Tables.register(new Recipes(db));
+	 * Tables.register(new Systembolaget(db));
+	 * Tables.get(Recipes.class).insert(recipe); }
+	 */
 
 }
