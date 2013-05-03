@@ -23,7 +23,7 @@ public class Contents extends TableHelper<Content> {
 	public void onCreate() throws SQLException {
 		db.execute("CREATE TABLE " + TABLE_NAME
 				+ " (recipe_id INT NOT NULL, ingredient_id INT NOT NULL,"
-				+ " volume INT NOT NULL,"
+				+ " volume_cl INT NOT NULL,"
 				+ " CONSTRAINT pk PRIMARY KEY(recipe_id, ingredient_id),"
 				+ " FOREIGN KEY(recipe_id) REFERENCES " + Recipes.TABLE_NAME
 				+ "(id), FOREIGN KEY(ingredient_id) REFERENCES "

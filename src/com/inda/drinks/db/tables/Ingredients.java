@@ -25,10 +25,10 @@ public class Ingredients extends TableHelper<Ingredient> {
 				+ " (id INT IDENTITY PRIMARY KEY,"
 				+ " name VARCHAR(30) NOT NULL, subtitle VARCHAR(30) NOT NULL,"
 				+ " ABV DOUBLE NOT NULL, category INT NOT NULL,"
-				+ " systembolaget_id INT NOT NULL, FOREIGN KEY(category) REFERENCES "
+				+ " sb_varunummer INT NOT NULL, FOREIGN KEY(category) REFERENCES "
 				+ Categories.TABLE_NAME + "(id),"
-				+ "FOREIGN KEY(systembolaget_id) REFERENCES " + Systembolaget.TABLE_NAME
-				+ "(id));");
+				+ "FOREIGN KEY(sb_varunummer) REFERENCES " + Systembolaget.TABLE_NAME
+				+ "(varunummer));");
 	}
 
 	@Override
