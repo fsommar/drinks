@@ -5,9 +5,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 
+import com.inda.drinks.db.DbWrapper;
 import com.inda.drinks.db.H2Db;
+import com.inda.drinks.db.Table;
+import com.inda.drinks.db.tables.Bar;
+import com.inda.drinks.db.tables.Categories;
+import com.inda.drinks.db.tables.Contents;
+import com.inda.drinks.db.tables.Glasses;
+import com.inda.drinks.db.tables.Ingredients;
+import com.inda.drinks.db.tables.Recipes;
+import com.inda.drinks.db.tables.Systembolaget;
 import com.inda.drinks.external.SystembolagetAPI;
-import com.inda.drinks.tools.Tables;
 
 /*
  * TODO:
@@ -17,6 +25,12 @@ import com.inda.drinks.tools.Tables;
  *  [ ] JUnit test code
  *    [ ] Insert statements (focus on negative tests)
  *    [ ] Queries, of long list and of single items
+ *  [ ] GUI
+ *    [ ] Working bar (starting with just text of categories)
+ *    [ ] Adding recipes
+ *  [ ] Error handling
+ *    [ ] Check input before inserting in DB (TableHelper.insert implementations)
+ *    [ ] Programmatic dependencies for Table (check dependency is registered)
  *    
  * LEGEND: [ ] not done, [x] done, [-] skipped.
  */
@@ -33,7 +47,7 @@ public class Main {
 	}
 
 	private static void testDB() {
-		H2Db db = new H2Db();
+		DbWrapper db = new H2Db();
 		try {
 			db.open();
 			db.execute("DROP TABLE IF EXISTS Test;");
@@ -49,23 +63,27 @@ public class Main {
 			prepare.setString(2, "Filippa");
 			prepare.executeUpdate();
 			ResultSet result = db.query("SELECT * FROM Test;");
-			System.out.println(Tables.getTableInfo(result));
-			System.out.println(Tables.getColumnInfo(result));
-			System.out.println(Tables.getRowInfo(result));
+			System.out.println(Table.getInfo(result));
+			System.out.println(Table.getColumnInfo(result));
+			System.out.println(Table.getRowInfo(result));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			db.close();
 		}
 	}
-	/*
-	 * private static void registerTables(DbWrapper db) throws SQLException { //
-	 * TODO: Prettier solution; not static, tables shouldn't be able to have
-	 * more than one instance (singleton?) Tables.register(new Categories(db));
-	 * Tables.register(new Contents(db)); Tables.register(new Glasses(db));
-	 * Tables.register(new Ingredients(db)); Tables.register(new Recipes(db));
-	 * Tables.register(new Systembolaget(db));
-	 * Tables.get(Recipes.class).insert(recipe); }
-	 */
+
+	private static void registerTables(DbWrapper db) throws SQLException { //
+		// No dependencies
+		Table.register(new Glasses(db));
+		Table.register(new Categories(db));
+		Table.register(new Systembolaget(db));
+
+		// Dependencies (order matters!!)
+		Table.register(new Recipes(db)); // #1
+		Table.register(new Ingredients(db)); // #2
+		Table.register(new Contents(db)); // #3
+		Table.register(new Bar(db)); // #4
+	}
 
 }

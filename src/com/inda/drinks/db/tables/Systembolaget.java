@@ -4,10 +4,10 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import com.inda.drinks.db.DbWrapper;
-import com.inda.drinks.db.TableHelper;
+import com.inda.drinks.db.Table;
 import com.inda.drinks.properties.SystembolagetItem;
 
-public class Systembolaget extends TableHelper<SystembolagetItem> {
+public class Systembolaget extends Table<SystembolagetItem> {
 	public static final String TABLE_NAME = "Systembolaget";
 	public static final int TABLE_VERSION = 1;
 	private final PreparedStatement insert;
@@ -38,5 +38,10 @@ public class Systembolaget extends TableHelper<SystembolagetItem> {
 		insert.setDouble(3, e.getPrice());
 		insert.setInt(4, e.getVolume());
 		insert.executeUpdate();
+	}
+
+	@Override
+	public void drop() throws SQLException {
+		super.db.execute("DROP TABLE IF EXISTS "+TABLE_NAME+";");		
 	}
 }

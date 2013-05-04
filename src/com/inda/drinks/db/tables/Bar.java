@@ -5,35 +5,33 @@ import java.sql.SQLException;
 
 import com.inda.drinks.db.DbWrapper;
 import com.inda.drinks.db.Table;
-import com.inda.drinks.properties.Category;
 
-public class Categories extends Table<Category> {
-	public static final String TABLE_NAME = "Categories";
+public class Bar extends Table<Integer> {
+	public static final String TABLE_NAME = "Bar";
 	public static final int TABLE_VERSION = 1;
 	private final PreparedStatement insert;
 
-	public Categories(DbWrapper db) throws SQLException {
+	public Bar(DbWrapper db) throws SQLException {
 		super(db, TABLE_NAME, TABLE_VERSION);
-		insert = super.db.prepare("INSERT INTO "+TABLE_NAME+" VALUES(?, ?, ?);");
+		super.addDependency(Ingredients.class);
+		insert = db.prepare("INSERT INTO " + TABLE_NAME + " VALUES(?);");
 	}
 
 	@Override
 	public void onCreate() throws SQLException {
 		super.db.execute("CREATE TABLE " + TABLE_NAME
-				+ " (id INT NOT NULL PRIMARY KEY,"
-				+ " name VARCHAR(15) NOT NULL, parent INT NOT NULL);");
+				+ " (id INT NOT NULL PRIMARY KEY, FOREIGN KEY(id) REFERENCES "
+				+ Ingredients.TABLE_NAME + "(id));");
 	}
 
 	@Override
 	public void onUpgrade(int from, int to) throws SQLException {
-		// Nothing here yet
+		// Nothing here yet :-)
 	}
 
 	@Override
-	public void insert(Category e) throws SQLException {
-		insert.setInt(1, e.getID());
-		insert.setString(2, e.getName());
-		insert.setInt(3, e.getParentID());
+	public void insert(Integer e) throws SQLException {
+		insert.setInt(1, e);
 		insert.executeUpdate();
 	}
 
@@ -41,4 +39,5 @@ public class Categories extends Table<Category> {
 	public void drop() throws SQLException {
 		super.db.execute("DROP TABLE IF EXISTS "+TABLE_NAME+";");		
 	}
+
 }

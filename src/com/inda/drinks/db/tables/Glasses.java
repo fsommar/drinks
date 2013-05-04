@@ -4,10 +4,10 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import com.inda.drinks.db.DbWrapper;
-import com.inda.drinks.db.TableHelper;
+import com.inda.drinks.db.Table;
 import com.inda.drinks.properties.Glass;
 
-public class Glasses extends TableHelper<Glass> {
+public class Glasses extends Table<Glass> {
 	public static final String TABLE_NAME = "Glasses";
 	public static final int TABLE_VERSION = 1;
 	private final PreparedStatement insert;
@@ -39,6 +39,11 @@ public class Glasses extends TableHelper<Glass> {
 		insert.setInt(1, e.getID());
 		insert.setString(2, e.toString());
 		insert.executeUpdate();
+	}
+
+	@Override
+	public void drop() throws SQLException {
+		super.db.execute("DROP TABLE IF EXISTS "+TABLE_NAME+";");		
 	}
 
 }

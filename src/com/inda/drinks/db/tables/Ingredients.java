@@ -4,16 +4,18 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import com.inda.drinks.db.DbWrapper;
-import com.inda.drinks.db.TableHelper;
+import com.inda.drinks.db.Table;
 import com.inda.drinks.properties.Ingredient;
 
-public class Ingredients extends TableHelper<Ingredient> {
+public class Ingredients extends Table<Ingredient> {
 	public static final String TABLE_NAME = "Ingredients";
 	public static final int TABLE_VERSION = 1;
 	private final PreparedStatement insert;
 
 	public Ingredients(DbWrapper db) throws SQLException {
 		super(db, TABLE_NAME, TABLE_VERSION);
+		super.addDependency(Systembolaget.class);
+		super.addDependency(Categories.class);
 		insert = db.prepare("INSERT INTO " + TABLE_NAME
 				+ " VALUES(default, ?, ?, ?, ?, ?);");
 	}
@@ -44,6 +46,11 @@ public class Ingredients extends TableHelper<Ingredient> {
 		insert.setInt(4, e.getCategory().getID());
 		insert.setInt(5, e.getSystembolagetID());
 		insert.executeUpdate();
+	}
+
+	@Override
+	public void drop() throws SQLException {
+		super.db.execute("DROP TABLE IF EXISTS "+TABLE_NAME+";");		
 	}
 
 }
