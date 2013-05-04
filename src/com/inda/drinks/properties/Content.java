@@ -6,6 +6,11 @@ import java.util.Map;
 
 import com.inda.drinks.tools.Formatter;
 
+/**
+ * Represents a row in the Categories table.
+ * @author Fredrik Sommar
+ *
+ */
 public class Content {
 	private final int id;
 	private final Map<Ingredient, Integer> ingredients;
@@ -15,16 +20,26 @@ public class Content {
 		this.ingredients = new HashMap<Ingredient, Integer>();
 	}
 
+	/**
+	 * @return the id of the Recipe that this object corresponds to.
+	 */
 	public int getID() {
 		return id;
 	}
 
+	/**
+	 * Returns a map of ingredients and their volume for this entry.
+	 * 
+	 * @return a map of ingredients as keys with the volume as value.
+	 */
 	public Map<Ingredient, Integer> getIngredients() {
 		return ingredients;
 	}
 
 	/**
-	 * Time complexity: O(n) where n is the number of ingredients.
+	 * Calculates the ABV (Alcohol By Volume) of the contents and returns it as
+	 * a percentage, e.g. 40. Time complexity: O(n) where n is the number of
+	 * ingredients.
 	 * 
 	 * @return -1 if failed, else ABV in percent.
 	 */
