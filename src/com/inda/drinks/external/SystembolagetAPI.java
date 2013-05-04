@@ -8,32 +8,54 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import com.inda.drinks.exceptions.NotImplementedException;
 import com.inda.drinks.properties.Category;
 import com.inda.drinks.tools.Formatter;
 import com.inda.drinks.tools.IngredientFactory;
 import com.inda.drinks.tools.Web;
 import com.inda.drinks.tools.XML;
 
+/**
+ * A class for the handling of the API of Systembolaget.
+ * 
+ * @author Fredrik Sommar
+ */
 public class SystembolagetAPI {
 	public static final String URL = "http://www.systembolaget.se/Assortment.aspx?Format=Xml";
-	private static File file = new File("data/systembolaget.xml");
+	private static final File file = new File("data/systembolaget");
 
+	/**
+	 * Downloads an XML file to data/systembolaget.
+	 * 
+	 * @throws IOException
+	 */
 	public static void fetchXML() throws IOException {
 		file.createNewFile();
 		Web.download(URL, file);
 	}
 
+	/**
+	 * Parses the XML file at data/systembolaget and adds it to the tables
+	 * Systembolaget and Ingredients.
+	 * 
+	 * @throws Exception
+	 */
 	public static void parseXML() throws Exception {
-		XML.parse(file, new SAXHandler());
+		XML.parse(file, new SystembolagetHandler());
 	}
 
-	public static class SAXHandler extends DefaultHandler {
-		private IngredientFactory infactusuk;
+	/**
+	 * The handler used for parsing the XML downloaded from Systembolaget.
+	 * 
+	 * @author Fredrik Sommar
+	 */
+	public static class SystembolagetHandler extends DefaultHandler {
+		private final IngredientFactory infactusuk;
 		private String val;
 		private boolean namn, namn2, varugrupp, alkoholhalt, prisinklmoms,
 				volymiml;
 
-		public SAXHandler() {
+		public SystembolagetHandler() {
 			infactusuk = IngredientFactory.newInstance();
 		}
 
@@ -75,9 +97,8 @@ public class SystembolagetAPI {
 				try {
 					d = Formatter.oneDecHalfEven(val);
 				} catch (ParseException e) {
-					System.err.println(val + " " + e);
+					e.printStackTrace();
 				}
-				// System.out.println("["+n+"]"+val+" || "+d);
 				infactusuk.setABV(d);
 				alkoholhalt = false;
 			} else if (prisinklmoms) {
@@ -96,14 +117,22 @@ public class SystembolagetAPI {
 			if (qName.equals("artikel")) {
 				// end of row, post to observer?
 				// Ingredient i = infactusuk.create();
+				// Table.get(Ingredients.class).insert(i);
 			}
 		}
 
 	}
 
-	// TODO
-	public static Category filterCategory(String s) {
-		return null;
+	/**
+	 * Converts the categories from the API of Systembolaget to that used by
+	 * this application and returns that as an object.
+	 * 
+	 * @param s
+	 *            the category from Systembolaget.
+	 * @return a Category object more suitable for this application.
+	 */
+	private static Category filterCategory(String s) {
+		throw new NotImplementedException();
 	}
 
 }

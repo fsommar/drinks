@@ -23,7 +23,7 @@ import com.inda.drinks.db.tables.Systembolaget;
  *    [ ] Javadoc
  *  [ ] JUnit test code
  *    [ ] Insert statements (focus on negative tests)
- *    [ ] Queries, of long list and of single items
+ *    [ ] Queries, of many items and of single items
  *  [ ] GUI
  *    [ ] Working bar (starting with just text of categories)
  *    [ ] Adding recipes
@@ -38,10 +38,10 @@ public class Main {
 
 	public static void main(String[] args) {
 		new File("data").mkdir();
-		testDB();
+//		testDB();
 		try {
-			// SystembolagetAPI.fetchXML();
-			// SystembolagetAPI.parseXML();
+//			 SystembolagetAPI.fetchXML();
+//			 SystembolagetAPI.parseXML();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

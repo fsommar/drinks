@@ -1,6 +1,8 @@
 package com.inda.drinks.exceptions;
 
-public class MissingDependencyException extends RuntimeException {
+import java.sql.SQLException;
+
+public class MissingDependencyException extends SQLException {
 
 	private static final long serialVersionUID = 493146513684779304L;
 

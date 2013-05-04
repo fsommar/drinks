@@ -130,7 +130,7 @@ public abstract class Table<E> {
 
 	/**
 	 * Allows for fetching of tables by using their corresponding classes as a
-	 * representation key.
+	 * representation key. Time complexity: O(1).
 	 * 
 	 * @param c
 	 *            the table class to get access to.
@@ -146,9 +146,10 @@ public abstract class Table<E> {
 	 * 
 	 * @param v
 	 *            the table to be registered.
+	 * @throws MissingDependencyException if any of the dependencies are missing.
 	 */
 	@SuppressWarnings("unchecked")
-	public static <V extends Table<?>> void register(V v) {
+	public static <V extends Table<?>> void register(V v) throws MissingDependencyException {
 		if (v.getDependencies().contains(v.getClass())) {
 			throw new MissingDependencyException(v.getClass().getSimpleName()
 					+ ".class is missing one or more of its dependencies.");
