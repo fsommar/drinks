@@ -39,6 +39,8 @@ public class Contents extends Table<Content> {
 
 	@Override
 	public void insert(Content e) throws SQLException {
+		// TODO: insert Content as well
+		// SELECT MAX(id) FROM <TABLE_NAME>;
 		for (Map.Entry<Ingredient, Integer> entry : e.getIngredients()
 				.entrySet()) {
 			insert.setInt(1, e.getID());

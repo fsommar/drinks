@@ -1,10 +1,10 @@
 package com.inda.drinks.properties;
 
 public class SystembolagetItem {
-	private int id;
-	private int varunummer; // I really don't like mixing languages
-	private double price;
-	private int volume; // in ml
+	private final int id;
+	private final int varunummer; // I really don't like mixing languages
+	private final double price;
+	private final int volume; // in ml
 
 	private SystembolagetItem(int id, int varunummer, double price, int volume) {
 		this.id = id;
@@ -25,7 +25,7 @@ public class SystembolagetItem {
 		return price;
 	}
 
-	public int getVolume() {
+	public int getVolumeInMl() {
 		return volume;
 	}
 

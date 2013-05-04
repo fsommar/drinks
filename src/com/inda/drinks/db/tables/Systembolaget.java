@@ -34,7 +34,7 @@ public class Systembolaget extends Table<SystembolagetItem> {
 		insert.setInt(1, e.getID());
 		insert.setInt(2, e.getVarunummer());
 		insert.setDouble(3, e.getPrice());
-		insert.setInt(4, e.getVolume());
+		insert.setInt(4, e.getVolumeInMl());
 		insert.executeUpdate();
 	}
 }

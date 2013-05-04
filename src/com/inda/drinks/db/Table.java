@@ -3,6 +3,7 @@ package com.inda.drinks.db;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -17,17 +18,15 @@ import com.inda.drinks.exceptions.VersionMismatchException;
  * @author Fredrik Sommar
  */
 public abstract class Table<E> {
-	// Will have to be static for now. Not sure if it's optimal...
-	private static Map<Class<? extends Table<?>>, Table<?>> tables;
+	// Must be one of the prettiest assignments I've ever seen
+	private static final Map<Class<? extends Table<?>>, Table<?>> tables = new HashMap<Class<? extends Table<?>>, Table<?>>();
 	private final Set<Class<? extends Table<?>>> deps;
 	public final String TABLE_NAME;
 	public final int TABLE_VERSION;
 	protected final DbWrapper db;
 
 	public abstract void onCreate() throws SQLException;
-
 	public abstract void onUpgrade(int from, int to) throws SQLException;
-
 	public abstract void insert(E e) throws SQLException;
 
 	protected Table(DbWrapper db, String name, int version)

@@ -28,8 +28,9 @@ import com.inda.drinks.db.tables.Systembolaget;
  *    [ ] Working bar (starting with just text of categories)
  *    [ ] Adding recipes
  *  [ ] Error handling
- *    [ ] Check input before inserting in DB (TableHelper.insert implementations)
+ *    [ ] Check input before creating objects (e.g. recipe name length <= 30)
  *    [x] Programmatic dependencies for Table (check dependency is registered)
+ *  [ ] Rework category layout, no SQL query will work for multiple nesting as it stands
  *    
  * LEGEND: [ ] not done, [x] done, [-] skipped.
  */
@@ -49,7 +50,7 @@ public class Main {
 	private static void testDB() {
 		DbWrapper db = new H2Db();
 		try {
-			db.open();
+			db.open("data/really_unique_name", "usr", "pwd");
 			db.execute("DROP TABLE IF EXISTS Test;");
 			db.execute("CREATE TABLE Test (id INT IDENTITY PRIMARY KEY,"
 					+ " lastName VARCHAR(255) NOT NULL, firstName VARCHAR(255));");
@@ -78,7 +79,6 @@ public class Main {
 		Table.register(new Glasses(db));
 		Table.register(new Categories(db));
 		Table.register(new Systembolaget(db));
-
 		// Dependencies (order matters!!)
 		Table.register(new Recipes(db)); // #1
 		Table.register(new Ingredients(db)); // #2

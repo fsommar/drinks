@@ -7,6 +7,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * DbWrapper implementation for the small java database H2.
+ * @author Fredrik Sommar
+ *
+ */
 public class H2Db implements DbWrapper {
 	private Connection conn;
 	private Statement statement;
@@ -17,9 +22,9 @@ public class H2Db implements DbWrapper {
 	}
 
 	@Override
-	public ResultSet execute(String sql) throws SQLException {
+	public Statement execute(String sql) throws SQLException {
 		getStatement().execute(sql);
-		return getStatement().getResultSet();
+		return getStatement();
 	}
 	
 	@Override
@@ -28,14 +33,14 @@ public class H2Db implements DbWrapper {
 	}
 
 	@Override
-	public void open() throws SQLException {
+	public void open(String loc, String usr, String pwd) throws SQLException {
 		try {
 			Class.forName("org.h2.Driver");
 		} catch(ClassNotFoundException e) {
 			// Do we want to reveal what kind of driver we are using?
 			throw new SQLException("Unable to instantiate SQL driver.");
 		}
-		conn = DriverManager.getConnection("jdbc:h2:file:data/really_unique_name", "usr", "pwd");
+		conn = DriverManager.getConnection("jdbc:h2:file:"+loc, usr, pwd);
 	}
 
 	@Override
@@ -53,6 +58,7 @@ public class H2Db implements DbWrapper {
 		}
 	}
 	
+	// We only ever need one statement object for our purposes
 	private Statement getStatement() throws SQLException {
 		if (statement == null) {
 			statement = conn.createStatement();

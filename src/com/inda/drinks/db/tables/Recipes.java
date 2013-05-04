@@ -35,9 +35,7 @@ public class Recipes extends Table<Recipe> {
 	public void insert(Recipe e) throws SQLException {
 		insert.setString(1, e.getName());
 		insert.setString(2, e.getInstructions());
-		insert.setInt(3, e.getGlass().getID());
-		// TODO: insert Content as well
-		// SELECT MAX(id) FROM <TABLE_NAME>;
+		insert.setInt(3, e.getGlassID());
 		insert.executeUpdate();
 	}
 }
