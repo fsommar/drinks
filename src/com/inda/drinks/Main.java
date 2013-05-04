@@ -1,9 +1,9 @@
 package com.inda.drinks;
 
+import java.io.File;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
 
 import com.inda.drinks.db.DbWrapper;
 import com.inda.drinks.db.H2Db;
@@ -15,7 +15,6 @@ import com.inda.drinks.db.tables.Glasses;
 import com.inda.drinks.db.tables.Ingredients;
 import com.inda.drinks.db.tables.Recipes;
 import com.inda.drinks.db.tables.Systembolaget;
-import com.inda.drinks.external.SystembolagetAPI;
 
 /*
  * TODO:
@@ -30,17 +29,18 @@ import com.inda.drinks.external.SystembolagetAPI;
  *    [ ] Adding recipes
  *  [ ] Error handling
  *    [ ] Check input before inserting in DB (TableHelper.insert implementations)
- *    [ ] Programmatic dependencies for Table (check dependency is registered)
+ *    [x] Programmatic dependencies for Table (check dependency is registered)
  *    
  * LEGEND: [ ] not done, [x] done, [-] skipped.
  */
 public class Main {
 
-	public static void main(String[] args) throws ParseException {
+	public static void main(String[] args) {
+		new File("data").mkdir();
 		testDB();
 		try {
 			// SystembolagetAPI.fetchXML();
-			SystembolagetAPI.parseXML();
+			// SystembolagetAPI.parseXML();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

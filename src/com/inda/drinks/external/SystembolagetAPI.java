@@ -18,16 +18,8 @@ public class SystembolagetAPI {
 	public static final String URL = "http://www.systembolaget.se/Assortment.aspx?Format=Xml";
 	private static File file = new File("data/systembolaget.xml");
 
-	static {
-		new File("data").mkdir();
-		try {
-			file.createNewFile();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
 	public static void fetchXML() throws IOException {
+		file.createNewFile();
 		Web.download(URL, file);
 	}
 
