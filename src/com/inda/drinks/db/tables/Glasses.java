@@ -8,18 +8,17 @@ import com.inda.drinks.db.Table;
 import com.inda.drinks.properties.Glass;
 
 public class Glasses extends Table<Glass> {
-	public static final String TABLE_NAME = "Glasses";
-	public static final int TABLE_VERSION = 1;
 	private final PreparedStatement insert;
 
 	public Glasses(DbWrapper db) throws SQLException {
-		super(db, TABLE_NAME, TABLE_VERSION);
-		insert = db.prepare("INSERT INTO " + TABLE_NAME + " VALUES(?, ?);");
+		super(db, "Glasses", 1);
+		insert = db.prepare("INSERT INTO " + super.TABLE_NAME
+				+ " VALUES(?, ?);");
 	}
 
 	@Override
 	public void onCreate() throws SQLException {
-		super.db.execute("CREATE TABLE " + TABLE_NAME
+		super.db.execute("CREATE TABLE " + super.TABLE_NAME
 				+ " (id INT IDENTITY PRIMARY KEY, name VARCHAR(255));");
 		// Add enum values immediately to table
 		for (Glass glass : Glass.values()) {
@@ -40,10 +39,4 @@ public class Glasses extends Table<Glass> {
 		insert.setString(2, e.toString());
 		insert.executeUpdate();
 	}
-
-	@Override
-	public void drop() throws SQLException {
-		super.db.execute("DROP TABLE IF EXISTS "+TABLE_NAME+";");		
-	}
-
 }

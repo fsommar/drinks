@@ -8,18 +8,17 @@ import com.inda.drinks.db.Table;
 import com.inda.drinks.properties.Category;
 
 public class Categories extends Table<Category> {
-	public static final String TABLE_NAME = "Categories";
-	public static final int TABLE_VERSION = 1;
 	private final PreparedStatement insert;
 
 	public Categories(DbWrapper db) throws SQLException {
-		super(db, TABLE_NAME, TABLE_VERSION);
-		insert = super.db.prepare("INSERT INTO "+TABLE_NAME+" VALUES(?, ?, ?);");
+		super(db, "Categories", 1);
+		insert = super.db.prepare("INSERT INTO " + super.TABLE_NAME
+				+ " VALUES(?, ?, ?);");
 	}
 
 	@Override
 	public void onCreate() throws SQLException {
-		super.db.execute("CREATE TABLE " + TABLE_NAME
+		super.db.execute("CREATE TABLE " + super.TABLE_NAME
 				+ " (id INT NOT NULL PRIMARY KEY,"
 				+ " name VARCHAR(15) NOT NULL, parent INT NOT NULL);");
 	}
@@ -35,10 +34,5 @@ public class Categories extends Table<Category> {
 		insert.setString(2, e.getName());
 		insert.setInt(3, e.getParentID());
 		insert.executeUpdate();
-	}
-
-	@Override
-	public void drop() throws SQLException {
-		super.db.execute("DROP TABLE IF EXISTS "+TABLE_NAME+";");		
 	}
 }

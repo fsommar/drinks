@@ -8,24 +8,22 @@ import com.inda.drinks.db.Table;
 import com.inda.drinks.properties.Recipe;
 
 public class Recipes extends Table<Recipe> {
-	public static final String TABLE_NAME = "Recipes";
-	public static final int TABLE_VERSION = 1;
 	private final PreparedStatement insert;
 
 	public Recipes(DbWrapper db) throws SQLException {
-		super(db, TABLE_NAME, TABLE_VERSION);
+		super(db, "Recipes", 1);
 		super.addDependency(Glasses.class);
-		insert = db.prepare("INSERT INTO " + TABLE_NAME
+		insert = db.prepare("INSERT INTO " + super.TABLE_NAME
 				+ " VALUES(default, ?, ?, ?)");
 	}
 
 	@Override
 	public void onCreate() throws SQLException {
-		super.db.execute("CREATE TABLE " + TABLE_NAME
+		super.db.execute("CREATE TABLE " + super.TABLE_NAME
 				+ " (id INT IDENTITY PRIMARY KEY, name VARCHAR(30) NOT NULL,"
 				+ " instructions TEXT NOT NULL, glass INT NOT NULL,"
-				+ " FOREIGN KEY(glass) REFERENCES " + Glasses.TABLE_NAME
-				+ "(id));");
+				+ " FOREIGN KEY(glass) REFERENCES "
+				+ Table.get(Glasses.class).TABLE_NAME + "(id));");
 	}
 
 	@Override
@@ -42,10 +40,4 @@ public class Recipes extends Table<Recipe> {
 		// SELECT MAX(id) FROM <TABLE_NAME>;
 		insert.executeUpdate();
 	}
-
-	@Override
-	public void drop() throws SQLException {
-		super.db.execute("DROP TABLE IF EXISTS "+TABLE_NAME+";");		
-	}
-
 }

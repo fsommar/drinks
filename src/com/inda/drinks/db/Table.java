@@ -17,20 +17,25 @@ import com.inda.drinks.exceptions.VersionMismatchException;
  * @author Fredrik Sommar
  */
 public abstract class Table<E> {
-	protected final DbWrapper db;
 	// Will have to be static for now. Not sure if it's optimal...
 	private static Map<Class<? extends Table<?>>, Table<?>> tables;
 	private final Set<Class<? extends Table<?>>> deps;
-	
+	public final String TABLE_NAME;
+	public final int TABLE_VERSION;
+	protected final DbWrapper db;
+
 	public abstract void onCreate() throws SQLException;
+
 	public abstract void onUpgrade(int from, int to) throws SQLException;
+
 	public abstract void insert(E e) throws SQLException;
-	public abstract void drop() throws SQLException;
 
 	protected Table(DbWrapper db, String name, int version)
 			throws VersionMismatchException {
-		this.db = db;
 		this.deps = new HashSet<Class<? extends Table<?>>>();
+		this.TABLE_NAME = name;
+		this.TABLE_VERSION = version;
+		this.db = db;
 		final Preferences prefs = Preferences.userRoot().node(name);
 		final boolean exists = prefs.getBoolean("exists", false);
 		if (!exists) {
@@ -59,12 +64,16 @@ public abstract class Table<E> {
 
 	}
 
-	protected <V extends Table<?>> void addDependency(Class<V> c) {
+	protected final <V extends Table<?>> void addDependency(Class<V> c) {
 		deps.add(c);
 	}
 
-	public Set<Class<? extends Table<?>>> getDependencies() {
+	public final Set<Class<? extends Table<?>>> getDependencies() {
 		return deps;
+	}
+
+	public void drop() throws SQLException {
+		db.execute("DROP TABLE IF EXISTS " + TABLE_NAME + ";");
 	}
 
 	@SuppressWarnings("unchecked")

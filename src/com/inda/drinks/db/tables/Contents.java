@@ -10,26 +10,26 @@ import com.inda.drinks.properties.Content;
 import com.inda.drinks.properties.Ingredient;
 
 public class Contents extends Table<Content> {
-	public static final String TABLE_NAME = "Contents";
-	public static final int TABLE_VERSION = 1;
 	private final PreparedStatement insert;
 
 	public Contents(DbWrapper db) throws SQLException {
-		super(db, TABLE_NAME, TABLE_VERSION);
+		super(db, "Contents", 1);
 		super.addDependency(Recipes.class);
 		super.addDependency(Ingredients.class);
-		insert = db.prepare("INSERT INTO " + TABLE_NAME + " VALUES(?, ?, ?)");
+		insert = db.prepare("INSERT INTO " + super.TABLE_NAME
+				+ " VALUES(?, ?, ?)");
 	}
 
 	@Override
 	public void onCreate() throws SQLException {
-		super.db.execute("CREATE TABLE " + TABLE_NAME
+		super.db.execute("CREATE TABLE " + super.TABLE_NAME
 				+ " (recipe_id INT NOT NULL, ingredient_id INT NOT NULL,"
 				+ " volume_cl INT NOT NULL,"
 				+ " CONSTRAINT pk PRIMARY KEY(recipe_id, ingredient_id),"
-				+ " FOREIGN KEY(recipe_id) REFERENCES " + Recipes.TABLE_NAME
+				+ " FOREIGN KEY(recipe_id) REFERENCES "
+				+ Table.get(Recipes.class).TABLE_NAME
 				+ "(id), FOREIGN KEY(ingredient_id) REFERENCES "
-				+ Ingredients.TABLE_NAME + "(id));");
+				+ Table.get(Ingredients.class).TABLE_NAME + "(id));");
 	}
 
 	@Override
@@ -47,10 +47,4 @@ public class Contents extends Table<Content> {
 			insert.executeUpdate();
 		}
 	}
-
-	@Override
-	public void drop() throws SQLException {
-		super.db.execute("DROP TABLE IF EXISTS "+TABLE_NAME+";");		
-	}
-
 }

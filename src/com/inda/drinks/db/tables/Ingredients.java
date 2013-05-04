@@ -8,29 +8,27 @@ import com.inda.drinks.db.Table;
 import com.inda.drinks.properties.Ingredient;
 
 public class Ingredients extends Table<Ingredient> {
-	public static final String TABLE_NAME = "Ingredients";
-	public static final int TABLE_VERSION = 1;
 	private final PreparedStatement insert;
 
 	public Ingredients(DbWrapper db) throws SQLException {
-		super(db, TABLE_NAME, TABLE_VERSION);
+		super(db, "Ingredients", 1);
 		super.addDependency(Systembolaget.class);
 		super.addDependency(Categories.class);
-		insert = db.prepare("INSERT INTO " + TABLE_NAME
+		insert = db.prepare("INSERT INTO " + super.TABLE_NAME
 				+ " VALUES(default, ?, ?, ?, ?, ?);");
 	}
 
 	@Override
 	public void onCreate() throws SQLException {
 		super.db.execute("CREATE TABLE "
-				+ TABLE_NAME
+				+ super.TABLE_NAME
 				+ " (id INT IDENTITY PRIMARY KEY,"
 				+ " name VARCHAR(30) NOT NULL, subtitle VARCHAR(30) NOT NULL,"
 				+ " ABV DOUBLE NOT NULL, category INT NOT NULL,"
 				+ " sb_varunummer INT NOT NULL, FOREIGN KEY(category) REFERENCES "
-				+ Categories.TABLE_NAME + "(id),"
-				+ "FOREIGN KEY(sb_varunummer) REFERENCES " + Systembolaget.TABLE_NAME
-				+ "(varunummer));");
+				+ Table.get(Categories.class).TABLE_NAME + "(id),"
+				+ "FOREIGN KEY(sb_varunummer) REFERENCES "
+				+ Table.get(Systembolaget.class).TABLE_NAME + "(varunummer));");
 	}
 
 	@Override
@@ -47,10 +45,4 @@ public class Ingredients extends Table<Ingredient> {
 		insert.setInt(5, e.getSystembolagetID());
 		insert.executeUpdate();
 	}
-
-	@Override
-	public void drop() throws SQLException {
-		super.db.execute("DROP TABLE IF EXISTS "+TABLE_NAME+";");		
-	}
-
 }

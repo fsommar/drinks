@@ -8,19 +8,17 @@ import com.inda.drinks.db.Table;
 import com.inda.drinks.properties.SystembolagetItem;
 
 public class Systembolaget extends Table<SystembolagetItem> {
-	public static final String TABLE_NAME = "Systembolaget";
-	public static final int TABLE_VERSION = 1;
 	private final PreparedStatement insert;
 
 	public Systembolaget(DbWrapper db) throws SQLException {
-		super(db, TABLE_NAME, TABLE_VERSION);
-		insert = db.prepare("INSERT INTO " + TABLE_NAME
+		super(db, "Systembolaget", 1);
+		insert = db.prepare("INSERT INTO " + super.TABLE_NAME
 				+ " VALUES(?, ?, ?, ?);");
 	}
 
 	@Override
 	public void onCreate() throws SQLException {
-		super.db.execute("CREATE TABLE " + TABLE_NAME
+		super.db.execute("CREATE TABLE " + super.TABLE_NAME
 				+ " (id INT NOT NULL PRIMARY KEY,"
 				+ " varunummer INT NOT NULL, price DOUBLE NOT NULL,"
 				+ " volume_ml INT NOT NULL);");
@@ -38,10 +36,5 @@ public class Systembolaget extends Table<SystembolagetItem> {
 		insert.setDouble(3, e.getPrice());
 		insert.setInt(4, e.getVolume());
 		insert.executeUpdate();
-	}
-
-	@Override
-	public void drop() throws SQLException {
-		super.db.execute("DROP TABLE IF EXISTS "+TABLE_NAME+";");		
 	}
 }
