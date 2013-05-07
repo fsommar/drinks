@@ -10,8 +10,8 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import com.inda.drinks.exceptions.NotImplementedException;
 import com.inda.drinks.properties.Category;
+import com.inda.drinks.properties.Ingredient;
 import com.inda.drinks.tools.Formatter;
-import com.inda.drinks.tools.IngredientFactory;
 import com.inda.drinks.tools.Web;
 import com.inda.drinks.tools.XML;
 
@@ -45,25 +45,24 @@ public class SystembolagetAPI {
 	}
 
 	/**
-	 * The handler used for parsing the XML downloaded from Systembolaget.
+	 * Handler used for parsing the XML downloaded from Systembolaget.
 	 * 
 	 * @author Fredrik Sommar
 	 */
 	public static class SystembolagetHandler extends DefaultHandler {
-		private final IngredientFactory infactusuk;
+		private Ingredient.Builder ingredient;
 		private String val;
-		private boolean namn, namn2, varugrupp, alkoholhalt, prisinklmoms,
-				volymiml;
-
-		public SystembolagetHandler() {
-			infactusuk = IngredientFactory.newInstance();
-		}
+		private int varunr;
+		private boolean varunummer, namn, namn2, varugrupp, alkoholhalt,
+				prisinklmoms, volymiml;
 
 		@Override
 		public void startElement(String uri, String localName, String qName,
 				Attributes attr) throws SAXException {
 			if (qName.equalsIgnoreCase("artikel")) {
-				infactusuk.reset(); // start of row
+				ingredient = new Ingredient.Builder();
+			} else if (qName.equalsIgnoreCase("varunummer")) {
+				varunummer = true;
 			} else if (qName.equalsIgnoreCase("namn")) {
 				namn = true;
 			} else if (qName.equalsIgnoreCase("namn2")) {
@@ -83,14 +82,18 @@ public class SystembolagetAPI {
 		public void characters(char[] ch, int start, int len)
 				throws SAXException {
 			val = new String(ch, start, len);
-			if (namn) {
-				infactusuk.setName(val);
+			if (varunummer) {
+				varunr = Integer.parseInt(val);
+				ingredient.systembolagetID(varunr);
+				varunummer = false;
+			} else if (namn) {
+				ingredient.name(val);
 				namn = false;
 			} else if (namn2) {
-				infactusuk.setSubtitle(val);
+				ingredient.subtitle(val);
 				namn2 = false;
 			} else if (varugrupp) {
-				// infactusuk.setCategory(filterCategory(val));
+				// ingredient.category(filterCategory(val));
 				varugrupp = false;
 			} else if (alkoholhalt) {
 				double d = -1;
@@ -99,10 +102,10 @@ public class SystembolagetAPI {
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}
-				infactusuk.setABV(d);
+				ingredient.ABV(d);
 				alkoholhalt = false;
 			} else if (prisinklmoms) {
-				// add to systemet table
+				// add to systembolaget table
 				prisinklmoms = false;
 			} else if (volymiml) {
 				// convert to int and divide by 10
@@ -116,7 +119,7 @@ public class SystembolagetAPI {
 				throws SAXException {
 			if (qName.equals("artikel")) {
 				// end of row, post to observer?
-				// Ingredient i = infactusuk.create();
+				// Ingredient i = ingredient.build();
 				// Table.get(Ingredients.class).insert(i);
 			}
 		}

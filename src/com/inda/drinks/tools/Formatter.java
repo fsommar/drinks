@@ -5,6 +5,11 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
 
+/**
+ * Handles common conversions and rounding of numbers.
+ * 
+ * @author Fredrik Sommar
+ */
 public class Formatter {
 	private static NumberFormat nf;
 	static {
@@ -13,10 +18,27 @@ public class Formatter {
 		nf.setMaximumFractionDigits(1);
 	}
 
+	/**
+	 * Parses a String and returns its double value rounded to one decimal
+	 * through half-even rounding.
+	 * 
+	 * @param s
+	 *            the String to parse a double from.
+	 * @return the parsed double.
+	 * @throws ParseException
+	 */
 	public static double oneDecHalfEven(String s) throws ParseException {
 		return nf.parse(s).doubleValue();
 	}
-	
+
+	/**
+	 * Rounds a double to one decimal using half-even rounding
+	 * 
+	 * @param d
+	 *            the double to be rounded.
+	 * @return the one decimal rounded double.
+	 * @throws ParseException
+	 */
 	public static double oneDecHalfEven(double d) throws ParseException {
 		return oneDecHalfEven(nf.format(d));
 	}

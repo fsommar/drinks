@@ -38,7 +38,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		new File("data").mkdir();
-//		testDB();
+		testDB();
 		try {
 //			 SystembolagetAPI.fetchXML();
 //			 SystembolagetAPI.parseXML();
@@ -53,7 +53,7 @@ public class Main {
 			db.open("data/really_unique_name", "usr", "pwd");
 			db.execute("DROP TABLE IF EXISTS Test;");
 			db.execute("CREATE TABLE Test (id INT IDENTITY PRIMARY KEY,"
-					+ " lastName VARCHAR(255) NOT NULL, firstName VARCHAR(255));");
+					+ " lastName VARCHAR(30) NOT NULL, firstName VARCHAR(30));");
 			PreparedStatement prepare = db
 					.prepare("INSERT INTO Test VALUES(default, ?, ?);");
 			prepare.setString(1, "Wikingsson");

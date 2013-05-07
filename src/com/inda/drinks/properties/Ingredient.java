@@ -18,16 +18,6 @@ public final class Ingredient {
 		this.systembolaget_id = systembolaget_id;
 	}
 
-	public Ingredient(String name, String subtitle, double ABV,
-			Category category, int systembolaget_id) {
-		this(-1, name, subtitle, ABV, category, systembolaget_id);
-	}
-
-	public Ingredient(String name, String subtitle, double ABV,
-			Category category) {
-		this(-1, name, subtitle, ABV, category, -1);
-	}
-	
 	public int getID() {
 		return id;
 	}
@@ -50,6 +40,60 @@ public final class Ingredient {
 
 	public int getSystembolagetID() {
 		return systembolaget_id;
+	}
+
+	/**
+	 * Builder pattern used for setting one parameter at a time since
+	 * Ingredient is immutable.
+	 * 
+	 * @author Fredrik Sommar
+	 */
+	public static class Builder {
+		private int id;
+		private String name, subtitle;
+		private double ABV;
+		private Category category;
+		private int systembolaget_id;
+
+		public Builder() {
+			this.id = -1;
+			this.systembolaget_id = -1;
+		}
+
+		public Ingredient build() {
+			return new Ingredient(id, name, subtitle, ABV, category,
+					systembolaget_id);
+		}
+
+		public Builder ID(int id) {
+			this.id = id;
+			return this;
+		}
+
+		public Builder name(String name) {
+			this.name = name;
+			return this;
+		}
+
+		public Builder subtitle(String subtitle) {
+			this.subtitle = subtitle;
+			return this;
+		}
+
+		public Builder ABV(double ABV) {
+			this.ABV = ABV;
+			return this;
+		}
+
+		public Builder category(Category category) {
+			this.category = category;
+			return this;
+		}
+
+		public Builder systembolagetID(int systembolaget_id) {
+			this.systembolaget_id = systembolaget_id;
+			return this;
+		}
 	}
 
 }
