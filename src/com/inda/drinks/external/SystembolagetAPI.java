@@ -93,16 +93,11 @@ public class SystembolagetAPI {
 				ingredient.subtitle(val);
 				namn2 = false;
 			} else if (varugrupp) {
-				// ingredient.category(filterCategory(val));
+				// ingredient.category(filterCategory(varunr, val));
 				varugrupp = false;
 			} else if (alkoholhalt) {
-				double d = -1;
-				try {
-					d = Formatter.oneDecHalfEven(val);
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
-				ingredient.ABV(d);
+				// Assume valid double (API _should_ not have faulty fields)
+				ingredient.ABV(Formatter.oneDecHalfEven(val));
 				alkoholhalt = false;
 			} else if (prisinklmoms) {
 				// add to systembolaget table
@@ -130,11 +125,17 @@ public class SystembolagetAPI {
 	 * Converts the categories from the API of Systembolaget to that used by
 	 * this application and returns that as an object.
 	 * 
+	 * @param id
+	 *            the "varunummer" of the product to be categorized, used to
+	 *            determine special (custom) categories.
 	 * @param s
 	 *            the category from Systembolaget.
 	 * @return a Category object more suitable for this application.
 	 */
-	private static Category filterCategory(String s) {
+	private static Category filterCategory(int id, String s) {
+		// Hashmap with name -> Category
+		// map["alkoholfritt"] would yield the Category object representing
+		// "alkoholfritt"
 		throw new NotImplementedException();
 	}
 

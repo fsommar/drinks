@@ -25,10 +25,15 @@ public class Formatter {
 	 * @param s
 	 *            the String to parse a double from.
 	 * @return the parsed double.
-	 * @throws ParseException
+	 * @throws NumberFormatException
+	 *             in case of parsing error.
 	 */
-	public static double oneDecHalfEven(String s) throws ParseException {
-		return nf.parse(s).doubleValue();
+	public static double oneDecHalfEven(String s) {
+		try {
+			return nf.parse(s).doubleValue();
+		} catch (ParseException e) {
+			throw new NumberFormatException();
+		}
 	}
 
 	/**
@@ -37,7 +42,8 @@ public class Formatter {
 	 * @param d
 	 *            the double to be rounded.
 	 * @return the one decimal rounded double.
-	 * @throws ParseException
+	 * @throws NumberFormatException
+	 *             in case of parsing error.
 	 */
 	public static double oneDecHalfEven(double d) throws ParseException {
 		return oneDecHalfEven(nf.format(d));

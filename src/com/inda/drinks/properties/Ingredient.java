@@ -61,6 +61,7 @@ public final class Ingredient {
 		}
 
 		public Ingredient build() {
+			// Check for validity
 			return new Ingredient(id, name, subtitle, ABV, category,
 					systembolaget_id);
 		}

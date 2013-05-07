@@ -20,7 +20,7 @@ import com.inda.drinks.db.tables.Systembolaget;
  * TODO:
  *  [ ] Documentation
  *    [ ] Use log tool (log4j?) for misc actions
- *    [ ] Javadoc
+ *    [x] Javadoc
  *  [ ] JUnit test code
  *    [ ] Insert statements (focus on negative tests)
  *    [ ] Queries, of many items and of single items
