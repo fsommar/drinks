@@ -24,7 +24,7 @@ public class Contents extends Table<Content> {
 	public void onCreate() throws SQLException {
 		super.db.execute("CREATE TABLE " + super.TABLE_NAME
 				+ " (recipe_id INT NOT NULL, ingredient_id INT NOT NULL,"
-				+ " volume_cl INT NOT NULL,"
+				+ " volume INT NOT NULL,"
 				+ " CONSTRAINT pk PRIMARY KEY(recipe_id, ingredient_id),"
 				+ " FOREIGN KEY(recipe_id) REFERENCES "
 				+ Table.get(Recipes.class).TABLE_NAME

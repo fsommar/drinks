@@ -25,10 +25,10 @@ public class Ingredients extends Table<Ingredient> {
 				+ " (id INT IDENTITY PRIMARY KEY,"
 				+ " name VARCHAR(30) NOT NULL, subtitle VARCHAR(30) NOT NULL,"
 				+ " ABV DOUBLE NOT NULL, category INT NOT NULL,"
-				+ " sb_varunummer INT NOT NULL, FOREIGN KEY(category) REFERENCES "
+				+ " part_number INT NOT NULL, FOREIGN KEY(category) REFERENCES "
 				+ Table.get(Categories.class).TABLE_NAME + "(id),"
-				+ "FOREIGN KEY(sb_varunummer) REFERENCES "
-				+ Table.get(Systembolaget.class).TABLE_NAME + "(varunummer));");
+				+ "FOREIGN KEY(part_number) REFERENCES "
+				+ Table.get(Systembolaget.class).TABLE_NAME + "(part_number));");
 	}
 
 	@Override
@@ -42,7 +42,7 @@ public class Ingredients extends Table<Ingredient> {
 		insert.setString(2, e.getSubtitle());
 		insert.setDouble(3, e.getABV());
 		insert.setInt(4, e.getCategory().getID());
-		insert.setInt(5, e.getSystembolagetID());
+		insert.setInt(5, e.getPartNumber());
 		insert.executeUpdate();
 	}
 }

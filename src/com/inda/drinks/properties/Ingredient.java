@@ -6,16 +6,16 @@ public final class Ingredient {
 	private final String subtitle;
 	private final double ABV;
 	private final Category category;
-	private final int systembolaget_id;
+	private final int partNumber; // "varunummer" in Systembolaget API
 
 	private Ingredient(int id, String name, String subtitle, double ABV,
-			Category category, int systembolaget_id) {
+			Category category, int partNumber) {
 		this.id = id;
 		this.name = name;
 		this.subtitle = subtitle;
 		this.ABV = ABV;
 		this.category = category;
-		this.systembolaget_id = systembolaget_id;
+		this.partNumber = partNumber;
 	}
 
 	public int getID() {
@@ -38,8 +38,8 @@ public final class Ingredient {
 		return category;
 	}
 
-	public int getSystembolagetID() {
-		return systembolaget_id;
+	public int getPartNumber() {
+		return partNumber;
 	}
 
 	/**
@@ -49,50 +49,50 @@ public final class Ingredient {
 	 * @author Fredrik Sommar
 	 */
 	public static class Builder {
-		private int id;
-		private String name, subtitle;
-		private double ABV;
-		private Category category;
-		private int systembolaget_id;
+		// Underscores used for builder variables
+		private int _id, _partNumber;
+		private String _name, _subtitle;
+		private double _ABV;
+		private Category _category;
 
 		public Builder() {
-			this.id = -1;
-			this.systembolaget_id = -1;
+			this._id = -1;
+			this._partNumber = -1;
 		}
 
 		public Ingredient build() {
 			// Check for validity
-			return new Ingredient(id, name, subtitle, ABV, category,
-					systembolaget_id);
+			return new Ingredient(_id, _name, _subtitle, _ABV, _category,
+					_partNumber);
 		}
 
 		public Builder ID(int id) {
-			this.id = id;
+			this._id = id;
 			return this;
 		}
 
 		public Builder name(String name) {
-			this.name = name;
+			this._name = name;
 			return this;
 		}
 
 		public Builder subtitle(String subtitle) {
-			this.subtitle = subtitle;
+			this._subtitle = subtitle;
 			return this;
 		}
 
 		public Builder ABV(double ABV) {
-			this.ABV = ABV;
+			this._ABV = ABV;
 			return this;
 		}
 
 		public Builder category(Category category) {
-			this.category = category;
+			this._category = category;
 			return this;
 		}
 
-		public Builder systembolagetID(int systembolaget_id) {
-			this.systembolaget_id = systembolaget_id;
+		public Builder partNumber(int partNumber) {
+			this._partNumber = partNumber;
 			return this;
 		}
 	}
