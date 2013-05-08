@@ -15,6 +15,7 @@ import com.inda.drinks.db.tables.Glasses;
 import com.inda.drinks.db.tables.Ingredients;
 import com.inda.drinks.db.tables.Recipes;
 import com.inda.drinks.db.tables.Systembolaget;
+import com.inda.drinks.gui.Window;
 
 /*
  * TODO:
@@ -40,6 +41,7 @@ public class Main {
 	public static void main(String[] args) {
 		new File("data").mkdir();
 		testDB();
+		new Window().setVisible(true);
 		try {
 //			 SystembolagetAPI.fetchXML();
 //			 SystembolagetAPI.parseXML();
