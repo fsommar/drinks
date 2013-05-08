@@ -158,7 +158,7 @@ public class SystembolagetAPI {
 		Category.Builder builder;
 		for (String name : s.split(", ")) {
 			builder = new Category.Builder();
-			c = categories.getCategory(name);
+			c = categories.getCategory(name, parent);
 			if (c == null) {
 				c = builder.ID(categories.getNextID()).name(name)
 						.parent(parent).build();

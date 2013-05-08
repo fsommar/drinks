@@ -8,6 +8,7 @@ import com.inda.drinks.db.DbWrapper;
 import com.inda.drinks.db.Table;
 import com.inda.drinks.exceptions.NotImplementedException;
 import com.inda.drinks.properties.Category;
+import com.inda.drinks.properties.Category.Builder;
 
 public class Categories extends Table<Category> {
 	private final PreparedStatement insert;
@@ -38,18 +39,40 @@ public class Categories extends Table<Category> {
 		insert.executeUpdate();
 	}
 
-	public Category getCategory(String name) {
+	public Category getCategory(String name, int parent) {
+		try {
+			ResultSet res = super.db.query("SELECT * FROM " + super.TABLE_NAME
+					+ " WHERE name = " + name + " AND parent = " + parent
+					+ " LIMIT 1;");
+			Category.Builder builder = new Category.Builder();
+			if (res.next()) {
+				return builder.ID(res.getInt(1)).name(res.getString(2))
+						.parent(res.getInt(3)).build();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		throw new NotImplementedException();
-		// QUERY DATABASE LOLs
 	}
 
 	public Category getCategory(int id) {
+		try {
+			ResultSet res = super.db.query("SELECT * FROM " + super.TABLE_NAME
+					+ " WHERE id = " + id + ";");
+			Category.Builder builder = new Category.Builder();
+			if (res.next()) {
+				return builder.ID(res.getInt(1)).name(res.getString(2))
+						.parent(res.getInt(3)).build();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		throw new NotImplementedException();
 	}
 
 	/**
-	 * Returns the next valid ID for categories, useful when inserting new categories
-	 * into the database.
+	 * Returns the next valid ID for categories, useful when inserting new
+	 * categories into the database.
 	 * 
 	 * @return the next valid id for categories, or -1 if it fails.
 	 */
