@@ -1,10 +1,12 @@
 package com.inda.drinks.db.tables;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.inda.drinks.db.DbWrapper;
 import com.inda.drinks.db.Table;
+import com.inda.drinks.exceptions.NotImplementedException;
 import com.inda.drinks.properties.Category;
 
 public class Categories extends Table<Category> {
@@ -35,4 +37,33 @@ public class Categories extends Table<Category> {
 		insert.setInt(3, e.getParentID());
 		insert.executeUpdate();
 	}
+
+	public Category getCategory(String name) {
+		throw new NotImplementedException();
+		// QUERY DATABASE LOLs
+	}
+
+	public Category getCategory(int id) {
+		throw new NotImplementedException();
+	}
+
+	/**
+	 * Returns the next valid ID for categories, useful when inserting new categories
+	 * into the database.
+	 * 
+	 * @return the next valid id for categories, or -1 if it fails.
+	 */
+	public int getNextID() {
+		try {
+			ResultSet res = super.db.query("SELECT MAX(id) FROM "
+					+ super.TABLE_NAME + ";");
+			if (res.next()) {
+				return res.getInt(1) + 1;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return -1;
+	}
+
 }

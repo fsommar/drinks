@@ -2,12 +2,12 @@ package com.inda.drinks.properties;
 
 public class Recipe {
 	private final String name, instructions;
-	private final int glass_id;
+	private final int glassID;
 	
-	private Recipe(String name, String instructions, int glass_id) {
+	private Recipe(String name, String instructions, int glassID) {
 		this.name = name;
 		this.instructions = instructions;
-		this.glass_id = glass_id;
+		this.glassID = glassID;
 	}
 
 	public String getName() {
@@ -19,7 +19,6 @@ public class Recipe {
 	}
 	
 	public int getGlassID() {
-		return glass_id;
-	}
-	
+		return glassID;
+	}	
 }

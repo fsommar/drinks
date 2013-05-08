@@ -29,4 +29,28 @@ public final class Category {
 	public int getParentID() {
 		return parent;
 	}
+	
+	public static class Builder {
+		private int _id, _parent;
+		private String _name;
+		
+		public Builder ID(int id) {
+			this._id = id;
+			return this;
+		}
+		
+		public Builder name(String name) {
+			this._name = name;
+			return this;
+		}
+		
+		public Builder parent(int parent) {
+			this._parent = parent;
+			return this;
+		}
+		
+		public Category build() {
+			return new Category(_id, _name, _parent);
+		}
+	}
 }

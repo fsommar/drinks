@@ -104,7 +104,7 @@ public class Systembolaget extends Table<Systembolaget.Item> {
 		}
 
 		public Systembolaget.Item build() {
-			// Check for validity
+			// TODO: Check for validity
 			return new Systembolaget.Item(_articleID, _partNumber, _price,
 					_volume);
 		}
