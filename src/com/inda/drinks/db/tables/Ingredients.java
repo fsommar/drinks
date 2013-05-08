@@ -1,7 +1,10 @@
 package com.inda.drinks.db.tables;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.inda.drinks.db.DbWrapper;
 import com.inda.drinks.db.Table;
@@ -44,5 +47,32 @@ public class Ingredients extends Table<Ingredient> {
 		insert.setInt(4, e.getCategory().getID());
 		insert.setInt(5, e.getPartNumber());
 		insert.executeUpdate();
+	}
+
+	/**
+	 * @return a set of all ingredients currently in the database. The set is
+	 *         empty if the database query fails for any reason.
+	 */
+	public Set<Ingredient> getAll() {
+		Set<Ingredient> ingredients = new HashSet<Ingredient>();
+		try {
+			ResultSet res = super.db.query("SELECT * FROM " + super.TABLE_NAME
+					+ ";");
+			Ingredient.Builder builder = new Ingredient.Builder();
+			while (res.next()) {
+				Ingredient ingredient = builder
+						.ID(res.getInt(1))
+						.name(res.getString(2))
+						.ABV(res.getDouble(3))
+						.category(
+								Table.get(Categories.class).getCategory(
+										res.getInt(4)))
+						.partNumber(res.getInt(5)).build();
+				ingredients.add(ingredient);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return ingredients;
 	}
 }

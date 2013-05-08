@@ -29,7 +29,7 @@ import com.inda.drinks.gui.Window;
  *    [ ] Working bar (starting with just text of categories)
  *    [ ] Adding recipes
  *  [ ] Error handling
- *    [ ] Check input before creating objects (e.g. recipe name length <= 30)
+ *    [ ] Check input before building objects (e.g. recipe name length <= 30)
  *    [x] Programmatic dependencies for Table (check dependency is registered)
  *  [-] Rework category layout, no SQL query will work for multiple nesting as it stands
  *    // Actually, yes it will. A simple 'while getParent != null' will suffice

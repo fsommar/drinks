@@ -1,11 +1,14 @@
 package com.inda.drinks.db.tables;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.inda.drinks.db.DbWrapper;
 import com.inda.drinks.db.Table;
+import com.inda.drinks.exceptions.NotImplementedException;
 import com.inda.drinks.properties.Category;
+import com.inda.drinks.properties.Category.Builder;
 
 public class Categories extends Table<Category> {
 	private final PreparedStatement insert;
@@ -35,4 +38,55 @@ public class Categories extends Table<Category> {
 		insert.setInt(3, e.getParentID());
 		insert.executeUpdate();
 	}
+
+	public Category getCategory(String name, int parent) {
+		try {
+			ResultSet res = super.db.query("SELECT * FROM " + super.TABLE_NAME
+					+ " WHERE name = " + name + " AND parent = " + parent
+					+ " LIMIT 1;");
+			Category.Builder builder = new Category.Builder();
+			if (res.next()) {
+				return builder.ID(res.getInt(1)).name(res.getString(2))
+						.parent(res.getInt(3)).build();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		throw new NotImplementedException();
+	}
+
+	public Category getCategory(int id) {
+		try {
+			ResultSet res = super.db.query("SELECT * FROM " + super.TABLE_NAME
+					+ " WHERE id = " + id + ";");
+			Category.Builder builder = new Category.Builder();
+			if (res.next()) {
+				return builder.ID(res.getInt(1)).name(res.getString(2))
+						.parent(res.getInt(3)).build();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		throw new NotImplementedException();
+	}
+
+	/**
+	 * Returns the next valid ID for categories, useful when inserting new
+	 * categories into the database.
+	 * 
+	 * @return the next valid id for categories, or -1 if it fails.
+	 */
+	public int getNextID() {
+		try {
+			ResultSet res = super.db.query("SELECT MAX(id) FROM "
+					+ super.TABLE_NAME + ";");
+			if (res.next()) {
+				return res.getInt(1) + 1;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return -1;
+	}
+
 }

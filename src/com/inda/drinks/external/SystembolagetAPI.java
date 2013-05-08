@@ -2,11 +2,15 @@ package com.inda.drinks.external;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import com.inda.drinks.db.Table;
+import com.inda.drinks.db.tables.Categories;
+import com.inda.drinks.db.tables.Ingredients;
 import com.inda.drinks.db.tables.Systembolaget;
 import com.inda.drinks.exceptions.NotImplementedException;
 import com.inda.drinks.properties.Category;
@@ -54,8 +58,8 @@ public class SystembolagetAPI {
 		private Systembolaget.Builder sb;
 		private String val;
 		private int partnr;
-		private boolean artikelid, varunummer, namn, namn2, varugrupp, alkoholhalt,
-				prisinklmoms, volymiml;
+		private boolean artikelid, varunummer, namn, namn2, varugrupp,
+				alkoholhalt, prisinklmoms, volymiml;
 
 		@Override
 		public void startElement(String uri, String localName, String qName,
@@ -101,14 +105,13 @@ public class SystembolagetAPI {
 				ingredient.subtitle(val);
 				namn2 = false;
 			} else if (varugrupp) {
-				// ingredient.category(filterCategory(varunr, val));
+				ingredient.category(filterCategory(partnr, val));
 				varugrupp = false;
 			} else if (alkoholhalt) {
 				// Assume valid String (API _should_ not have faulty fields)
 				ingredient.ABV(Formatter.oneDecHalfEven(val));
 				alkoholhalt = false;
 			} else if (prisinklmoms) {
-				// add to systembolaget table
 				sb.price(Formatter.oneDecHalfEven(val));
 				prisinklmoms = false;
 			} else if (volymiml) {
@@ -122,11 +125,13 @@ public class SystembolagetAPI {
 		public void endElement(String uri, String localName, String qName)
 				throws SAXException {
 			if (qName.equals("artikel")) {
-				// end of row, post to observer?
-				// Ingredient i = ingredient.build();
-				// Table.get(Ingredients.class).insert(i);
-				// Systembolaget.Item sb = sbItem.build();
-				// Table.get(Systembolaget.class).insert(sb);
+				// end of row
+				try {
+					Table.get(Ingredients.class).insert(ingredient.build());
+					Table.get(Systembolaget.class).insert(sb.build());
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 
@@ -147,7 +152,22 @@ public class SystembolagetAPI {
 		// Hashmap with name -> Category
 		// map["alkoholfritt"] would yield the Category object representing
 		// "alkoholfritt"
-		throw new NotImplementedException();
-	}
+		Categories categories = Table.get(Categories.class);
+		Category c = null; // TODO: prettier plsss
+		int parent = Category.NO_PARENT;
+		Category.Builder builder;
+		for (String name : s.split(", ")) {
+			builder = new Category.Builder();
+			c = categories.getCategory(name, parent);
+			if (c == null) {
+				c = builder.ID(categories.getNextID()).name(name)
+						.parent(parent).build();
+				// categories.insert(c);
+				parent = c.getID();
+			}
 
+		}
+		throw new NotImplementedException();
+		// return c;
+	}
 }
