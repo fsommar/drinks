@@ -18,8 +18,6 @@ import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import com.inda.drinks.gui.Window;
 
@@ -113,7 +111,7 @@ public class MyBar {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
-				if (!listModel.isEmpty()) {
+				if (!listModel.isEmpty() && rightDrinkList.getSelectedValue() != null) {
 					int n = JOptionPane.showConfirmDialog(Window,
 							"Do you want to delete this item from your stock?",
 							"hello world", JOptionPane.OK_CANCEL_OPTION);
