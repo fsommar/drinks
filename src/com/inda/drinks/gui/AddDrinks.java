@@ -10,9 +10,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.ItemEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -23,6 +26,8 @@ import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerListModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 public class AddDrinks {
 	public AddDrinks() {
@@ -69,7 +74,6 @@ public class AddDrinks {
 
 		// Create CenterField
 		JPanel centerField = new JPanel(new GridBagLayout());
-
 		GridBagConstraints c = new GridBagConstraints();
 
 		// Categories List
@@ -83,9 +87,28 @@ public class AddDrinks {
 		c.gridheight = 2;
 		centerField.add(categories, c);
 
+		// Temporary liqueur data
+		final ArrayList<String> data2 = new ArrayList<String>();
+		final DefaultComboBoxModel model = new DefaultComboBoxModel(
+				data2.toArray());
+		data2.addAll(Arrays.asList(new String[] { "Absolut vodka",
+				"Vanlig vodka", "HB", "Jelzin" }));
+
+		categories.addListSelectionListener(new ListSelectionListener() {
+			
+			@Override
+			public void valueChanged(ListSelectionEvent arg0) {
+				// Object item = event.getItem(); TODO: hämta spriiiiit från
+				// item
+				model.removeAllElements();
+				for (String s : data2) { // temporär
+					model.addElement(s);
+				}				
+			}
+		});
+
 		// Booooooooze List
-		String[] data2 = { "Absolut vodka", "Vanlig vodka", "HB", "Jelzin" };
-		final JList boozeList = new JList(data2);
+		final JList boozeList = new JList(model);
 		boozeList.setBorder(BorderFactory.createEtchedBorder());
 		c.gridx = 4;
 		centerField.add(boozeList, c);
@@ -113,7 +136,7 @@ public class AddDrinks {
 							+ (String) centilitres.getValue() + " cl");
 					ingredientList.addElement(temp);
 					categories.clearSelection();
-					boozeList.clearSelection();
+					model.removeAllElements();
 				}
 			}
 		});
@@ -162,7 +185,7 @@ public class AddDrinks {
 					categories.clearSelection();
 					boozeList.clearSelection();
 					ingredientList.clear();
-					drinkDescription.setText("");					
+					drinkDescription.setText("");
 				}
 			}
 		});
