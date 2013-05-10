@@ -31,17 +31,19 @@ public class Systembolaget extends Table<Systembolaget.Item> {
 
 	@Override
 	public void insert(Item e) throws SQLException {
-		insert.setInt(1, e.getPartNumber());
-		insert.setDouble(2, e.getPrice());
-		insert.setInt(3, e.getVolume());
-		insert.executeUpdate();
+		preparedExecute(insert, e);
 	}
 
 	public void merge(Item e) throws SQLException {
-		merge.setInt(1, e.getPartNumber());
-		merge.setDouble(2, e.getPrice());
-		merge.setInt(3, e.getVolume());
-		merge.executeUpdate();
+		preparedExecute(merge, e);
+	}
+
+	private static void preparedExecute(PreparedStatement ps,
+			Systembolaget.Item e) throws SQLException {
+		ps.setInt(1, e.getPartNumber());
+		ps.setDouble(2, e.getPrice());
+		ps.setInt(3, e.getVolume());
+		ps.executeUpdate();
 	}
 
 	/**

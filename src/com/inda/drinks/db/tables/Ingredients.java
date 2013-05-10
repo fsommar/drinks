@@ -50,7 +50,7 @@ public class Ingredients extends Table<Ingredient> {
 		preparedExecute(merge, e);
 	}
 	
-	private void preparedExecute(PreparedStatement ps, Ingredient e) throws SQLException {
+	private static void preparedExecute(PreparedStatement ps, Ingredient e) throws SQLException {
 		ps.setString(1, e.getName());
 		ps.setString(2, e.getSubtitle());
 		ps.setDouble(3, e.getABV());
