@@ -131,11 +131,7 @@ public class AddDrinks {
 		final DefaultListModel ingredientList = new DefaultListModel();
 
 		// Adding boooze button
-<<<<<<< HEAD
 		JButton addBooze = new JButton(Resources.ADD);
-=======
-		JButton addBooze = new JButton("L�gg till");
->>>>>>> Å Ä Ö tillagda
 		addBooze.addActionListener(new ActionListener() {
 
 			@Override
@@ -176,11 +172,7 @@ public class AddDrinks {
 		centerField.add(drinkDescription, c);
 
 		// Add drink button
-<<<<<<< HEAD
 		JButton addDrink = new JButton(Resources.ADD_DRINK);
-=======
-		JButton addDrink = new JButton("L�gg till drink");
->>>>>>> Å Ä Ö tillagda
 		addDrink.addActionListener(new ActionListener() {
 
 			@Override

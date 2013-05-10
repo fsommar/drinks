@@ -19,8 +19,6 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import com.inda.drinks.gui.Window;
-
 /**
  * Class that displays the window for adding and removing drinks to/from the
  * users stash
@@ -99,11 +97,7 @@ public class MyBar {
 		leftOptions.add(alcohol, c);
 
 		// Add liqueur button
-<<<<<<< HEAD
 		JButton addDrink = new JButton(Resources.ADD);
-=======
-		JButton addDrink = new JButton("L�gg till");
->>>>>>> Å Ä Ö tillagda
 		addDrink.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
