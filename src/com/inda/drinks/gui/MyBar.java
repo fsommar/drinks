@@ -124,7 +124,7 @@ public class MyBar {
 				if (!listModel.isEmpty() && selected != null) {
 					int n = JOptionPane.showConfirmDialog(Window,
 							Resources.removeDialog(selected.toString()),
-							Resources.REMOVE + selected + "?",
+							Resources.REMOVE + " " + selected,
 							JOptionPane.OK_CANCEL_OPTION);
 					if (n == JOptionPane.OK_OPTION) {
 						if (rightDrinkList.getSelectedIndex() != -1) {
