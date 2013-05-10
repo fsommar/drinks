@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.swing.SwingUtilities;
+
 import com.inda.drinks.db.DbWrapper;
 import com.inda.drinks.db.H2Db;
 import com.inda.drinks.db.Table;
@@ -39,12 +41,17 @@ import com.inda.drinks.gui.Window;
 public class Main {
 
 	public static void main(String[] args) {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				new Window().setVisible(true);
+			}
+		});
 		new File("data").mkdir();
 		testDB();
-		new Window().setVisible(true);
 		try {
-//			 SystembolagetAPI.fetchXML();
-//			 SystembolagetAPI.parseXML();
+			// SystembolagetAPI.fetchXML();
+			// SystembolagetAPI.parseXML();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -22,10 +22,11 @@ import javax.swing.JPanel;
 import com.inda.drinks.gui.Window;
 
 /**
- * Class that displays the window for adding
- * and removing drinks to/from the users stash
+ * Class that displays the window for adding and removing drinks to/from the
+ * users stash
+ * 
  * @author Robin Hellgren
- *
+ * 
  */
 
 public class MyBar {
@@ -98,7 +99,7 @@ public class MyBar {
 		leftOptions.add(alcohol, c);
 
 		// Add liqueur button
-		JButton addDrink = new JButton("LŠgg till");
+		JButton addDrink = new JButton(Resources.ADD);
 		addDrink.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
@@ -114,16 +115,17 @@ public class MyBar {
 		leftOptions.add(addDrink, c);
 
 		// Remove liqueur button
-		JButton removeDrink = new JButton("Ta bort");
+		JButton removeDrink = new JButton(Resources.REMOVE);
 		removeDrink.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
-				if (!listModel.isEmpty() && rightDrinkList.getSelectedValue() != null) {
+				Object selected = rightDrinkList.getSelectedValue();
+				if (!listModel.isEmpty() && selected != null) {
 					int n = JOptionPane.showConfirmDialog(Window,
-							"Do you want to delete this item from your stock?",
-							"hello world", JOptionPane.OK_CANCEL_OPTION);
+							Resources.removeDialog(selected.toString()),
+							Resources.REMOVE + selected + "?",
+							JOptionPane.OK_CANCEL_OPTION);
 					if (n == JOptionPane.OK_OPTION) {
 						if (rightDrinkList.getSelectedIndex() != -1) {
 							listModel.remove(rightDrinkList.getSelectedIndex());
@@ -134,7 +136,7 @@ public class MyBar {
 		});
 		c.gridy = 3;
 		leftOptions.add(removeDrink, c);
-		
+
 		// Add left options to panel
 		c = new GridBagConstraints();
 		c.gridx = 1;

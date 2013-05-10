@@ -50,13 +50,13 @@ public class AddDrinks {
 		final JTextField drinkName = new JTextField();
 		drinkName.setPreferredSize(new Dimension(150, 20));
 		drinkName.setForeground(Color.gray);
-		drinkName.setText("Namn");
+		drinkName.setText(Resources.NAME);
 		drinkName.addFocusListener(new FocusListener() {
 
 			@Override
 			public void focusGained(FocusEvent arg0) {
 				drinkName.setForeground(Color.black);
-				if (drinkName.getText().equals("Namn")) {
+				if (drinkName.getText().equals(Resources.NAME)) {
 					drinkName.setText("");
 				}
 			}
@@ -65,7 +65,7 @@ public class AddDrinks {
 			public void focusLost(FocusEvent arg0) {
 				if (drinkName.getText().equals("")) {
 					drinkName.setForeground(Color.gray);
-					drinkName.setText("Namn");
+					drinkName.setText(Resources.NAME);
 				}
 			}
 		});
@@ -125,13 +125,13 @@ public class AddDrinks {
 		}
 		final SpinnerListModel spinner = new SpinnerListModel(measurements);
 		final JSpinner centilitres = new JSpinner(spinner);
-		centilitres.setToolTipText("cl");
+		centilitres.setToolTipText(Resources.CL);
 
 		// Drink Ingredients
 		final DefaultListModel ingredientList = new DefaultListModel();
 
 		// Adding boooze button
-		JButton addBooze = new JButton("Lägg till");
+		JButton addBooze = new JButton(Resources.ADD);
 		addBooze.addActionListener(new ActionListener() {
 
 			@Override
@@ -172,20 +172,20 @@ public class AddDrinks {
 		centerField.add(drinkDescription, c);
 
 		// Add drink button
-		JButton addDrink = new JButton("Lägg till drink");
+		JButton addDrink = new JButton(Resources.ADD_DRINK);
 		addDrink.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (!drinkName.getText().equals("Namn")
+				if (!drinkName.getText().equals(Resources.NAME)
 						&& glaswareList.getSelectedItem() != null
 						&& !ingredientList.isEmpty()
 						&& !drinkDescription.getText().equals("")) {
-					// Lägg till drinken i DB
+					// Lä‰gg till drinken i DB
 
 					// Rensa fälten
 					drinkName.setForeground(Color.gray);
-					drinkName.setText("Namn");
+					drinkName.setText(Resources.NAME);
 					glaswareList.setSelectedItem(null);
 					categories.clearSelection();
 					boozeList.clearSelection();
