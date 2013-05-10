@@ -48,7 +48,9 @@ public class Main {
 		try {
 			db.open("data/really_unique_name", "usr", "pwd");
 			registerTables(db);
-			// SystembolagetAPI.fetchXML();
+			if (!SystembolagetAPI.FILE.exists()) {
+				SystembolagetAPI.fetchXML();
+			}
 			SystembolagetAPI.parseXML();
 			for (Ingredient i : Table.get(Ingredients.class).getAll()) {
 				System.out.println(i);

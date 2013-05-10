@@ -25,7 +25,7 @@ import com.inda.drinks.tools.XML;
  */
 public class SystembolagetAPI {
 	public static final String URL = "http://www.systembolaget.se/Assortment.aspx?Format=Xml";
-	private static final File FILE = new File("data/systembolaget");
+	public static final File FILE = new File("data/systembolaget");
 	private static final String[] SPECIAL_CASES = { "druvigt", "friskt",
 			"fylligt", "lätt" };
 
