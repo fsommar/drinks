@@ -42,8 +42,14 @@ public final class Category {
 		return parent;
 	}
 
+	public String toString() {
+		return String.format("Category[%d, %s, %d]", getID(), getName(),
+				getParentID());
+	}
+
 	/**
 	 * Builder class for Category
+	 * 
 	 * @author Fredrik Sommar
 	 */
 	public static class Builder {

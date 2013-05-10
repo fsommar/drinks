@@ -3,14 +3,14 @@ package com.inda.drinks.db.tables;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import com.inda.drinks.db.DbWrapper;
+import com.inda.drinks.db.Database;
 import com.inda.drinks.db.Table;
 import com.inda.drinks.properties.Recipe;
 
 public class Recipes extends Table<Recipe> {
-	private final PreparedStatement insert;
+	private PreparedStatement insert;
 
-	public Recipes(DbWrapper db) throws SQLException {
+	public Recipes(Database db) throws SQLException {
 		super(db, "Recipes", 1);
 		super.addDependency(Glasses.class);
 		insert = db.prepare("INSERT INTO " + super.TABLE_NAME

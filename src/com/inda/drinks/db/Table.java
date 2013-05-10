@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 import com.inda.drinks.exceptions.MissingDependencyException;
@@ -23,15 +24,16 @@ public abstract class Table<E> {
 	private final Set<Class<? extends Table<?>>> deps;
 	public final String TABLE_NAME;
 	public final int TABLE_VERSION;
-	protected final DbWrapper db;
+	protected final Database db;
 	private final Preferences prefs;
+	private boolean created = false;
 
 	/**
 	 * Called when the table is to be created for the very first time.
 	 * 
 	 * @throws SQLException
 	 */
-	public abstract void onCreate() throws SQLException;
+	protected abstract void onCreate() throws SQLException;
 
 	/**
 	 * Called when database version is higher than before.
@@ -42,7 +44,7 @@ public abstract class Table<E> {
 	 *            the new version number.
 	 * @throws SQLException
 	 */
-	public abstract void onUpgrade(int from, int to) throws SQLException;
+	protected abstract void onUpgrade(int from, int to) throws SQLException;
 
 	/**
 	 * Inserts an object into the table.
@@ -66,7 +68,7 @@ public abstract class Table<E> {
 	 * @throws VersionMismatchException
 	 *             if the new version is less than the current one.
 	 */
-	protected Table(DbWrapper db, String name, int version)
+	protected Table(Database db, String name, int version)
 			throws VersionMismatchException {
 		this.deps = new HashSet<Class<? extends Table<?>>>();
 		this.TABLE_NAME = name;
@@ -76,7 +78,9 @@ public abstract class Table<E> {
 		final boolean exists = prefs.getBoolean("exists", false);
 		if (!exists) {
 			try {
+				drop(); // in the case of leftovers
 				onCreate();
+				created = true;
 				prefs.putBoolean("exists", true);
 				prefs.putInt("version", version);
 			} catch (SQLException e) {
@@ -96,6 +100,11 @@ public abstract class Table<E> {
 					e.printStackTrace();
 				}
 			}
+		}
+		try {
+			prefs.flush();
+		} catch (BackingStoreException e) {
+			e.printStackTrace();
 		}
 
 	}
@@ -129,6 +138,13 @@ public abstract class Table<E> {
 	}
 
 	/**
+	 * @return if this table was created now or if it already existed before.
+	 */
+	public boolean wasCreated() {
+		return created;
+	}
+
+	/**
 	 * Allows for fetching of tables by using their corresponding classes as a
 	 * representation key. Time complexity: O(1).
 	 * 
@@ -146,10 +162,12 @@ public abstract class Table<E> {
 	 * 
 	 * @param v
 	 *            the table to be registered.
-	 * @throws MissingDependencyException if any of the dependencies are missing.
+	 * @throws MissingDependencyException
+	 *             if any of the dependencies are missing.
 	 */
 	@SuppressWarnings("unchecked")
-	public static <V extends Table<?>> void register(V v) throws MissingDependencyException {
+	public static <V extends Table<?>> void register(V v)
+			throws MissingDependencyException {
 		if (v.getDependencies().contains(v.getClass())) {
 			throw new MissingDependencyException(v.getClass().getSimpleName()
 					+ ".class is missing one or more of its dependencies.");

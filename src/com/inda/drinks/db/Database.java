@@ -10,7 +10,7 @@ import java.sql.Statement;
  * @author Fredrik Sommar
  *
  */
-public interface DbWrapper {
+public interface Database {
 	/**
 	 * Executes the supplied SQL statement. Used when multiple ResultSets are
 	 * expected.

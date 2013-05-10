@@ -1,14 +1,14 @@
 package com.inda.drinks;
 
 import java.io.File;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
-import com.inda.drinks.db.DbWrapper;
-import com.inda.drinks.db.H2Db;
+import com.inda.drinks.db.Database;
+import com.inda.drinks.db.H2Database;
 import com.inda.drinks.db.Table;
 import com.inda.drinks.db.tables.Bar;
 import com.inda.drinks.db.tables.Categories;
@@ -17,7 +17,9 @@ import com.inda.drinks.db.tables.Glasses;
 import com.inda.drinks.db.tables.Ingredients;
 import com.inda.drinks.db.tables.Recipes;
 import com.inda.drinks.db.tables.Systembolaget;
+import com.inda.drinks.external.SystembolagetAPI;
 import com.inda.drinks.gui.Window;
+import com.inda.drinks.properties.Ingredient;
 
 /*
  * TODO:
@@ -41,50 +43,34 @@ import com.inda.drinks.gui.Window;
 public class Main {
 
 	public static void main(String[] args) {
+		new File("data").mkdir();
+		Database db = new H2Database();
+		try {
+			db.open("data/really_unique_name", "usr", "pwd");
+			registerTables(db);
+			// SystembolagetAPI.fetchXML();
+			SystembolagetAPI.parseXML();
+			for (Ingredient i : Table.get(Ingredients.class).getAll()) {
+				System.out.println(i);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			db.close();
+		}
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (Exception e) {
+		}
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
 				new Window().setVisible(true);
 			}
 		});
-		new File("data").mkdir();
-		testDB();
-		try {
-			// SystembolagetAPI.fetchXML();
-			// SystembolagetAPI.parseXML();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
-	private static void testDB() {
-		DbWrapper db = new H2Db();
-		try {
-			db.open("data/really_unique_name", "usr", "pwd");
-			db.execute("DROP TABLE IF EXISTS Test;");
-			db.execute("CREATE TABLE Test (id INT IDENTITY PRIMARY KEY,"
-					+ " lastName VARCHAR(30) NOT NULL, firstName VARCHAR(30));");
-			PreparedStatement prepare = db
-					.prepare("INSERT INTO Test VALUES(default, ?, ?);");
-			prepare.setString(1, "Wikingsson");
-			prepare.setString(2, "Fredrik");
-			prepare.executeUpdate();
-			prepare.setString(1, "Reinfeldt");
-			prepare.executeUpdate();
-			prepare.setString(2, "Filippa");
-			prepare.executeUpdate();
-			ResultSet result = db.query("SELECT * FROM Test;");
-			System.out.println(Table.getInfo(result));
-			System.out.println(Table.getColumnInfo(result));
-			System.out.println(Table.getRowInfo(result));
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			db.close();
-		}
-	}
-
-	private static void registerTables(DbWrapper db) throws SQLException { //
+	private static void registerTables(Database db) throws SQLException { //
 		// No dependencies
 		Table.register(new Glasses(db));
 		Table.register(new Categories(db));

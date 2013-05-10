@@ -3,13 +3,13 @@ package com.inda.drinks.db.tables;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import com.inda.drinks.db.DbWrapper;
+import com.inda.drinks.db.Database;
 import com.inda.drinks.db.Table;
 
 public class Bar extends Table<Integer> {
 	private final PreparedStatement insert;
 
-	public Bar(DbWrapper db) throws SQLException {
+	public Bar(Database db) throws SQLException {
 		super(db, "Bar", 1);
 		super.addDependency(Ingredients.class);
 		insert = db.prepare("INSERT INTO " + super.TABLE_NAME + " VALUES(?);");

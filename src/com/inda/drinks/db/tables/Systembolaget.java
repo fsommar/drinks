@@ -3,24 +3,25 @@ package com.inda.drinks.db.tables;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import com.inda.drinks.db.DbWrapper;
+import com.inda.drinks.db.Database;
 import com.inda.drinks.db.Table;
 
 public class Systembolaget extends Table<Systembolaget.Item> {
-	private final PreparedStatement insert;
+	private final PreparedStatement insert, merge;
 
-	public Systembolaget(DbWrapper db) throws SQLException {
+	public Systembolaget(Database db) throws SQLException {
 		super(db, "Systembolaget", 1);
 		insert = db.prepare("INSERT INTO " + super.TABLE_NAME
-				+ " VALUES(?, ?, ?, ?);");
+				+ " VALUES(?, ?, ?);");
+		merge = db.prepare("MERGE INTO " + super.TABLE_NAME
+				+ " KEY(part_number) VALUES(?, ?, ?);");
 	}
 
 	@Override
 	public void onCreate() throws SQLException {
 		super.db.execute("CREATE TABLE " + super.TABLE_NAME
-				+ " (article_id INT NOT NULL PRIMARY KEY,"
-				+ " part_number INT NOT NULL, price DOUBLE NOT NULL,"
-				+ " volume INT NOT NULL);");
+				+ " (part_number INT NOT NULL PRIMARY KEY"
+				+ ", price DOUBLE NOT NULL, volume INT NOT NULL);");
 	}
 
 	@Override
@@ -30,11 +31,17 @@ public class Systembolaget extends Table<Systembolaget.Item> {
 
 	@Override
 	public void insert(Item e) throws SQLException {
-		insert.setInt(1, e.getArticleID());
-		insert.setInt(2, e.getPartNumber());
-		insert.setDouble(3, e.getPrice());
-		insert.setInt(4, e.getVolume());
+		insert.setInt(1, e.getPartNumber());
+		insert.setDouble(2, e.getPrice());
+		insert.setInt(3, e.getVolume());
 		insert.executeUpdate();
+	}
+
+	public void merge(Item e) throws SQLException {
+		merge.setInt(1, e.getPartNumber());
+		merge.setDouble(2, e.getPrice());
+		merge.setInt(3, e.getVolume());
+		merge.executeUpdate();
 	}
 
 	/**
@@ -43,20 +50,14 @@ public class Systembolaget extends Table<Systembolaget.Item> {
 	 * @author Fredrik Sommar
 	 */
 	public static class Item {
-		private final int articleID;
 		private final int partNumber; // "varunummer" in the Systembolaget API
 		private final double price;
 		private final int volume;
 
-		private Item(int articleID, int partNumber, double price, int volume) {
-			this.articleID = articleID;
+		private Item(int partNumber, double price, int volume) {
 			this.partNumber = partNumber;
 			this.price = price;
 			this.volume = volume;
-		}
-
-		public int getArticleID() {
-			return articleID;
 		}
 
 		public int getPartNumber() {
@@ -70,6 +71,11 @@ public class Systembolaget extends Table<Systembolaget.Item> {
 		public int getVolume() {
 			return volume;
 		}
+
+		public String toString() {
+			return String.format("Systembolaget.Item[%d, %.1f, %d]",
+					getPartNumber(), getPrice(), getVolume());
+		}
 	}
 
 	/**
@@ -80,13 +86,8 @@ public class Systembolaget extends Table<Systembolaget.Item> {
 	 */
 	public static class Builder {
 		// Underscore to separate from super class' variables of same name
-		private int _articleID, _volume, _partNumber;
+		private int _volume, _partNumber;
 		private double _price;
-
-		public Systembolaget.Builder articleID(int articleID) {
-			this._articleID = articleID;
-			return this;
-		}
 
 		public Systembolaget.Builder partNumber(int partNumber) {
 			this._partNumber = partNumber;
@@ -105,8 +106,7 @@ public class Systembolaget extends Table<Systembolaget.Item> {
 
 		public Systembolaget.Item build() {
 			// TODO: Check for validity
-			return new Systembolaget.Item(_articleID, _partNumber, _price,
-					_volume);
+			return new Systembolaget.Item(_partNumber, _price, _volume);
 		}
 
 	}

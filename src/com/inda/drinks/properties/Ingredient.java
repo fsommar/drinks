@@ -6,7 +6,7 @@ public final class Ingredient {
 	private final String subtitle;
 	private final double ABV;
 	private final Category category;
-	private final int partNumber; // "varunummer" in Systembolaget API
+	private final int partNumber; // "varnummer" in Systembolaget API
 
 	private Ingredient(int id, String name, String subtitle, double ABV,
 			Category category, int partNumber) {
@@ -42,9 +42,14 @@ public final class Ingredient {
 		return partNumber;
 	}
 
+	public String toString() {
+		return String.format("Ingredient[%d, %s, %s, %2.1f, %s, %d]", getID(), getName(),
+				getSubtitle(), getABV(), getCategory(), getPartNumber());
+	}
+
 	/**
-	 * Builder pattern used for setting one parameter at a time since
-	 * Ingredient is immutable.
+	 * Builder pattern used for setting one parameter at a time since Ingredient
+	 * is immutable.
 	 * 
 	 * @author Fredrik Sommar
 	 */

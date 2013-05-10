@@ -12,7 +12,6 @@ import com.inda.drinks.db.Table;
 import com.inda.drinks.db.tables.Categories;
 import com.inda.drinks.db.tables.Ingredients;
 import com.inda.drinks.db.tables.Systembolaget;
-import com.inda.drinks.exceptions.NotImplementedException;
 import com.inda.drinks.properties.Category;
 import com.inda.drinks.properties.Ingredient;
 import com.inda.drinks.tools.Formatter;
@@ -26,7 +25,9 @@ import com.inda.drinks.tools.XML;
  */
 public class SystembolagetAPI {
 	public static final String URL = "http://www.systembolaget.se/Assortment.aspx?Format=Xml";
-	private static final File file = new File("data/systembolaget");
+	private static final File FILE = new File("data/systembolaget");
+	private static final String[] SPECIAL_CASES = { "druvigt", "friskt",
+			"fylligt", "lätt" };
 
 	/**
 	 * Downloads an XML file to data/systembolaget.
@@ -34,8 +35,8 @@ public class SystembolagetAPI {
 	 * @throws IOException
 	 */
 	public static void fetchXML() throws IOException {
-		file.createNewFile();
-		Web.download(URL, file);
+		FILE.createNewFile();
+		Web.download(URL, FILE);
 	}
 
 	/**
@@ -45,7 +46,7 @@ public class SystembolagetAPI {
 	 * @throws Exception
 	 */
 	public static void parseXML() throws Exception {
-		XML.parse(file, new SystembolagetHandler());
+		XML.parse(FILE, new SystembolagetHandler());
 	}
 
 	/**
@@ -58,8 +59,8 @@ public class SystembolagetAPI {
 		private Systembolaget.Builder sb;
 		private String val;
 		private int partnr;
-		private boolean artikelid, varunummer, namn, namn2, varugrupp,
-				alkoholhalt, prisinklmoms, volymiml;
+		private boolean varunummer, namn, namn2, varugrupp, alkoholhalt,
+				prisinklmoms, volymiml;
 
 		@Override
 		public void startElement(String uri, String localName, String qName,
@@ -67,9 +68,7 @@ public class SystembolagetAPI {
 			if (qName.equalsIgnoreCase("artikel")) {
 				ingredient = new Ingredient.Builder();
 				sb = new Systembolaget.Builder();
-			} else if (qName.equalsIgnoreCase("artikelid")) {
-				artikelid = true;
-			} else if (qName.equalsIgnoreCase("varunummer")) {
+			} else if (qName.equalsIgnoreCase("varnummer")) {
 				varunummer = true;
 			} else if (qName.equalsIgnoreCase("namn")) {
 				namn = true;
@@ -79,9 +78,9 @@ public class SystembolagetAPI {
 				varugrupp = true;
 			} else if (qName.equalsIgnoreCase("alkoholhalt")) {
 				alkoholhalt = true;
-			} else if (qName.equals("prisinklmoms")) {
+			} else if (qName.equalsIgnoreCase("prisinklmoms")) {
 				prisinklmoms = true;
-			} else if (qName.equals("volymiml")) {
+			} else if (qName.equalsIgnoreCase("volymiml")) {
 				volymiml = true;
 			}
 		}
@@ -90,10 +89,7 @@ public class SystembolagetAPI {
 		public void characters(char[] ch, int start, int len)
 				throws SAXException {
 			val = new String(ch, start, len).trim();
-			if (artikelid) {
-				sb.articleID(Integer.parseInt(val));
-				artikelid = false;
-			} else if (varunummer) {
+			if (varunummer) {
 				partnr = Integer.parseInt(val);
 				ingredient.partNumber(partnr);
 				sb.partNumber(partnr);
@@ -124,14 +120,31 @@ public class SystembolagetAPI {
 		@Override
 		public void endElement(String uri, String localName, String qName)
 				throws SAXException {
-			if (qName.equals("artikel")) {
-				// end of row
+			if (qName.equalsIgnoreCase("artikel")) { // end of row
 				try {
-					Table.get(Ingredients.class).insert(ingredient.build());
-					Table.get(Systembolaget.class).insert(sb.build());
+					// Order matters since ingredients references systembolaget
+					Table.get(Systembolaget.class).merge(sb.build());
+					Ingredient i = ingredient.build();
+					if (i.getCategory() != null) {
+						Table.get(Ingredients.class).merge(i);
+					}
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
+			} else if (qName.equalsIgnoreCase("varnummer")) {
+				varunummer = false;
+			} else if (qName.equalsIgnoreCase("namn")) {
+				namn = false;
+			} else if (qName.equalsIgnoreCase("namn2")) {
+				namn2 = false;
+			} else if (qName.equalsIgnoreCase("varugrupp")) {
+				varugrupp = false;
+			} else if (qName.equalsIgnoreCase("alkoholhalt")) {
+				alkoholhalt = false;
+			} else if (qName.equalsIgnoreCase("prisinklmoms")) {
+				prisinklmoms = false;
+			} else if (qName.equalsIgnoreCase("volymiml")) {
+				volymiml = false;
 			}
 		}
 
@@ -149,25 +162,31 @@ public class SystembolagetAPI {
 	 * @return a Category object more suitable for this application.
 	 */
 	private static Category filterCategory(int id, String s) {
-		// Hashmap with name -> Category
-		// map["alkoholfritt"] would yield the Category object representing
-		// "alkoholfritt"
 		Categories categories = Table.get(Categories.class);
-		Category c = null; // TODO: prettier plsss
+		Category c = null;
 		int parent = Category.NO_PARENT;
 		Category.Builder builder;
-		for (String name : s.split(", ")) {
+		outer: for (String name : s.split(", ")) {
+			name = name.trim().toLowerCase();
+			for (String spec : SPECIAL_CASES) {
+				// White wines' third category level is ignored
+				if (name.equalsIgnoreCase(spec)) {
+					break outer;
+				}
+			}
 			builder = new Category.Builder();
 			c = categories.getCategory(name, parent);
-			if (c == null) {
+			if (c == null) { // Category does not yet exist
 				c = builder.ID(categories.getNextID()).name(name)
 						.parent(parent).build();
-				// categories.insert(c);
-				parent = c.getID();
+				try {
+					categories.insert(c);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 			}
-
+			parent = c.getID();
 		}
-		throw new NotImplementedException();
-		// return c;
+		return c;
 	}
 }

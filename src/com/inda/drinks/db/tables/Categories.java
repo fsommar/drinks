@@ -4,16 +4,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.inda.drinks.db.DbWrapper;
+import com.inda.drinks.db.Database;
 import com.inda.drinks.db.Table;
-import com.inda.drinks.exceptions.NotImplementedException;
 import com.inda.drinks.properties.Category;
-import com.inda.drinks.properties.Category.Builder;
 
 public class Categories extends Table<Category> {
 	private final PreparedStatement insert;
 
-	public Categories(DbWrapper db) throws SQLException {
+	public Categories(Database db) throws SQLException {
 		super(db, "Categories", 1);
 		insert = super.db.prepare("INSERT INTO " + super.TABLE_NAME
 				+ " VALUES(?, ?, ?);");
@@ -23,7 +21,7 @@ public class Categories extends Table<Category> {
 	public void onCreate() throws SQLException {
 		super.db.execute("CREATE TABLE " + super.TABLE_NAME
 				+ " (id INT NOT NULL PRIMARY KEY,"
-				+ " name VARCHAR(15) NOT NULL, parent INT NOT NULL);");
+				+ " name VARCHAR(50) NOT NULL, parent INT NOT NULL);");
 	}
 
 	@Override
@@ -42,7 +40,7 @@ public class Categories extends Table<Category> {
 	public Category getCategory(String name, int parent) {
 		try {
 			ResultSet res = super.db.query("SELECT * FROM " + super.TABLE_NAME
-					+ " WHERE name = " + name + " AND parent = " + parent
+					+ " WHERE name = '" + name + "' AND parent = " + parent
 					+ " LIMIT 1;");
 			Category.Builder builder = new Category.Builder();
 			if (res.next()) {
@@ -52,13 +50,13 @@ public class Categories extends Table<Category> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		throw new NotImplementedException();
+		return null;
 	}
 
 	public Category getCategory(int id) {
 		try {
 			ResultSet res = super.db.query("SELECT * FROM " + super.TABLE_NAME
-					+ " WHERE id = " + id + ";");
+					+ " WHERE id = " + id + " LIMIT 1;");
 			Category.Builder builder = new Category.Builder();
 			if (res.next()) {
 				return builder.ID(res.getInt(1)).name(res.getString(2))
@@ -67,7 +65,7 @@ public class Categories extends Table<Category> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		throw new NotImplementedException();
+		return null;
 	}
 
 	/**

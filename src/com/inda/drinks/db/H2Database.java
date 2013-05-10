@@ -12,19 +12,20 @@ import java.sql.Statement;
  * @author Fredrik Sommar
  *
  */
-public class H2Db implements DbWrapper {
+public class H2Database implements Database {
 	private Connection conn;
 	private Statement statement;
 	
 	@Override
 	public ResultSet query(String sql) throws SQLException {
-		return getStatement().executeQuery(sql);
+		return conn.createStatement().executeQuery(sql);
 	}
 
 	@Override
 	public Statement execute(String sql) throws SQLException {
-		getStatement().execute(sql);
-		return getStatement();
+		Statement m = conn.createStatement();
+		m.execute(sql);
+		return m;
 	}
 	
 	@Override
@@ -56,13 +57,5 @@ public class H2Db implements DbWrapper {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	// We only ever need one statement object for our purposes
-	private Statement getStatement() throws SQLException {
-		if (statement == null) {
-			statement = conn.createStatement();
-		}
-		return statement;
 	}
 }

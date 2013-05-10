@@ -3,14 +3,14 @@ package com.inda.drinks.db.tables;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import com.inda.drinks.db.DbWrapper;
+import com.inda.drinks.db.Database;
 import com.inda.drinks.db.Table;
 import com.inda.drinks.properties.Content;
 
 public class Contents extends Table<Content> {
 	private final PreparedStatement insert;
 
-	public Contents(DbWrapper db) throws SQLException {
+	public Contents(Database db) throws SQLException {
 		super(db, "Contents", 1);
 		super.addDependency(Recipes.class);
 		super.addDependency(Ingredients.class);
@@ -23,7 +23,7 @@ public class Contents extends Table<Content> {
 		super.db.execute("CREATE TABLE " + super.TABLE_NAME
 				+ " (recipe_id INT NOT NULL, ingredient_id INT NOT NULL,"
 				+ " specific BOOLEAN NOT NULL, volume INT NOT NULL,"
-				+ " CONSTRAINT pk PRIMARY KEY(recipe_id, ingredient_id),"
+				+ " CONSTRAINT contents_pk PRIMARY KEY(recipe_id, ingredient_id),"
 				+ " FOREIGN KEY(recipe_id) REFERENCES "
 				+ Table.get(Recipes.class).TABLE_NAME
 				+ "(id), FOREIGN KEY(ingredient_id) REFERENCES "
