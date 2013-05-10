@@ -99,7 +99,11 @@ public class MyBar {
 		leftOptions.add(alcohol, c);
 
 		// Add liqueur button
+<<<<<<< HEAD
 		JButton addDrink = new JButton(Resources.ADD);
+=======
+		JButton addDrink = new JButton("L�gg till");
+>>>>>>> Å Ä Ö tillagda
 		addDrink.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
