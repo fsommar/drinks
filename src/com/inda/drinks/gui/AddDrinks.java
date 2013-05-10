@@ -28,6 +28,12 @@ import javax.swing.SpinnerListModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+/**
+ * Class that displays the window for adding a drink
+ * @author Robin Hellgren
+ *
+ */
+
 public class AddDrinks {
 	public AddDrinks() {
 

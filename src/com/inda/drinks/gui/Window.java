@@ -6,6 +6,11 @@ import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 import com.inda.drinks.gui.AllDrinks;
 
+/**
+ * Creates main window and top tabs
+ * @author Robin Hellgren
+ *
+ */
 public class Window extends JFrame {
 
 	public Window() {

@@ -3,12 +3,19 @@ package com.inda.drinks.gui;
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JTextPane;
+
+/**
+ * Class that displays all drinks currently in the database
+ * @author Robin Hellgren
+ *
+ */
 
 public class AllDrinks {
 	public AllDrinks() {
@@ -33,10 +40,23 @@ public class AllDrinks {
 		leftSide.add(leftMeny, c);
 
 		// Center Drink info
-		JTextPane drinkInfo = new JTextPane();
+		final JPanel drinkInfo = new JPanel(new GridBagLayout());
 		drinkInfo.setBorder(BorderFactory.createEtchedBorder());
 
-
+		// Drink list listener, displays chosen drink
+		leftMeny.addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				//Display drink from DB in drinkInfo
+			}
+			
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				drinkInfo.removeAll(); //händer aldrig?	
+			}
+		});
+		
 		panel.add(drinkInfo, BorderLayout.CENTER);
 
 		return panel;

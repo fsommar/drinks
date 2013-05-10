@@ -21,6 +21,13 @@ import javax.swing.JPanel;
 
 import com.inda.drinks.gui.Window;
 
+/**
+ * Class that displays the window for adding
+ * and removing drinks to/from the users stash
+ * @author Robin Hellgren
+ *
+ */
+
 public class MyBar {
 
 	Window Window;
@@ -97,6 +104,8 @@ public class MyBar {
 			public void actionPerformed(ActionEvent e) {
 				if (!listModel.contains(alcohol.getSelectedItem())) {
 					listModel.addElement(alcohol.getSelectedItem());
+					model.removeAllElements();
+					boozeBox.setSelectedItem(null);
 				}
 			}
 		});

@@ -10,6 +10,13 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
 
+/**
+ * Class that displays the drinks a user can make
+ * with his or hers current stash
+ * @author Robin Hellgren
+ *
+ */
+
 public class PersonalDrinkList {
 	public PersonalDrinkList() {
 	}
