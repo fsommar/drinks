@@ -53,7 +53,7 @@ public class AllDrinks {
 			
 			@Override
 			public void focusGained(FocusEvent arg0) {
-				drinkInfo.removeAll(); //händer aldrig?	
+				drinkInfo.removeAll(); //hä‰nder aldrig?	
 			}
 		});
 		
