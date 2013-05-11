@@ -28,7 +28,7 @@ import com.inda.drinks.gui.Window;
  *    [ ] Adding recipes
  *  [ ] Error handling
  *    [ ] Check input before building objects (e.g. recipe name length <= 30)
- *    
+ *  [ ] Combine AllDrinks and PersonalDrinkList (they're almost the same) 
  * LEGEND: [ ] not done, [x] done, [-] skipped.
  */
 public class Main {

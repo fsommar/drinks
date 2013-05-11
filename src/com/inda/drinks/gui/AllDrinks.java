@@ -32,18 +32,17 @@ import com.inda.drinks.properties.Recipe;
  */
 
 public class AllDrinks implements Tab {
-	private DefaultListModel<Recipe> model = new DefaultListModel<Recipe>();
+	private DefaultListModel recipeModel = new DefaultListModel();
 	private JTextPane drinkInfo;
 	private SimpleAttributeSet boldItalics;
 
 	// Visar samtliga drinkar i databasen
 	public JComponent showWindow() {
-
 		JPanel panel = new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 
 		// Left drink menu
-		JList<Recipe> leftMenu = new JList<Recipe>(model);
+		JList leftMenu = new JList(recipeModel);
 		leftMenu.setBorder(BorderFactory.createEtchedBorder());
 		JScrollPane scroll = new JScrollPane(leftMenu);
 		c.fill = GridBagConstraints.BOTH;
@@ -102,9 +101,9 @@ public class AllDrinks implements Tab {
 	@Override
 	public void update() {
 		Set<Recipe> recipes = Table.get(Recipes.class).getAll();
-		model.clear();
+		recipeModel.clear();
 		for (Recipe r : recipes) {
-			model.addElement(r);
+			recipeModel.addElement(r);
 		}
 	}
 }

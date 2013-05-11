@@ -21,12 +21,15 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerListModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
+import com.inda.drinks.properties.Glass;
 
 /**
  * Class that displays the window for adding a drink
@@ -70,8 +73,8 @@ public class AddDrinks implements Tab {
 		topOption.add(drinkName);
 
 		// Type of glas
-		String[] glasData = { "cocktail", "highball", "lowball", "shot" };
-		final JComboBox glaswareList = new JComboBox(glasData);
+//		String[] glasData = { "cocktail", "highball", "lowball", "shot" };
+		final JComboBox glaswareList = new JComboBox(Glass.values());
 		glaswareList.setSelectedItem(null);
 		topOption.add(glaswareList);
 
@@ -80,36 +83,38 @@ public class AddDrinks implements Tab {
 		GridBagConstraints c = new GridBagConstraints();
 
 		// Categories List
-		String[] data = { "Vodka ren", "Vodka jordubb", "Vodka Choklad",
-				"Vodka Hallon" }; // TODO: riktig data
-		final JList categories = new JList(data);
-		categories.setBorder(BorderFactory.createEtchedBorder());
+//		String[] data = { "Vodka ren", "Vodka jordubb", "Vodka Choklad",
+//				"Vodka Hallon" }; // TODO: riktig data
+		
+		final JList categories = new JList();
+		JScrollPane scroll = new JScrollPane(categories);
+		scroll.setBorder(BorderFactory.createEtchedBorder());
 		c.gridx = 1;
 		c.gridwidth = 2;
 		c.fill = GridBagConstraints.BOTH;
 		c.gridheight = 2;
-		centerField.add(categories, c);
+		centerField.add(scroll, c);
 
 		// Temporary liqueur data
+		categories.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent arg0) {
+				// Object item = event.getItem(); TODO: hämta spriiiiit från
+				// item
+				/*
+				model.removeAllElements();
+				for (String s : data2) { // temporär
+					model.addElement(s);
+				}
+				*/
+			}
+		});
+
 		final ArrayList<String> data2 = new ArrayList<String>();
 		final DefaultComboBoxModel model = new DefaultComboBoxModel(
 				data2.toArray());
 		data2.addAll(Arrays.asList(new String[] { "Absolut vodka",
 				"Vanlig vodka", "HB", "Jelzin" }));
-
-		categories.addListSelectionListener(new ListSelectionListener() {
-
-			@Override
-			public void valueChanged(ListSelectionEvent arg0) {
-				// Object item = event.getItem(); TODO: hämta spriiiiit från
-				// item
-				model.removeAllElements();
-				for (String s : data2) { // temporär
-					model.addElement(s);
-				}
-			}
-		});
-
 		// Booooooooze List
 		final JList boozeList = new JList(model);
 		boozeList.setBorder(BorderFactory.createEtchedBorder());

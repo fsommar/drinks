@@ -15,9 +15,7 @@ public class Glasses extends Table<Glass> {
 		prepared = db.prepare("INSERT INTO " + super.TABLE_NAME
 				+ " VALUES(?, ?);");
 		if (super.wasCreated()) {
-			for (Glass glass : Glass.values()) {
-				insert(glass);
-			}
+			insertGlasses();
 		}
 	}
 
@@ -29,8 +27,9 @@ public class Glasses extends Table<Glass> {
 
 	@Override
 	public void onUpgrade(int from, int to) throws SQLException {
-		 db.execute("DROP TABLE IF EXISTS "+TABLE_NAME+";");
-		 onCreate();
+		db.execute("DROP TABLE IF EXISTS " + TABLE_NAME + ";");
+		onCreate();
+		insertGlasses();
 	}
 
 	@Override
@@ -38,5 +37,11 @@ public class Glasses extends Table<Glass> {
 		prepared.setInt(1, e.getID());
 		prepared.setString(2, e.toString());
 		prepared.executeUpdate();
+	}
+
+	private void insertGlasses() throws SQLException {
+		for (Glass glass : Glass.values()) {
+			insert(glass);
+		}
 	}
 }
