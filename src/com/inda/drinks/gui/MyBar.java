@@ -28,11 +28,8 @@ import javax.swing.JPanel;
  * 
  */
 
-<<<<<<< HEAD
 public class MyBar implements Tab {
-	// Fönster där användaren lägger till/tar bort från sitt förråd
-=======
-public class MyBar {
+	// Föˆnster d‰är anv‰ändaren l‰ägger till/tar bort frÂån sitt föˆrrÂåd
 
 	Window Window;
 
@@ -41,7 +38,6 @@ public class MyBar {
 	}
 
 	// Föˆnster d‰är anv‰ndaren l‰ägger till/tar bort frÂån sitt föˆrrÂåd
->>>>>>> GUI Fixade subkategori p√• MyBar
 	public JComponent showWindow() {
 		final JPanel panel = new JPanel(new GridBagLayout());
 
