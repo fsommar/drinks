@@ -210,7 +210,7 @@ public class AddDrinks implements Tab {
 						+ (String) centilitres.getValue() + " cl");
 						 ingredientList.addElement(temp);
 				} else {
-					String temp = ((String) subcategoryBox.getSelectedItem() + " "
+					String temp = ((String) categoryBox.getSelectedItem() + " " + (String) subcategoryBox.getSelectedItem() + " "
 							+ (String) centilitres.getValue() + " cl");
 							 ingredientList.addElement(temp);
 				}
