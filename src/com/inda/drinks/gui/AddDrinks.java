@@ -30,14 +30,12 @@ import javax.swing.event.ListSelectionListener;
 
 /**
  * Class that displays the window for adding a drink
+ * 
  * @author Robin Hellgren
- *
+ * 
  */
 
-public class AddDrinks {
-	public AddDrinks() {
-
-	}
+public class AddDrinks implements Tab {
 
 	// Läga till drinkar till databasen
 	public JComponent showWindow() {
@@ -100,7 +98,7 @@ public class AddDrinks {
 				"Vanlig vodka", "HB", "Jelzin" }));
 
 		categories.addListSelectionListener(new ListSelectionListener() {
-			
+
 			@Override
 			public void valueChanged(ListSelectionEvent arg0) {
 				// Object item = event.getItem(); TODO: hämta spriiiiit från
@@ -108,7 +106,7 @@ public class AddDrinks {
 				model.removeAllElements();
 				for (String s : data2) { // temporär
 					model.addElement(s);
-				}				
+				}
 			}
 		});
 
@@ -201,5 +199,10 @@ public class AddDrinks {
 
 		panel.add(centerField, BorderLayout.CENTER);
 		return panel;
+	}
+
+	@Override
+	public void update() {
+
 	}
 }

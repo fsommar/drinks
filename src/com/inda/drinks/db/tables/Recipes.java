@@ -1,7 +1,10 @@
 package com.inda.drinks.db.tables;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.inda.drinks.db.Database;
 import com.inda.drinks.db.Table;
@@ -37,5 +40,23 @@ public class Recipes extends Table<Recipe> {
 		insert.setString(2, e.getInstructions());
 		insert.setInt(3, e.getGlassID());
 		insert.executeUpdate();
+	}
+
+	public Set<Recipe> getAll() {
+		Set<Recipe> recipes = new HashSet<Recipe>();
+		try {
+			ResultSet res = super.db.query("SELECT * FROM " + super.TABLE_NAME
+					+ ";");
+			Recipe.Builder builder = new Recipe.Builder();
+			while (res.next()) {
+				Recipe recipe = builder.ID(res.getInt(1))
+						.name(res.getString(2)).instructions(res.getString(3))
+						.glassID(res.getInt(4)).build();
+				recipes.add(recipe);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return recipes;
 	}
 }

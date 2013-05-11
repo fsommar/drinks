@@ -27,17 +27,10 @@ import javax.swing.JPanel;
  * 
  */
 
-public class MyBar {
-
-	Window Window;
-
-	public MyBar(Window main) {
-		Window = main;
-	}
-
+public class MyBar implements Tab {
 	// Fönster där användaren lägger till/tar bort från sitt förråd
 	public JComponent showWindow() {
-		JPanel panel = new JPanel(new GridBagLayout());
+		final JPanel panel = new JPanel(new GridBagLayout());
 
 		// Drink list
 		final DefaultListModel listModel = new DefaultListModel();
@@ -120,7 +113,7 @@ public class MyBar {
 			public void actionPerformed(ActionEvent arg0) {
 				Object selected = rightDrinkList.getSelectedValue();
 				if (!listModel.isEmpty() && selected != null) {
-					int n = JOptionPane.showConfirmDialog(Window,
+					int n = JOptionPane.showConfirmDialog(panel,
 							Resources.removeDialog(selected.toString()),
 							Resources.REMOVE + " " + selected,
 							JOptionPane.OK_CANCEL_OPTION);
@@ -142,5 +135,10 @@ public class MyBar {
 		panel.add(leftOptions, c);
 
 		return panel;
+	}
+
+	@Override
+	public void update() {
+
 	}
 }

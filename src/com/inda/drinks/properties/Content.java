@@ -21,7 +21,7 @@ public class Content {
 	 * @param id
 	 *            the id of the recipe these contents are linked to.
 	 */
-	private Content(int id) {
+	public Content(int id) {
 		this.id = id;
 		this.ingredients = new HashSet<Content.Item>();
 	}
@@ -75,7 +75,7 @@ public class Content {
 	}
 
 	/**
-	 * Represents a row in the Categories table, i.e. an ingredient linked to a
+	 * Represents a row in the Contents table, i.e. an ingredient linked to a
 	 * recipe.
 	 * 
 	 * @author Fredrik Sommar

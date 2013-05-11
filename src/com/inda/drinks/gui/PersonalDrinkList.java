@@ -8,6 +8,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 
 /**
@@ -17,9 +18,7 @@ import javax.swing.JTextPane;
  *
  */
 
-public class PersonalDrinkList {
-	public PersonalDrinkList() {
-	}
+public class PersonalDrinkList implements Tab {
 
 	// Drinklista genererad utifrån användarens förråd
 	public JComponent showWindow() {
@@ -37,7 +36,8 @@ public class PersonalDrinkList {
 		leftMeny.setBorder(BorderFactory.createEtchedBorder());
 		c.weighty = 1;
 		c.fill = GridBagConstraints.BOTH;
-		leftSide.add(leftMeny, c);
+		JScrollPane scroll = new JScrollPane(leftMeny);
+		leftSide.add(scroll, c);
 
 		// Center Drink info
 		JTextPane drinkInfo = new JTextPane();
@@ -46,5 +46,10 @@ public class PersonalDrinkList {
 		panel.add(drinkInfo, BorderLayout.CENTER);
 
 		return panel;
+	}
+
+	@Override
+	public void update() {
+		
 	}
 }

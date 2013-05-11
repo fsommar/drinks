@@ -4,6 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.event.KeyEvent;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import com.inda.drinks.gui.AllDrinks;
 
 /**
@@ -17,8 +20,16 @@ public class Window extends JFrame {
 		super("#wäng");
 		// Top tab meny
 		JTabbedPane tabbedPane = new JTabbedPane();
+		tabbedPane.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				if (e.getSource() instanceof Tab) {
+					((Tab) e.getSource()).update();
+				}
+			}
+		});
 
-		MyBar userStash = new MyBar(Window.this);
+		MyBar userStash = new MyBar();
 		tabbedPane.addTab(Resources.BAR, null, userStash.showWindow(),
 				Resources.BAR_INFO);
 		tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);

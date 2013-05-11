@@ -5,7 +5,6 @@ import java.sql.SQLException;
 
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 import com.inda.drinks.db.Database;
 import com.inda.drinks.db.H2Database;
@@ -19,24 +18,16 @@ import com.inda.drinks.db.tables.Recipes;
 import com.inda.drinks.db.tables.Systembolaget;
 import com.inda.drinks.external.SystembolagetAPI;
 import com.inda.drinks.gui.Window;
-import com.inda.drinks.properties.Ingredient;
 
 /*
  * TODO:
  *  [ ] Documentation
- *    [ ] Use log tool (log4j?) for misc actions
- *    [x] Javadoc
- *  [ ] JUnit test code
- *    [ ] Insert statements (focus on negative tests)
- *    [ ] Queries, of many items and of single items
+ *    [ ] Javadoc
  *  [ ] GUI
- *    [ ] Working bar (starting with just text of categories)
+ *    [ ] Working bar
  *    [ ] Adding recipes
  *  [ ] Error handling
  *    [ ] Check input before building objects (e.g. recipe name length <= 30)
- *    [x] Programmatic dependencies for Table (check dependency is registered)
- *  [-] Rework category layout, no SQL query will work for multiple nesting as it stands
- *    // Actually, yes it will. A simple 'while getParent != null' will suffice
  *    
  * LEGEND: [ ] not done, [x] done, [-] skipped.
  */
@@ -50,19 +41,20 @@ public class Main {
 			registerTables(db);
 			if (!SystembolagetAPI.FILE.exists()) {
 				SystembolagetAPI.fetchXML();
+				SystembolagetAPI.parseXML();
 			}
-			SystembolagetAPI.parseXML();
-			for (Ingredient i : Table.get(Ingredients.class).getAll()) {
-				System.out.println(i);
-			}
+			// for (Ingredient i : Table.get(Ingredients.class).getAll()) {
+			// System.out.println(i);
+			// }
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			db.close();
+			// Show JOptionPane; Unable to open database. Perhaps it's already
+			// in use?
 		}
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception e) {
+			// Fail silently
 		}
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
