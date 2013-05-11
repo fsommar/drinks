@@ -13,7 +13,6 @@ import java.util.Arrays;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JList;
@@ -65,17 +64,13 @@ public class MyBar implements Tab {
 
 		// Subcategory box
 		final ArrayList<String> data3 = new ArrayList<String>();
-		final DefaultComboBoxModel model = new DefaultComboBoxModel(
-				data3.toArray());
-
+		final DefaultComboBoxModel model = new DefaultComboBoxModel();
 		data3.addAll(Arrays.asList(new String[] { "Ren", "Citron", "Mandarin",
 				"Apelsin" }));
 		final JComboBox subcategoryBox = new JComboBox(model);
-		subcategoryBox.setSelectedItem(null);
-
 		categoryBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent event) {
-				if (event.getStateChange() == ItemEvent.SELECTED) {
+				if (event.getStateChange() == ItemEvent.SELECTED && categoryBox.getSelectedIndex() != -1) {
 					// Object item = event.getItem(); TODO: hä‰mta spriiiiit
 					// frÂån
 					// item
@@ -89,9 +84,29 @@ public class MyBar implements Tab {
 		});
 		leftOptions.add(subcategoryBox);
 
-		// Specific ingredient
-		final JCheckBox specific = new JCheckBox();
-		leftOptions.add(specific);
+		// Liqueur box
+		final ArrayList<String> data4 = new ArrayList<String>();
+		data4.addAll(Arrays.asList(new String[] { "Absolut vodka",
+				"Vanlig vodka", "HB", "Jelzin" }));
+		final DefaultComboBoxModel model2 = new DefaultComboBoxModel();
+		final JComboBox alcohol = new JComboBox(model2);
+		leftOptions.add(alcohol, c);
+		c.weighty = 1;
+		c.weightx = 1;
+		c.gridx = 1;
+		c.gridy = 4;
+
+		subcategoryBox.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent event2) {
+				if (event2.getStateChange() == ItemEvent.SELECTED && subcategoryBox.getSelectedIndex() != -1) {
+					model2.removeAllElements();
+					for (String s : data4) { // temporä‰r
+						model2.addElement(s);
+					}
+					alcohol.setSelectedItem(null);
+				}
+			}
+		});
 
 		// Add liqueur button
 		final JButton addDrink = new JButton(Resources.ADD);
@@ -121,58 +136,14 @@ public class MyBar implements Tab {
 		c.gridy = 6;
 		leftOptions.add(removeDrink, c);
 
-		// Liqueur box
-		final ArrayList<String> data4 = new ArrayList<String>();
-		final DefaultComboBoxModel model2 = new DefaultComboBoxModel(
-				data4.toArray());
-		final JComboBox alcohol = new JComboBox(model2);
-		alcohol.setSelectedItem(null);
-
-		data4.addAll(Arrays.asList(new String[] { "Absolut vodka",
-				"Vanlig vodka", "HB", "Jelzin" }));
-
-		c.weighty = 1;
-		c.weightx = 1;
-		c.gridx = 1;
-		c.gridy = 4;
-
-		specific.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				if (specific.isSelected()) {
-					model2.removeAllElements();
-					leftOptions.remove(addDrink);
-					leftOptions.remove(removeDrink);
-					leftOptions.add(alcohol, c);
-					for (String s : data4) { // temporä‰r
-						model2.addElement(s);
-					}
-					alcohol.setSelectedItem(null);
-					leftOptions.add(addDrink);
-					leftOptions.add(removeDrink);
-
-				}
-				if (!specific.isSelected()) {
-					model2.removeAllElements();
-					leftOptions.remove(alcohol);
-				}
-			}
-		});
-
 		// If user adds drink
 		addDrink.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				if (!listModel.contains(alcohol.getSelectedItem())
-						|| !listModel.contains(subcategoryBox.getSelectedItem())) {
-					if (specific.isSelected()) {
-						listModel.addElement(alcohol.getSelectedItem());
-						alcohol.setSelectedItem(null);
-						specific.setSelected(false);
-					} else {
-						listModel.addElement(subcategoryBox.getSelectedItem());
-					}
+						&& alcohol.getSelectedItem() != null) {
+					listModel.addElement(alcohol.getSelectedItem());
+					alcohol.setSelectedItem(null);
 					model.removeAllElements();
 					categoryBox.setSelectedItem(null);
 					model2.removeAllElements();
