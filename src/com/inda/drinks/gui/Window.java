@@ -29,7 +29,7 @@ public class Window extends JFrame {
 			}
 		});
 
-		MyBar userStash = new MyBar();
+		MyBar userStash = new MyBar(Window.this);
 		tabbedPane.addTab(Resources.BAR, null, userStash.showWindow(),
 				Resources.BAR_INFO);
 		tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);

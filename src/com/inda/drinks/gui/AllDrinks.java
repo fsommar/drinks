@@ -27,8 +27,9 @@ import com.inda.drinks.properties.Recipe;
 
 /**
  * Class that displays all drinks currently in the database
+ * 
  * @author Robin Hellgren
- *
+ * 
  */
 
 public class AllDrinks implements Tab {
@@ -52,7 +53,7 @@ public class AllDrinks implements Tab {
 		c.gridx = 1;
 		c.gridy = 1;
 		panel.add(scroll, c);
-		
+
 		// Center Drink info
 		drinkInfo = new JTextPane();
 		drinkInfo.setBorder(BorderFactory.createEtchedBorder());
@@ -60,7 +61,7 @@ public class AllDrinks implements Tab {
 		boldItalics = new SimpleAttributeSet();
 		StyleConstants.setItalic(boldItalics, true);
 		StyleConstants.setBold(boldItalics, true);
-		
+
 		leftMenu.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
@@ -89,10 +90,12 @@ public class AllDrinks implements Tab {
 		drinkInfo.setText("");
 		StyledDocument doc = drinkInfo.getStyledDocument();
 		try {
-			doc.insertString(0, r.getName()+"\n", boldItalics);
+			doc.insertString(0, r.getName() + "\n", boldItalics);
 			Content c = Table.get(Contents.class).getContent(r.getID());
 			for (Content.Item item : c.getContents()) {
-				doc.insertString(doc.getLength(), " - "+item.getIngredient() + " " + item.getVolume() + " "+Resources.CL+"\n", null);
+				doc.insertString(doc.getLength(), " - " + item.getIngredient()
+						+ " " + item.getVolume() + " " + Resources.CL + "\n",
+						null);
 			}
 		} catch (BadLocationException e) {
 			e.printStackTrace();
