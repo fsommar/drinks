@@ -156,6 +156,7 @@ public class MyBar implements Tab {
 					for (String s : data4) { // temporä‰r
 						model2.addElement(s);
 					}
+					alcohol.setSelectedItem(null);
 					leftOptions.add(addDrink);
 					leftOptions.add(removeDrink);
 					
@@ -166,13 +167,19 @@ public class MyBar implements Tab {
 				}
 			}
 		});
-
+		
 		// If user adds drink
 		addDrink.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				if (!listModel.contains(alcohol.getSelectedItem())) {
+				if (!listModel.contains(alcohol.getSelectedItem()) || !listModel.contains(subcategoryBox.getSelectedItem())) {
+					if(specific.isSelected()) {
 					listModel.addElement(alcohol.getSelectedItem());
+					alcohol.setSelectedItem(null);
+					specific.setSelected(false);
+					} else {
+						listModel.addElement(subcategoryBox.getSelectedItem());
+					}
 					model.removeAllElements();
 					categoryBox.setSelectedItem(null);
 					model2.removeAllElements();
