@@ -181,6 +181,25 @@ public class AddDrinks implements Tab {
 		// Drink Ingredients
 		final DefaultListModel ingredientList = new DefaultListModel();
 
+		// Field for Description and Ingredients
+		c = new GridBagConstraints();
+		c.gridx = 6;
+		c.gridwidth = 20;
+		c.weightx = 1;
+		c.weighty = 1;
+		c.fill = GridBagConstraints.BOTH;
+
+		// Ingredients area
+		final JList ingredientArea = new JList(ingredientList);
+		ingredientArea.setBorder(BorderFactory.createEtchedBorder());
+		centerField.add(ingredientArea, c);
+
+		// Description area
+		final JTextArea drinkDescription = new JTextArea();
+		c.gridx = 26;
+		drinkDescription.setBorder(BorderFactory.createEtchedBorder());
+		centerField.add(drinkDescription, c);
+		
 		// If user adds drink
 		addDrink.addActionListener(new ActionListener() {
 
@@ -200,6 +219,18 @@ public class AddDrinks implements Tab {
 				model2.removeAllElements();
 				subcategoryBox.setSelectedItem(null);
 				// }
+			}
+		});
+		
+		// If user removes drink
+		removeDrink.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if(!ingredientList.isEmpty() && ingredientArea.getSelectedIndex() != -1) {
+					int removeIndex = ingredientArea.getSelectedIndex();
+					ingredientList.remove(removeIndex);
+				}
 			}
 		});
 
@@ -231,25 +262,6 @@ public class AddDrinks implements Tab {
 		// }
 		// });
 
-		// Field for Description and Ingredients
-		c = new GridBagConstraints();
-		c.gridx = 6;
-		c.gridwidth = 20;
-		c.weightx = 1;
-		c.weighty = 1;
-		c.fill = GridBagConstraints.BOTH;
-
-		// Ingredients area
-		final JList ingredientArea = new JList(ingredientList);
-		ingredientArea.setBorder(BorderFactory.createEtchedBorder());
-		centerField.add(ingredientArea, c);
-
-		// Description area
-		final JTextArea drinkDescription = new JTextArea();
-		c.gridx = 26;
-		drinkDescription.setBorder(BorderFactory.createEtchedBorder());
-		centerField.add(drinkDescription, c);
-
 		// Add drink button
 		JButton addWholeDrink = new JButton(Resources.ADD_DRINK);
 		addWholeDrink.addActionListener(new ActionListener() {
@@ -270,8 +282,8 @@ public class AddDrinks implements Tab {
 					subcategoryBox.setSelectedItem(null);
 					ingredientList.clear();
 					drinkDescription.setText("");
-					
-					//TODO: Rensa spinner och checkbox
+					specific.setEnabled(false);
+					//TODO: Rensa spinner
 				}
 			}
 		});
