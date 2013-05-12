@@ -3,6 +3,7 @@ package com.inda.drinks.gui;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
@@ -108,7 +109,7 @@ public class PersonalDrinkList extends JPanel implements Tab {
 		// of the ingredients exist OR if its not specific, find all contents
 		// where the category of the ingredient matches
 		Set<Recipe> recipes = Table.get(Recipes.class).getAll();
-		Set<Ingredient> bar = Table.get(Bar.class).getAllIngredients();
+		List<Ingredient> bar = Table.get(Bar.class).getAllIngredients();
 		// Clear previous info
 		personalDrinkList.clear();
 		drinkInfo.setText("");

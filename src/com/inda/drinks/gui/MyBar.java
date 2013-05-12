@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.sql.SQLException;
-import java.util.Set;
+import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
@@ -75,17 +75,15 @@ public class MyBar extends JPanel implements Tab {
 						&& categoryBox.getSelectedIndex() != -1) {
 					if (event.getItem() instanceof Category) {
 						subcategoryModel.removeAllElements();
-						Set<Category> subCategories = Table.get(
+						List<Category> subCategories = Table.get(
 								Categories.class).getAllWithParent(
 								((Category) event.getItem()).getID());
 						if (subCategories.isEmpty()) {
-							// subcategoryBox.setEnabled(false);
 							subcategoryBox.setVisible(false);
 							fillIngredientList(((Category) event.getItem())
 									.getID());
 						} else {
 							subcategoryBox.setVisible(true);
-							// subcategoryBox.setEnabled(true);
 							for (Category category : subCategories) {
 								subcategoryModel.addElement(category);
 							}
@@ -220,6 +218,5 @@ public class MyBar extends JPanel implements Tab {
 		for (Ingredient ingredient : Table.get(Bar.class).getAllIngredients()) {
 			listModel.addElement(ingredient);
 		}
-
 	}
 }

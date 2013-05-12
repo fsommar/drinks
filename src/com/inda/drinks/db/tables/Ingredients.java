@@ -3,8 +3,9 @@ package com.inda.drinks.db.tables;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import com.inda.drinks.db.Database;
 import com.inda.drinks.db.Table;
@@ -72,11 +73,11 @@ public class Ingredients extends Table<Ingredient> {
 	 * @return a set of all ingredients currently in the database. The set is
 	 *         empty if the database query fails for any reason.
 	 */
-	public Set<Ingredient> getAll() {
-		Set<Ingredient> ingredients = new HashSet<Ingredient>();
+	public Collection<Ingredient> getAll() {
+		List<Ingredient> ingredients = new ArrayList<Ingredient>();
 		try {
 			ResultSet res = super.db.query("SELECT * FROM " + super.TABLE_NAME
-					+ ";");
+					+ "ORDER BY name;");
 			Ingredient.Builder builder = new Ingredient.Builder();
 			while (res.next()) {
 				Ingredient ingredient = builder
@@ -104,11 +105,11 @@ public class Ingredients extends Table<Ingredient> {
 	 *            the category id to query for.
 	 * @return a set of all the Ingredients belonging to the category id.
 	 */
-	public Set<Ingredient> getAllWithCategory(int categoryID) {
-		Set<Ingredient> ingredients = new HashSet<Ingredient>();
+	public List<Ingredient> getAllWithCategory(int categoryID) {
+		List<Ingredient> ingredients = new ArrayList<Ingredient>();
 		try {
 			ResultSet res = super.db.query("SELECT * FROM " + super.TABLE_NAME
-					+ " WHERE category = " + categoryID + ";");
+					+ " WHERE category = " + categoryID + " ORDER BY name;");
 			Ingredient.Builder builder = new Ingredient.Builder();
 			while (res.next()) {
 				Ingredient ingredient = builder
