@@ -23,6 +23,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
@@ -63,10 +64,11 @@ public class AddDrinks extends JPanel implements Tab {
 		final Recipes recipes = Table.get(Recipes.class);
 
 		JPanel topOption = new JPanel(new FlowLayout());
-		JPanel centerField = new JPanel(new GridBagLayout());
+		final JPanel centerField = new JPanel(new GridBagLayout());
 		alcoholBox.setEnabled(false);
 		// Glass types
 		final JComboBox glassList = new JComboBox(Glass.values());
+		glassList.setSelectedItem(null);
 
 		drinkName.setPreferredSize(new Dimension(150, 20));
 		drinkName.setForeground(Color.gray);
@@ -210,11 +212,35 @@ public class AddDrinks extends JPanel implements Tab {
 		addDrink.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (!drinkName.getText().equals(Resources.NAME)
-						&& glassList.getSelectedItem() != null
-						&& !ingredientModel.isEmpty()
-						&& !drinkDescription.getText().equals("")) {
-					// TODO: JOptionPane som säger vilka fält som saknar input
+				if (drinkName.getText().equals(Resources.NAME)
+						|| glassList.getSelectedItem() != null
+						|| !ingredientModel.isEmpty()
+						|| !drinkDescription.getText().equals("")) {
+					ArrayList<String> errors = new ArrayList<String>();
+					if (drinkName.getText().equals(Resources.NAME)) {
+						errors.add(Resources.DRINK_NAME);
+					}
+					if (glassList.getSelectedItem() == null) {
+						errors.add(Resources.DRINK_GLASS);
+					}
+					if (ingredientModel.isEmpty()) {
+						errors.add(Resources.DRINK_INGREDIENTS);
+					}
+					if (drinkDescription.getText().equals("")) {
+						errors.add(Resources.DRINK_DESCRIPTION);
+					}
+					String errorMessage = Resources.ERROR_FIRST;
+					if(errors.size() == 1) {
+						errorMessage += errors.get(0) + Resources.ERROR_LAST;
+					} else {
+						errorMessage += errors.get(0);
+						for(int i = 1; i < errors.size()-1; i++) { //Lägger till alla errors utom första och sista
+							errorMessage += ", " + errors.get(i);
+						}
+						errorMessage += " och " + errors.get(errors.size()-1) + Resources.ERROR_LAST;
+					}
+					JOptionPane.showMessageDialog(centerField, errorMessage);
+					
 					if (content == null) {
 						return;
 					}
@@ -228,7 +254,8 @@ public class AddDrinks extends JPanel implements Tab {
 							.glassID(g.getID()).build();
 					try {
 						recipes.insert(r);
-						Table.get(Contents.class).insert(recipes.getPreviousID(), content);
+						Table.get(Contents.class).insert(
+								recipes.getPreviousID(), content);
 						content = null;
 						// Rensa fŠälten
 						drinkName.setForeground(Color.gray);

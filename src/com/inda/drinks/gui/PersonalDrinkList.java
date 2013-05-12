@@ -35,7 +35,7 @@ public class PersonalDrinkList extends JPanel implements Tab {
 	private JTextPane drinkInfo;
 	private SimpleAttributeSet boldItalics;
 
-	// Drinklista genererad utifrŒn anvŠndarens fšrrŒd
+	// Drinklista genererad utifråŒn anväŠndarens föšrråŒd
 	public PersonalDrinkList() {
 		super(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
