@@ -2,11 +2,15 @@ package com.inda.drinks.gui;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
+import javax.swing.JButton;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
@@ -53,6 +57,25 @@ public class AllDrinks extends JPanel implements Tab {
 		c.gridy = 1;
 		add(scroll, c);
 
+
+		// Remove Button
+		JButton removeDrink = new JButton(Resources.REMOVE);
+		removeDrink.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if(recipeList.getSelectedIndex() != -1) {
+					recipeModel.remove(recipeList.getSelectedIndex());
+				} else {
+					JOptionPane.showMessageDialog(AllDrinks.this, Resources.SELECTION_ERROR);
+				}
+			}
+		});
+		c.gridy = 10;
+		c.weightx = 0;
+		c.weighty = 0;
+		add(removeDrink, c);
+		
 		// Center Drink info
 		drinkInfo = new JTextPane();
 		drinkInfo.setBorder(BorderFactory.createEtchedBorder());
@@ -78,7 +101,9 @@ public class AllDrinks extends JPanel implements Tab {
 
 		c.weightx = 1;
 		c.gridx = 2;
+		c.gridy = 1;
 		c.gridwidth = 2;
+		c.fill = GridBagConstraints.BOTH;
 		add(drinkInfo, c);
 	}
 
@@ -89,7 +114,9 @@ public class AllDrinks extends JPanel implements Tab {
 			doc.insertString(0, r.getName() + "\n", boldItalics);
 			Content c = Table.get(Contents.class).getContent(r.getID());
 			for (Content.Item item : c.getContents()) {
-				doc.insertString(doc.getLength(), "    " + item + "\n", null);
+				doc.insertString(doc.getLength(), "    " + item.getVolume()
+						+ " " + Resources.CL + "  " + item.getIngredient()
+						+ "\n", null);
 			}
 			doc.insertString(doc.getLength(), "\n" + r.getInstructions(), null);
 		} catch (BadLocationException e) {
@@ -105,8 +132,6 @@ public class AllDrinks extends JPanel implements Tab {
 			recipeModel.addElement(r);
 		}
 		recipeList.requestFocus();
-		if (recipeList.getSelectedIndex() == -1) {
-			recipeList.setSelectedIndex(Math.min(0, recipeModel.size() - 1));
-		}
+		recipeList.setSelectedIndex(Math.min(0, recipeModel.size() - 1));
 	}
 }

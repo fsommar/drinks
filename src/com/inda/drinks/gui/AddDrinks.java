@@ -269,7 +269,7 @@ public class AddDrinks extends JPanel implements Tab {
 						errorMessage += " och " + errors.get(errors.size() - 1)
 								+ Resources.ERROR_LAST;
 						JOptionPane
-								.showMessageDialog(centerField, errorMessage);
+								.showMessageDialog(AddDrinks.this, errorMessage);
 					}
 				}
 			}
