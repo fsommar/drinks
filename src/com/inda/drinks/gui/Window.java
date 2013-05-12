@@ -19,18 +19,17 @@ public class Window extends JFrame {
 	public Window() {
 		super("#wäng");
 		// Top tab meny
-		JTabbedPane tabbedPane = new JTabbedPane();
+		final JTabbedPane tabbedPane = new JTabbedPane();
 		tabbedPane.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				if (e.getSource() instanceof Tab) {
-					((Tab) e.getSource()).update();
+				if (tabbedPane.getSelectedComponent() instanceof Tab) {
+					((Tab) tabbedPane.getSelectedComponent()).update();
 				}
 			}
 		});
 
-		MyBar userStash = new MyBar();
-		tabbedPane.addTab(Resources.BAR, null, userStash.showWindow(),
+		tabbedPane.addTab(Resources.BAR, null, new MyBar(),
 				Resources.BAR_INFO);
 		tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
 		

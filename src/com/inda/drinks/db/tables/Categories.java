@@ -3,6 +3,8 @@ package com.inda.drinks.db.tables;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.inda.drinks.db.Database;
 import com.inda.drinks.db.Table;
@@ -66,6 +68,46 @@ public class Categories extends Table<Category> {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public Set<Category> getAll() {
+		Set<Category> categories = new HashSet<Category>();
+		try {
+			ResultSet res = super.db.query("SELECT * FROM " + super.TABLE_NAME
+					+ ";");
+			Category.Builder builder = new Category.Builder();
+			while (res.next()) {
+				Category category = builder
+						.ID(res.getInt(1))
+						.name(res.getString(2))
+						.parent(res.getInt(3))
+						.build();
+				categories.add(category);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return categories;
+	}
+	
+	public Set<Category> getAllWithParent(int parentID) {
+		Set<Category> categories = new HashSet<Category>();
+		try {
+			ResultSet res = super.db.query("SELECT * FROM " + super.TABLE_NAME
+					+ " WHERE parent = "+parentID+" ORDER BY name;");
+			Category.Builder builder = new Category.Builder();
+			while (res.next()) {
+				Category category = builder
+						.ID(res.getInt(1))
+						.name(res.getString(2))
+						.parent(res.getInt(3))
+						.build();
+				categories.add(category);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return categories;
 	}
 
 	/**

@@ -82,7 +82,7 @@ public class AddDrinks implements Tab {
 		GridBagConstraints c = new GridBagConstraints();
 
 		// Left Options area
-		final JPanel leftOptions = new JPanel(new GridLayout(15, 0));
+		final JPanel leftOptions = new JPanel(new GridLayout(0, 1));
 		centerField.add(leftOptions);
 
 		// Category box
@@ -177,7 +177,7 @@ public class AddDrinks implements Tab {
 				}
 			}
 		});
-		
+
 		// Drink Ingredients
 		final DefaultListModel ingredientList = new DefaultListModel();
 
@@ -199,20 +199,21 @@ public class AddDrinks implements Tab {
 		c.gridx = 26;
 		drinkDescription.setBorder(BorderFactory.createEtchedBorder());
 		centerField.add(drinkDescription, c);
-		
+
 		// If user adds drink
 		addDrink.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				// TODO: if (spriten inte finns i ingredienslistan ännu)
-				if(specific.isSelected()) {
-				String temp = ((String) alcohol.getSelectedItem() + " "
-						+ (String) centilitres.getValue() + " cl");
-						 ingredientList.addElement(temp);
-				} else {
-					String temp = ((String) categoryBox.getSelectedItem() + " " + (String) subcategoryBox.getSelectedItem() + " "
+				if (specific.isSelected()) {
+					String temp = ((String) alcohol.getSelectedItem() + " "
 							+ (String) centilitres.getValue() + " cl");
-							 ingredientList.addElement(temp);
+					ingredientList.addElement(temp);
+				} else {
+					String temp = ((String) categoryBox.getSelectedItem() + " "
+							+ (String) subcategoryBox.getSelectedItem() + " "
+							+ (String) centilitres.getValue() + " cl");
+					ingredientList.addElement(temp);
 				}
 				model.removeAllElements();
 				categoryBox.setSelectedItem(null);
@@ -221,13 +222,14 @@ public class AddDrinks implements Tab {
 				// }
 			}
 		});
-		
+
 		// If user removes drink
 		removeDrink.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if(!ingredientList.isEmpty() && ingredientArea.getSelectedIndex() != -1) {
+				if (!ingredientList.isEmpty()
+						&& ingredientArea.getSelectedIndex() != -1) {
 					int removeIndex = ingredientArea.getSelectedIndex();
 					ingredientList.remove(removeIndex);
 				}
@@ -283,7 +285,7 @@ public class AddDrinks implements Tab {
 					ingredientList.clear();
 					drinkDescription.setText("");
 					specific.setEnabled(false);
-					//TODO: Rensa spinner
+					// TODO: Rensa spinner
 				}
 			}
 		});

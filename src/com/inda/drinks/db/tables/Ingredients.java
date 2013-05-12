@@ -87,4 +87,29 @@ public class Ingredients extends Table<Ingredient> {
 		}
 		return ingredients;
 	}
+	
+	public Set<Ingredient> getAllWithCategory(int categoryID) {
+		Set<Ingredient> ingredients = new HashSet<Ingredient>();
+		try {
+			ResultSet res = super.db.query("SELECT * FROM " + super.TABLE_NAME
+					+ " WHERE category = "+categoryID+";");
+			Ingredient.Builder builder = new Ingredient.Builder();
+			while (res.next()) {
+				Ingredient ingredient = builder
+						.ID(res.getInt(1))
+						.name(res.getString(2))
+						.subtitle(res.getString(3))
+						.ABV(res.getDouble(4))
+						.category(
+								Table.get(Categories.class).getCategory(
+										res.getInt(5)))
+						.partNumber(res.getInt(6))
+						.build();
+				ingredients.add(ingredient);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return ingredients;
+	}
 }
