@@ -57,17 +57,26 @@ public class AllDrinks extends JPanel implements Tab {
 		c.gridy = 1;
 		add(scroll, c);
 
-
 		// Remove Button
 		JButton removeDrink = new JButton(Resources.REMOVE);
 		removeDrink.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if(recipeList.getSelectedIndex() != -1) {
-					recipeModel.remove(recipeList.getSelectedIndex());
+				if (recipeList.getSelectedIndex() != -1) {
+					int n = JOptionPane.showConfirmDialog(AllDrinks.this,
+							Resources.removeDrinkDialog(recipeList
+									.getSelectedValue().toString()),
+							Resources.REMOVE + " "
+									+ recipeList.getSelectedValue().toString(),
+							JOptionPane.OK_CANCEL_OPTION);
+					if (n == JOptionPane.OK_OPTION) {
+						recipeModel.remove(recipeList.getSelectedIndex());
+						drinkInfo.setText("");
+					}
 				} else {
-					JOptionPane.showMessageDialog(AllDrinks.this, Resources.SELECTION_ERROR);
+					JOptionPane.showMessageDialog(AllDrinks.this,
+							Resources.DRINK_SELECTION_ERROR);
 				}
 			}
 		});
@@ -75,7 +84,7 @@ public class AllDrinks extends JPanel implements Tab {
 		c.weightx = 0;
 		c.weighty = 0;
 		add(removeDrink, c);
-		
+
 		// Center Drink info
 		drinkInfo = new JTextPane();
 		drinkInfo.setBorder(BorderFactory.createEtchedBorder());

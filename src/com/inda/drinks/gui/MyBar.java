@@ -125,6 +125,10 @@ public class MyBar extends JPanel implements Tab {
 							}
 						}
 					}
+				} else if (listModel.isEmpty()) {
+					JOptionPane.showMessageDialog(MyBar.this, Resources.EMPTY_ERROR);
+				} else if (rightDrinkList.getSelectedIndex() == -1) {
+					JOptionPane.showMessageDialog(MyBar.this, Resources.SELECTION_ERROR);
 				}
 			}
 		});
@@ -154,6 +158,12 @@ public class MyBar extends JPanel implements Tab {
 								Resources.addError(ingredient.toString()));
 						e.printStackTrace();
 					}
+				} else if (listModel.contains(alcoholBox.getSelectedItem())) {
+					JOptionPane.showMessageDialog(MyBar.this, Resources.ingredientAlreadyAddedError(alcoholBox.getSelectedItem().toString()));
+				} else if (alcoholBox.getSelectedIndex() == -1) {
+					JOptionPane.showMessageDialog(MyBar.this, Resources.SELECTION_ERROR);
+				} else if (!(alcoholBox.getSelectedItem() instanceof Ingredient)) {
+					JOptionPane.showMessageDialog(MyBar.this, Resources.addIngredientError(alcoholBox.getSelectedItem().toString()));
 				}
 			}
 		});
