@@ -46,8 +46,8 @@ public class Main {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			// Show JOptionPane; Unable to open database. Perhaps it's already
-			// in use?
+			// TODO: Show JOptionPane; Unable to open database. Perhaps it's
+			// already in use?
 		}
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

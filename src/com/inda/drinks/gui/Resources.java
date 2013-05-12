@@ -1,5 +1,7 @@
 package com.inda.drinks.gui;
 
+import javax.swing.Icon;
+
 public class Resources {
 
 	public static final String CL = "cl";
@@ -13,6 +15,9 @@ public class Resources {
 	public static final String DRINK_LIST_INFO = "Lista de drinkar du kan göra.";
 	public static final String ALL_DRINKS = "Samtliga drinkar";
 	public static final String ALL_DRINKS_INFO = "Lista samtliga drinkar";
+	public static final String DESCRIPTION = "Instruktion och beskrivning";
+	public static final String CONTENTS = "Innehåll";
+	public static final String SPECIFIC = "Specifik";
 
 	public static String removeDialog(String s) {
 		return String.format(

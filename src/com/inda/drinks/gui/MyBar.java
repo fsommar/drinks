@@ -119,7 +119,7 @@ public class MyBar extends JPanel implements Tab {
 									rightDrinkList.setSelectedIndex(Math.max(
 											index - 1, -1));
 								} catch (SQLException e) {
-									// Show JOptionPane saying delete failed.
+									// TODO: Show JOptionPane saying delete failed.
 									e.printStackTrace();
 								}
 							}
@@ -130,13 +130,12 @@ public class MyBar extends JPanel implements Tab {
 		});
 
 		// Add liqueur button
-		final JButton addDrink = new JButton(Resources.ADD);
-		addDrink.addActionListener(new ActionListener() {
+		final JButton addContent = new JButton(Resources.ADD);
+		addContent.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				if (!listModel.contains(alcoholBox.getSelectedItem())
 						&& alcoholBox.getSelectedItem() instanceof Ingredient) {
-					// TODO: Add to DB as well
 					Ingredient ingredient = (Ingredient) alcoholBox
 							.getSelectedItem();
 					try {
@@ -151,7 +150,7 @@ public class MyBar extends JPanel implements Tab {
 						subcategoryBox.setVisible(false);
 						categoryBox.setSelectedItem(null);
 					} catch (SQLException e) {
-						// Show JOptionPane saying add failed.
+						// TODO: Show JOptionPane saying add failed.
 						e.printStackTrace();
 					}
 				}
@@ -161,28 +160,33 @@ public class MyBar extends JPanel implements Tab {
 		final GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 1;
 		c.gridy = 1;
+		c.weightx = 0;
 		c.anchor = GridBagConstraints.WEST;
 		add(categoryBox, c);
-		c.gridx = GridBagConstraints.RELATIVE;
+		c.gridx = 2;
+		c.weightx = 0;
+		c.anchor = GridBagConstraints.WEST;
 		add(subcategoryBox, c);
 		c.gridx = 1;
-		c.gridy++;
+		c.gridy = 2;
 		c.gridwidth = 2;
+		c.weightx = 1;
 		add(alcoholBox, c);
 		c.gridx = 1;
-		c.gridy++;
+		c.gridy = 3;
+		c.weightx = 0;
 		c.gridwidth = 1;
-		add(addDrink, c);
+		add(addContent, c);
 		c.gridx = 1;
-		c.gridy++;
-		c.gridwidth = 4;
+		c.gridy = 4;
+		c.gridwidth = 3;
 		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 1;
 		c.weighty = 1;
 		JScrollPane scroll = new JScrollPane(rightDrinkList);
 		add(scroll, c);
 		c.gridx = 1;
-		c.gridy++;
+		c.gridy = 5;
 		c.gridwidth = 1;
 		c.fill = GridBagConstraints.NONE;
 		c.weightx = 0;
