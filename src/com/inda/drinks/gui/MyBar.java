@@ -119,7 +119,7 @@ public class MyBar extends JPanel implements Tab {
 									rightDrinkList.setSelectedIndex(Math.max(
 											index - 1, -1));
 								} catch (SQLException e) {
-									// TODO: Show JOptionPane saying delete failed.
+									JOptionPane.showMessageDialog(MyBar.this, Resources.removeError(selected.toString()));
 									e.printStackTrace();
 								}
 							}
@@ -150,7 +150,8 @@ public class MyBar extends JPanel implements Tab {
 						subcategoryBox.setVisible(false);
 						categoryBox.setSelectedItem(null);
 					} catch (SQLException e) {
-						// TODO: Show JOptionPane saying add failed.
+						JOptionPane.showMessageDialog(MyBar.this,
+								Resources.addError(ingredient.toString()));
 						e.printStackTrace();
 					}
 				}

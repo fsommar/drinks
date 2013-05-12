@@ -1,6 +1,5 @@
 package com.inda.drinks.gui;
 
-
 public class Resources {
 
 	public static final String CL = "cl";
@@ -23,6 +22,15 @@ public class Resources {
 	public static final String DRINK_INGREDIENTS = "drinkens ingredienser";
 	public static final String DRINK_DESCRIPTION = "beskrivning av drinken";
 	public static final String ERROR_LAST = " för att lägga till drinken.";
+	public static final String SELECTION_ERROR = "Ingen ingrediens vald.";
+
+	public static String addError(String s) {
+		return String.format("Något gick snett, %s har inte lagts till", s);
+	}
+	
+	public static String removeError(String s) {
+		return String.format("Något gick snett, %s har inte tagits bort", s);
+	}
 
 	public static String removeDialog(String s) {
 		return String.format(
