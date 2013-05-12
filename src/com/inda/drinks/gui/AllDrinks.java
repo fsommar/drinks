@@ -52,23 +52,31 @@ public class AllDrinks extends JPanel implements Tab {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (recipeList.getSelectedIndex() != -1) {
-					try {
-						Recipe r = (Recipe) recipeList.getSelectedValue();
-						Table.get(Recipes.class).remove(r.getID());
-						recipeModel.remove(recipeList.getSelectedIndex());
-						recipeList.requestFocus();
-						recipeList.setSelectedIndex(Math.min(0, recipeModel.size() - 1));
-						displayInfo((Recipe) recipeList.getSelectedValue());
-					} catch (SQLException e) {
-						e.printStackTrace();
+					int n = JOptionPane.showConfirmDialog(AllDrinks.this,
+							Resources.removeDrinkDialog(recipeList
+									.getSelectedValue().toString()),
+									Resources.REMOVE + " "
+											+ recipeList.getSelectedValue().toString(),
+											JOptionPane.OK_CANCEL_OPTION);
+					if (n == JOptionPane.OK_OPTION) {
+						try {
+							Recipe r = (Recipe) recipeList.getSelectedValue();
+							Table.get(Recipes.class).remove(r.getID());
+							recipeModel.remove(recipeList.getSelectedIndex());
+							recipeList.requestFocus();
+							recipeList.setSelectedIndex(Math.min(0, recipeModel.size() - 1));
+							displayInfo((Recipe) recipeList.getSelectedValue());
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
 					}
 				} else {
 					JOptionPane.showMessageDialog(AllDrinks.this,
-							Resources.SELECTION_ERROR);
+							Resources.DRINK_SELECTION_ERROR);
 				}
 			}
 		});
-
+		
 		// Center Drink info
 		drinkInfo = new JTextPane();
 		drinkInfo.setBorder(BorderFactory.createEtchedBorder());
@@ -76,7 +84,7 @@ public class AllDrinks extends JPanel implements Tab {
 		boldItalics = new SimpleAttributeSet();
 		StyleConstants.setItalic(boldItalics, true);
 		StyleConstants.setBold(boldItalics, true);
-
+		
 		recipeList.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {

@@ -23,6 +23,16 @@ public class Resources {
 	public static final String DRINK_DESCRIPTION = "beskrivning av drinken";
 	public static final String ERROR_LAST = " för att lägga till drinken.";
 	public static final String SELECTION_ERROR = "Ingen ingrediens vald.";
+	public static final String DRINK_SELECTION_ERROR = "Ingen drink vald";
+	public static final String EMPTY_ERROR = "Listan är tom, inget kan raderas.";
+	
+	public static String ingredientAlreadyAddedError(String s) {
+		return String.format("%s är redan tillagd", s);
+	}
+	
+	public static String addIngredientError(String s) {
+		return String.format("%s är inte en tillåten ingrediens.", s);
+	}
 
 	public static String addError(String s) {
 		return String.format("Något gick snett, %s har inte lagts till", s);
@@ -32,6 +42,10 @@ public class Resources {
 		return String.format("Något gick snett, %s har inte tagits bort", s);
 	}
 
+	public static String removeDrinkDialog(String s) {
+		return String.format("Är du säker på att du vill ta bort %s från din drinksamling?", s);
+	}
+	
 	public static String removeDialog(String s) {
 		return String.format(
 				"Är du säker på att du vill ta bort %s ifrån ditt förråd?", s);

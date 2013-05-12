@@ -168,8 +168,12 @@ public class AddDrinks extends JPanel implements Tab {
 		addContent.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (alcoholBox.getSelectedIndex() == -1
-						|| !(alcoholBox.getSelectedItem() instanceof Ingredient)) {
+				if (alcoholBox.getSelectedIndex() == -1) {
+					JOptionPane.showMessageDialog(AddDrinks.this, Resources.SELECTION_ERROR);
+					return;
+				}
+				if (!(alcoholBox.getSelectedItem() instanceof Ingredient)) {
+					JOptionPane.showMessageDialog(AddDrinks.this, Resources.addIngredientError(alcoholBox.getSelectedItem().toString()));
 					return;
 				}
 				Ingredient ingredient = (Ingredient) alcoholBox
@@ -200,6 +204,11 @@ public class AddDrinks extends JPanel implements Tab {
 						&& ingredientList.getSelectedIndex() != -1) {
 					int removeIndex = ingredientList.getSelectedIndex();
 					ingredientModel.remove(removeIndex);
+				} else if (ingredientModel.isEmpty()) {
+					JOptionPane.showMessageDialog(AddDrinks.this,
+							Resources.EMPTY_ERROR);
+				} else if (ingredientList.getSelectedIndex() == -1) {
+					JOptionPane.showMessageDialog(AddDrinks.this, Resources.SELECTION_ERROR);
 				}
 			}
 		});
