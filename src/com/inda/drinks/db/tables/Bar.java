@@ -17,7 +17,8 @@ public class Bar extends Table<Integer> {
 		super(db, "Bar", 1);
 		super.addDependency(Ingredients.class);
 		insert = db.prepare("INSERT INTO " + super.TABLE_NAME + " VALUES(?);");
-		remove = db.prepare("DELETE FROM " + super.TABLE_NAME + " WHERE id = ?;");
+		remove = db.prepare("DELETE FROM " + super.TABLE_NAME
+				+ " WHERE id = ?;");
 	}
 
 	@Override
@@ -38,6 +39,12 @@ public class Bar extends Table<Integer> {
 		insert.executeUpdate();
 	}
 
+	/**
+	 * Returns a set of all the ingredients currently in the user's bar.
+	 * 
+	 * @return a set of ingredients, which is empty if there's nothing in the
+	 *         bar.
+	 */
 	public Set<Ingredient> getAllIngredients() {
 		Set<Ingredient> ingredients = new HashSet<Ingredient>();
 		try {
@@ -63,6 +70,11 @@ public class Bar extends Table<Integer> {
 		return ingredients;
 	}
 
+	/**
+	 * Removs the bar ingredient with the supplied id.
+	 * @param id the ingredient id of the ingredient to be removed.
+	 * @throws SQLException
+	 */
 	public void remove(int id) throws SQLException {
 		remove.setInt(1, id);
 		remove.executeUpdate();

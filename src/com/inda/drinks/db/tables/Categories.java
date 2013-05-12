@@ -39,6 +39,15 @@ public class Categories extends Table<Category> {
 		insert.executeUpdate();
 	}
 
+	/**
+	 * Returns the category with the supplied name and parent id.
+	 * 
+	 * @param name
+	 *            the name of the Category.
+	 * @param parent
+	 *            the id of the parent to the Category.
+	 * @return a Category object, or null if the entry doesn't exist.
+	 */
 	public Category getCategory(String name, int parent) {
 		try {
 			ResultSet res = super.db.query("SELECT * FROM " + super.TABLE_NAME
@@ -55,6 +64,13 @@ public class Categories extends Table<Category> {
 		return null;
 	}
 
+	/**
+	 * Returns the Category object with the supplied id.
+	 * 
+	 * @param id
+	 *            the id of the Category.
+	 * @return the Category object, or null if it doesn't exist.
+	 */
 	public Category getCategory(int id) {
 		try {
 			ResultSet res = super.db.query("SELECT * FROM " + super.TABLE_NAME
@@ -70,6 +86,12 @@ public class Categories extends Table<Category> {
 		return null;
 	}
 
+	/**
+	 * Returns a set of all Categories currently in the database.
+	 * 
+	 * @return the set of Category objects, which is empty if there aren't any
+	 *         Categories currently in the database.
+	 */
 	public Set<Category> getAll() {
 		Set<Category> categories = new HashSet<Category>();
 		try {
@@ -87,6 +109,15 @@ public class Categories extends Table<Category> {
 		return categories;
 	}
 
+	/**
+	 * Returns a set of all the Category objects that has the supplied parent
+	 * id.
+	 * 
+	 * @param parentID
+	 *            the id of the Category parent.
+	 * @return a set of Category objects, which is empty if no Categories with
+	 *         the supplied parent id exist.
+	 */
 	public Set<Category> getAllWithParent(int parentID) {
 		Set<Category> categories = new HashSet<Category>();
 		try {
