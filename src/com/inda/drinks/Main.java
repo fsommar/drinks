@@ -19,19 +19,6 @@ import com.inda.drinks.db.tables.Systembolaget;
 import com.inda.drinks.external.SystembolagetAPI;
 import com.inda.drinks.gui.Window;
 
-/*
- * TODO:
- *  [ ] Documentation
- *    [ ] Javadoc
- *  [ ] GUI
- *    [ ] Working bar
- *    [ ] Adding recipes
- *  [ ] Error handling
- *    [ ] Check input before building objects (e.g. recipe name length <= 30)
- *  [ ] Combine AllDrinks and PersonalDrinkList (they're almost the same) 
- *  [ ] Generalise getAll methods (DIE)
- * LEGEND: [ ] not done, [x] done, [-] skipped.
- */
 public class Main {
 
 	public static void main(String[] args) {

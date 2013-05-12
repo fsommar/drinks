@@ -32,7 +32,6 @@ import com.inda.drinks.properties.Ingredient;
  * @author Robin Hellgren
  * 
  */
-
 public class MyBar extends JPanel implements Tab {
 	private static final long serialVersionUID = 268354442820169093L;
 	private DefaultListModel listModel = new DefaultListModel();

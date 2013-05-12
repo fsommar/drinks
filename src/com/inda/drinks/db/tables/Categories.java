@@ -4,9 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import com.inda.drinks.db.Database;
 import com.inda.drinks.db.Table;
@@ -89,13 +87,13 @@ public class Categories extends Table<Category> {
 	}
 
 	/**
-	 * Returns a set of all Categories currently in the database.
+	 * Returns a list of all Categories currently in the database.
 	 * 
-	 * @return the set of Category objects, which is empty if there aren't any
+	 * @return the list of Category objects, which is empty if there aren't any
 	 *         Categories currently in the database.
 	 */
-	public Set<Category> getAll() {
-		Set<Category> categories = new HashSet<Category>();
+	public List<Category> getAll() {
+		List<Category> categories = new ArrayList<Category>();
 		try {
 			ResultSet res = super.db.query("SELECT * FROM " + super.TABLE_NAME
 					+ ";");
@@ -112,12 +110,12 @@ public class Categories extends Table<Category> {
 	}
 
 	/**
-	 * Returns a set of all the Category objects that has the supplied parent
+	 * Returns a list of all the Category objects that has the supplied parent
 	 * id.
 	 * 
 	 * @param parentID
 	 *            the id of the Category parent.
-	 * @return a set of Category objects, which is empty if no Categories with
+	 * @return a list of Category objects, which is empty if no Categories with
 	 *         the supplied parent id exist.
 	 */
 	public List<Category> getAllWithParent(int parentID) {

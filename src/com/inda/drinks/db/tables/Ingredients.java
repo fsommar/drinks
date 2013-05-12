@@ -4,7 +4,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import com.inda.drinks.db.Database;
@@ -70,10 +69,10 @@ public class Ingredients extends Table<Ingredient> {
 	}
 
 	/**
-	 * @return a set of all ingredients currently in the database. The set is
+	 * @return a list of all ingredients currently in the database. The list is
 	 *         empty if the database query fails for any reason.
 	 */
-	public Collection<Ingredient> getAll() {
+	public List<Ingredient> getAll() {
 		List<Ingredient> ingredients = new ArrayList<Ingredient>();
 		try {
 			ResultSet res = super.db.query("SELECT * FROM " + super.TABLE_NAME
@@ -103,7 +102,7 @@ public class Ingredients extends Table<Ingredient> {
 	 * 
 	 * @param categoryID
 	 *            the category id to query for.
-	 * @return a set of all the Ingredients belonging to the category id.
+	 * @return a list of all the Ingredients belonging to the category id.
 	 */
 	public List<Ingredient> getAllWithCategory(int categoryID) {
 		List<Ingredient> ingredients = new ArrayList<Ingredient>();
