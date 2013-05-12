@@ -89,9 +89,7 @@ public class AllDrinks extends JPanel implements Tab {
 			doc.insertString(0, r.getName() + "\n", boldItalics);
 			Content c = Table.get(Contents.class).getContent(r.getID());
 			for (Content.Item item : c.getContents()) {
-				doc.insertString(doc.getLength(), "    " + item.getVolume()
-						+ " " + Resources.CL + "  " + item.getIngredient()
-						+ "\n", null);
+				doc.insertString(doc.getLength(), "    " + item + "\n", null);
 			}
 			doc.insertString(doc.getLength(), "\n" + r.getInstructions(), null);
 		} catch (BadLocationException e) {
@@ -107,6 +105,8 @@ public class AllDrinks extends JPanel implements Tab {
 			recipeModel.addElement(r);
 		}
 		recipeList.requestFocus();
-		recipeList.setSelectedIndex(Math.min(0, recipeModel.size() - 1));
+		if (recipeList.getSelectedIndex() == -1) {
+			recipeList.setSelectedIndex(Math.min(0, recipeModel.size() - 1));
+		}
 	}
 }

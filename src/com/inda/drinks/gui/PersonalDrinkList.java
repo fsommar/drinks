@@ -2,6 +2,8 @@ package com.inda.drinks.gui;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -18,8 +20,11 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
 import com.inda.drinks.db.Table;
+import com.inda.drinks.db.tables.Bar;
 import com.inda.drinks.db.tables.Contents;
+import com.inda.drinks.db.tables.Recipes;
 import com.inda.drinks.properties.Content;
+import com.inda.drinks.properties.Ingredient;
 import com.inda.drinks.properties.Recipe;
 
 /**
@@ -31,7 +36,9 @@ import com.inda.drinks.properties.Recipe;
 
 public class PersonalDrinkList extends JPanel implements Tab {
 	private static final long serialVersionUID = 1772643430818816788L;
+	private Set<Recipe> personalDrinkList = new HashSet<Recipe>();
 	private DefaultListModel recipeModel = new DefaultListModel();
+	private JList recipeList = new JList(recipeModel);
 	private JTextPane drinkInfo;
 	private SimpleAttributeSet boldItalics;
 
@@ -40,10 +47,8 @@ public class PersonalDrinkList extends JPanel implements Tab {
 		super(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 
-		// Left drink menu
-		JList leftMenu = new JList(recipeModel);
-		leftMenu.setBorder(BorderFactory.createEtchedBorder());
-		JScrollPane scroll = new JScrollPane(leftMenu);
+		recipeList.setBorder(BorderFactory.createEtchedBorder());
+		JScrollPane scroll = new JScrollPane(recipeList);
 		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 0;
 		c.weighty = 1;
@@ -59,11 +64,11 @@ public class PersonalDrinkList extends JPanel implements Tab {
 		StyleConstants.setItalic(boldItalics, true);
 		StyleConstants.setBold(boldItalics, true);
 
-		leftMenu.addListSelectionListener(new ListSelectionListener() {
+		recipeList.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				if (e.getSource() instanceof Recipe) {
-					final Recipe r = (Recipe) e.getSource();
+				if (recipeList.getSelectedValue() instanceof Recipe) {
+					final Recipe r = (Recipe) recipeList.getSelectedValue();
 					SwingUtilities.invokeLater(new Runnable() {
 						@Override
 						public void run() {
@@ -87,10 +92,9 @@ public class PersonalDrinkList extends JPanel implements Tab {
 			doc.insertString(0, r.getName() + "\n", boldItalics);
 			Content c = Table.get(Contents.class).getContent(r.getID());
 			for (Content.Item item : c.getContents()) {
-				doc.insertString(doc.getLength(), " - " + item.getIngredient()
-						+ " " + item.getVolume() + " " + Resources.CL + "\n",
-						null);
+				doc.insertString(doc.getLength(), "    " + item + "\n", null);
 			}
+			doc.insertString(doc.getLength(), "\n" + r.getInstructions(), null);
 		} catch (BadLocationException e) {
 			e.printStackTrace();
 		}
@@ -102,5 +106,43 @@ public class PersonalDrinkList extends JPanel implements Tab {
 		// Get Bar IDs => get ingredients => get all contents where one or more
 		// of the ingredients exist OR if its not specific, find all contents
 		// where the category of the ingredient matches
+		Set<Recipe> recipes = Table.get(Recipes.class).getAll();
+		Set<Ingredient> bar = Table.get(Bar.class).getAllIngredients();
+		// Clear previous info
+		personalDrinkList.clear();
+		drinkInfo.setText("");
+		for (Recipe r : recipes) {
+			Content c = Table.get(Contents.class).getContent(r.getID());
+			boolean makeable = true;
+			for (Content.Item item : c.getContents()) {
+				if (item.isSpecific()) {
+					if (!bar.contains(item.getIngredient())) {
+						makeable = false;
+						break;
+					}
+				} else {
+					// if it's not specific check if categories are the same
+					makeable = false;
+					for (Ingredient i : bar) {
+						// if at least one item in
+						if (i.getCategory().equals(
+								item.getIngredient().getCategory())) {
+							makeable = true;
+						}
+					}
+				}
+			}
+			if (makeable) {
+				personalDrinkList.add(r);
+			}
+		}
+		recipeModel.clear();
+		for (Recipe r : personalDrinkList) {
+			recipeModel.addElement(r);
+		}
+		recipeList.requestFocus();
+		if (recipeList.getSelectedIndex() == -1) {
+			recipeList.setSelectedIndex(Math.min(0, recipeModel.size() - 1));
+		}
 	}
 }

@@ -27,7 +27,7 @@ public final class Ingredient {
 	}
 
 	public String getSubtitle() {
-		return subtitle;
+		return subtitle == null ? "" : subtitle;
 	}
 
 	public double getABV() {
@@ -49,7 +49,7 @@ public final class Ingredient {
 		}
 		Ingredient i = (Ingredient) o;
 		return i.id == this.id && i.name.equals(this.name)
-				&& i.subtitle.equals(this.subtitle) && i.ABV == this.ABV
+				&& i.getSubtitle().equals(this.getSubtitle()) && i.ABV == this.ABV
 				&& i.getCategory().equals(this.getCategory())
 				&& i.partNumber == this.partNumber;
 	}
