@@ -17,6 +17,12 @@ public class Resources {
 	public static final String DESCRIPTION = "Instruktion och beskrivning";
 	public static final String CONTENTS = "Innehåll";
 	public static final String SPECIFIC = "Specifik";
+	public static final String ERROR_FIRST = "Vänligen ange ";
+	public static final String DRINK_NAME = "drinkens namn";
+	public static final String DRINK_GLASS = "typ av glas";
+	public static final String DRINK_INGREDIENTS = "drinkens ingredienser";
+	public static final String DRINK_DESCRIPTION = "beskrivning av drinken";
+	public static final String ERROR_LAST = " för att lägga till drinken.";
 
 	public static String removeDialog(String s) {
 		return String.format(
