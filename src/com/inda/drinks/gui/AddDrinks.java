@@ -212,64 +212,66 @@ public class AddDrinks extends JPanel implements Tab {
 		addDrink.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (drinkName.getText().equals(Resources.NAME)
-						|| glassList.getSelectedItem() != null
-						|| !ingredientModel.isEmpty()
-						|| !drinkDescription.getText().equals("")) {
-					ArrayList<String> errors = new ArrayList<String>();
-					if (drinkName.getText().equals(Resources.NAME)) {
-						errors.add(Resources.DRINK_NAME);
-					}
-					if (glassList.getSelectedItem() == null) {
-						errors.add(Resources.DRINK_GLASS);
-					}
-					if (ingredientModel.isEmpty()) {
-						errors.add(Resources.DRINK_INGREDIENTS);
-					}
-					if (drinkDescription.getText().equals("")) {
-						errors.add(Resources.DRINK_DESCRIPTION);
-					}
-					String errorMessage = Resources.ERROR_FIRST;
-					if(errors.size() == 1) {
-						errorMessage += errors.get(0) + Resources.ERROR_LAST;
-					} else {
-						errorMessage += errors.get(0);
-						for(int i = 1; i < errors.size()-1; i++) { //Lägger till alla errors utom första och sista
-							errorMessage += ", " + errors.get(i);
+				if (!drinkName.getText().equals(Resources.NAME)
+						&& glassList.getSelectedItem() != null
+						&& !ingredientModel.isEmpty()
+						&& !drinkDescription.getText().equals("")) {
+
+						Glass g = (Glass) glassList.getSelectedItem();
+						Recipe r = new Recipe.Builder().ID(-1)
+								.name(drinkName.getText())
+								.instructions(drinkDescription.getText())
+								.glassID(g.getID()).build();
+						try {
+							recipes.insert(r);
+							Table.get(Contents.class).insert(
+									recipes.getPreviousID(), content);
+							content = null;
+							// Rensa fŠälten
+							drinkName.setForeground(Color.gray);
+							drinkName.setText(Resources.NAME);
+							glassList.setSelectedItem(null);
+							categoryBox.setSelectedItem(null);
+							subcategoryBox.setSelectedItem(null);
+							ingredientModel.clear();
+							drinkDescription.setText("");
+							specific.setEnabled(false);
+							volumeSpinner.setValue(Integer.toString(4));
+						} catch (SQLException e) {
+							e.printStackTrace();
 						}
-						errorMessage += " och " + errors.get(errors.size()-1) + Resources.ERROR_LAST;
-					}
-					JOptionPane.showMessageDialog(centerField, errorMessage);
-					
-					if (content == null) {
-						return;
-					}
-					if (!(glassList.getSelectedItem() instanceof Glass)) {
-						return;
-					}
-					Glass g = (Glass) glassList.getSelectedItem();
-					Recipe r = new Recipe.Builder().ID(-1)
-							.name(drinkName.getText())
-							.instructions(drinkDescription.getText())
-							.glassID(g.getID()).build();
-					try {
-						recipes.insert(r);
-						Table.get(Contents.class).insert(
-								recipes.getPreviousID(), content);
-						content = null;
-						// Rensa fŠälten
-						drinkName.setForeground(Color.gray);
-						drinkName.setText(Resources.NAME);
-						glassList.setSelectedItem(null);
-						categoryBox.setSelectedItem(null);
-						subcategoryBox.setSelectedItem(null);
-						ingredientModel.clear();
-						drinkDescription.setText("");
-						specific.setEnabled(false);
-						volumeSpinner.setValue(Integer.toString(4));
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
+					} else {
+						ArrayList<String> errors = new ArrayList<String>();
+						if (drinkName.getText().equals(Resources.NAME)) {
+							errors.add(Resources.DRINK_NAME);
+						}
+						if (glassList.getSelectedItem() == null) {
+							errors.add(Resources.DRINK_GLASS);
+						}
+						if (ingredientModel.isEmpty()) {
+							errors.add(Resources.DRINK_INGREDIENTS);
+						}
+						if (drinkDescription.getText().equals("")) {
+							errors.add(Resources.DRINK_DESCRIPTION);
+						}
+						String errorMessage = Resources.ERROR_FIRST;
+						if (errors.size() == 1) {
+							errorMessage += errors.get(0) + Resources.ERROR_LAST;
+							JOptionPane
+									.showMessageDialog(centerField, errorMessage);
+							return;
+						} else {
+							errorMessage += errors.get(0);
+							// Lägger till alla errors utom första och sista
+							for (int i = 1; i < errors.size() - 1; i++) {
+								errorMessage += ", " + errors.get(i);
+							}
+							errorMessage += " och " + errors.get(errors.size() - 1)
+									+ Resources.ERROR_LAST;
+							JOptionPane
+									.showMessageDialog(centerField, errorMessage);
+							return;
+						}
 				}
 			}
 		});
