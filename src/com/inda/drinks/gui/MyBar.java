@@ -2,11 +2,11 @@ package com.inda.drinks.gui;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.sql.SQLException;
 import java.util.Set;
 
 import javax.swing.DefaultComboBoxModel;
@@ -16,6 +16,7 @@ import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import com.inda.drinks.db.Table;
 import com.inda.drinks.db.tables.Bar;
@@ -36,77 +37,17 @@ public class MyBar extends JPanel implements Tab {
 	private static final long serialVersionUID = 268354442820169093L;
 	private DefaultListModel listModel = new DefaultListModel();
 	private DefaultComboBoxModel alcoholModel = new DefaultComboBoxModel();
+	private JComboBox alcoholBox = new JComboBox(alcoholModel);
 
 	// Fšönster däŠr användaren läŠgger till/tar bort fråŒn sitt fšörråŒd
 	public MyBar() {
 		super(new GridBagLayout());
 
-		// Drink list
-		/*
-		 * String[] data = { "one", "two", "three", "four" }; for (String s :
-		 * data) { listModel.addElement(s); }
-		 */
-
-		// Right drink list area
 		final JList rightDrinkList = new JList(listModel);
-		final GridBagConstraints c = new GridBagConstraints();
-		c.weighty = 1;
-		c.weightx = 8;
-		c.gridheight = 20;
-		c.gridx = 2;
-		c.gridy = 1;
-		c.fill = GridBagConstraints.BOTH;
-		add(rightDrinkList, c);
+		alcoholBox.setEnabled(false);
 
-		// Left options panel
-		final JPanel leftOptions = new JPanel(new GridLayout(15, 0));
-
-		DefaultComboBoxModel categoryModel = new DefaultComboBoxModel();
-		final JComboBox categoryBox = new JComboBox(categoryModel);
-		for (Category category : Table.get(Categories.class).getAllWithParent(
-				Category.NO_PARENT)) {
-			categoryModel.addElement(category);
-		}
-		categoryBox.setSelectedItem(null);
-		leftOptions.add(categoryBox);
-
-		// Subcategory box
 		final DefaultComboBoxModel subcategoryModel = new DefaultComboBoxModel();
 		final JComboBox subcategoryBox = new JComboBox(subcategoryModel);
-		categoryBox.addItemListener(new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent event) {
-				if (event.getStateChange() == ItemEvent.SELECTED
-						&& categoryBox.getSelectedIndex() != -1) {
-					if (event.getItem() instanceof Category) {
-						subcategoryModel.removeAllElements();
-						Set<Category> subCategories = Table.get(
-								Categories.class).getAllWithParent(
-								((Category) event.getItem()).getID());
-						if (subCategories.isEmpty()) {
-							subcategoryBox.setEnabled(false);
-							fillIngredientList(((Category) event.getItem()).getID());
-						} else {
-							// subcategoryBox.setVisible(true);
-							subcategoryBox.setEnabled(true);
-							for (Category category : subCategories) {
-								subcategoryModel.addElement(category);
-							}
-						}
-					}
-				}
-			}
-		});
-		leftOptions.add(subcategoryBox);
-
-		// Liqueur box
-		final JComboBox alcohol = new JComboBox(alcoholModel);
-		leftOptions.add(alcohol, c);
-		c.weighty = 1;
-		c.weightx = 1;
-		c.gridx = 1;
-		c.gridy = 4;
-
 		subcategoryBox.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent event) {
@@ -118,56 +59,135 @@ public class MyBar extends JPanel implements Tab {
 				}
 			}
 		});
+		subcategoryBox.setVisible(false);
 
-		// Add liqueur button
-		final JButton addDrink = new JButton(Resources.ADD);
-		c.gridy = 5;
-		leftOptions.add(addDrink, c);
-
-		// TODO: Remove from DB as well
-		// Remove liqueur button
-		final JButton removeDrink = new JButton(Resources.REMOVE);
-		removeDrink.addActionListener(new ActionListener() {
+		DefaultComboBoxModel categoryModel = new DefaultComboBoxModel();
+		final JComboBox categoryBox = new JComboBox(categoryModel);
+		for (Category category : Table.get(Categories.class).getAllWithParent(
+				Category.NO_PARENT)) {
+			categoryModel.addElement(category);
+		}
+		categoryBox.setSelectedItem(null);
+		categoryBox.addItemListener(new ItemListener() {
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				Object selected = rightDrinkList.getSelectedValue();
-				if (!listModel.isEmpty() && selected != null) {
-					int n = JOptionPane.showConfirmDialog(MyBar.this,
-							Resources.removeDialog(selected.toString()),
-							Resources.REMOVE + " " + selected,
-							JOptionPane.OK_CANCEL_OPTION);
-					if (n == JOptionPane.OK_OPTION) {
-						if (rightDrinkList.getSelectedIndex() != -1) {
-							listModel.remove(rightDrinkList.getSelectedIndex());
+			public void itemStateChanged(ItemEvent event) {
+				if (event.getStateChange() == ItemEvent.SELECTED
+						&& categoryBox.getSelectedIndex() != -1) {
+					if (event.getItem() instanceof Category) {
+						subcategoryModel.removeAllElements();
+						Set<Category> subCategories = Table.get(
+								Categories.class).getAllWithParent(
+								((Category) event.getItem()).getID());
+						if (subCategories.isEmpty()) {
+							// subcategoryBox.setEnabled(false);
+							subcategoryBox.setVisible(false);
+							fillIngredientList(((Category) event.getItem())
+									.getID());
+						} else {
+							subcategoryBox.setVisible(true);
+							// subcategoryBox.setEnabled(true);
+							for (Category category : subCategories) {
+								subcategoryModel.addElement(category);
+							}
 						}
 					}
 				}
 			}
 		});
-		c.gridy = 6;
-		leftOptions.add(removeDrink, c);
 
-		// TODO: Add to DB as well
-		// If user adds drink
-		addDrink.addActionListener(new ActionListener() {
+		// Remove liqueur button
+		final JButton removeDrink = new JButton(Resources.REMOVE);
+		removeDrink.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (!listModel.contains(alcohol.getSelectedItem())
-						&& alcohol.getSelectedItem() != null) {
-					listModel.addElement(alcohol.getSelectedItem());
-					alcohol.setSelectedItem(null);
-					subcategoryModel.removeAllElements();
-					categoryBox.setSelectedItem(null);
-					alcoholModel.removeAllElements();
-					subcategoryBox.setSelectedItem(null);
+			public void actionPerformed(ActionEvent event) {
+				if (rightDrinkList.getSelectedValue() instanceof Ingredient) {
+					Ingredient selected = (Ingredient) rightDrinkList
+							.getSelectedValue();
+					if (!listModel.isEmpty() && selected != null) {
+						int n = JOptionPane.showConfirmDialog(MyBar.this,
+								Resources.removeDialog(selected.toString()),
+								Resources.REMOVE + " " + selected,
+								JOptionPane.OK_CANCEL_OPTION);
+						if (n == JOptionPane.OK_OPTION) {
+							int index = rightDrinkList.getSelectedIndex();
+							if (index != -1) {
+								try {
+									Table.get(Bar.class).remove(
+											selected.getID());
+									listModel.remove(rightDrinkList
+											.getSelectedIndex());
+									rightDrinkList.setSelectedIndex(Math.max(
+											index - 1, -1));
+								} catch (SQLException e) {
+									// Show JOptionPane saying delete failed.
+									e.printStackTrace();
+								}
+							}
+						}
+					}
 				}
 			}
 		});
 
-		// Add left options to panel
+		// Add liqueur button
+		final JButton addDrink = new JButton(Resources.ADD);
+		addDrink.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				if (!listModel.contains(alcoholBox.getSelectedItem())
+						&& alcoholBox.getSelectedItem() instanceof Ingredient) {
+					// TODO: Add to DB as well
+					Ingredient ingredient = (Ingredient) alcoholBox
+							.getSelectedItem();
+					try {
+						Table.get(Bar.class).insert(ingredient.getID());
+						listModel.addElement(ingredient);
+						// Clear boxes
+						alcoholBox.setSelectedItem(null);
+						alcoholBox.setEnabled(false);
+						alcoholModel.removeAllElements();
+						subcategoryModel.removeAllElements();
+						subcategoryBox.setSelectedItem(null);
+						subcategoryBox.setVisible(false);
+						categoryBox.setSelectedItem(null);
+					} catch (SQLException e) {
+						// Show JOptionPane saying add failed.
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+
+		final GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 1;
 		c.gridy = 1;
-		add(leftOptions, c);
+		c.anchor = GridBagConstraints.WEST;
+		add(categoryBox, c);
+		c.gridx = GridBagConstraints.RELATIVE;
+		add(subcategoryBox, c);
+		c.gridx = 1;
+		c.gridy++;
+		c.gridwidth = 2;
+		add(alcoholBox, c);
+		c.gridx = 1;
+		c.gridy++;
+		c.gridwidth = 1;
+		add(addDrink, c);
+		c.gridx = 1;
+		c.gridy++;
+		c.gridwidth = 4;
+		c.fill = GridBagConstraints.BOTH;
+		c.weightx = 1;
+		c.weighty = 1;
+		JScrollPane scroll = new JScrollPane(rightDrinkList);
+		add(scroll, c);
+		c.gridx = 1;
+		c.gridy++;
+		c.gridwidth = 1;
+		c.fill = GridBagConstraints.NONE;
+		c.weightx = 0;
+		c.weighty = 0;
+		add(removeDrink, c);
 	}
 
 	private void fillIngredientList(int categoryID) {
@@ -176,6 +196,7 @@ public class MyBar extends JPanel implements Tab {
 				.getAllWithCategory(categoryID)) {
 			alcoholModel.addElement(ingredient);
 		}
+		alcoholBox.setEnabled(true);
 	}
 
 	@Override

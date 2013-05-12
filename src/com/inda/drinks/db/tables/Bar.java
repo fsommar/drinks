@@ -11,12 +11,13 @@ import com.inda.drinks.db.Table;
 import com.inda.drinks.properties.Ingredient;
 
 public class Bar extends Table<Integer> {
-	private final PreparedStatement insert;
+	private final PreparedStatement insert, remove;
 
 	public Bar(Database db) throws SQLException {
 		super(db, "Bar", 1);
 		super.addDependency(Ingredients.class);
 		insert = db.prepare("INSERT INTO " + super.TABLE_NAME + " VALUES(?);");
+		remove = db.prepare("DELETE FROM " + super.TABLE_NAME + " WHERE id = ?;");
 	}
 
 	@Override
@@ -60,5 +61,10 @@ public class Bar extends Table<Integer> {
 			e.printStackTrace();
 		}
 		return ingredients;
+	}
+
+	public void remove(int id) throws SQLException {
+		remove.setInt(1, id);
+		remove.executeUpdate();
 	}
 }
