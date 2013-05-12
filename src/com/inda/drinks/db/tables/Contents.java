@@ -40,8 +40,6 @@ public class Contents extends Table<Content> {
 
 	@Override
 	public void insert(Content e) throws SQLException {
-		// TODO: insert Content as well
-		// SELECT MAX(id) FROM <TABLE_NAME>;
 		for (Content.Item ci : e.getContents()) {
 			insert.setInt(1, e.getID());
 			insert.setInt(2, ci.getIngredient().getID());
@@ -50,8 +48,20 @@ public class Contents extends Table<Content> {
 			insert.executeUpdate();
 		}
 	}
+	
+	public void insert(int id, Content e) throws SQLException {
+		for (Content.Item ci : e.getContents()) {
+			insert.setInt(1, id);
+			insert.setInt(2, ci.getIngredient().getID());
+			insert.setBoolean(3, ci.isSpecific());
+			insert.setInt(4, ci.getVolume());
+			insert.executeUpdate();
+		}
+	}
 
 	public Content getContent(int id) {
+		Content c = new Content();
+		c.setID(id);
 		try {
 			ResultSet res = super.db
 					.query("SELECT i.id, i.name, i.subtitle, i.ABV, i.category, i.part_number,"
@@ -61,7 +71,6 @@ public class Contents extends Table<Content> {
 							+ Table.get(Ingredients.class).TABLE_NAME
 							+ " as i ON c.ingredient_id = i.id WHERE c.recipe_id = "
 							+ id + ";");
-			Content c = new Content(id);
 			Ingredient.Builder iBuilder = new Ingredient.Builder();
 			while (res.next()) {
 				Ingredient ingredient = iBuilder
@@ -73,11 +82,11 @@ public class Contents extends Table<Content> {
 								Table.get(Categories.class).getCategory(
 										res.getInt(5)))
 						.partNumber(res.getInt(6)).build();
-				c.add(ingredient, res.getInt(7), res.getBoolean(9));
+				c.add(ingredient, res.getInt(7), res.getBoolean(8));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return c;
 	}
 }

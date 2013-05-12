@@ -32,6 +32,11 @@ public class Recipe {
 	public int getGlassID() {
 		return glassID;
 	}
+	
+	@Override
+	public String toString() {
+		return name;
+	}
 
 	/**
 	 * Builder pattern used for setting one parameter at a time since Recipe is
@@ -53,8 +58,8 @@ public class Recipe {
 			return this;
 		}
 
-		public Builder instructions(String name) {
-			this._name = name;
+		public Builder instructions(String instructions) {
+			this._instructions = instructions;
 			return this;
 		}
 

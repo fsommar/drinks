@@ -12,6 +12,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -33,12 +34,14 @@ import javax.swing.event.ChangeListener;
 
 import com.inda.drinks.db.Table;
 import com.inda.drinks.db.tables.Categories;
+import com.inda.drinks.db.tables.Contents;
 import com.inda.drinks.db.tables.Ingredients;
 import com.inda.drinks.db.tables.Recipes;
 import com.inda.drinks.properties.Category;
 import com.inda.drinks.properties.Content;
 import com.inda.drinks.properties.Glass;
 import com.inda.drinks.properties.Ingredient;
+import com.inda.drinks.properties.Recipe;
 
 /**
  * Class that displays the window for adding a drink
@@ -57,6 +60,7 @@ public class AddDrinks extends JPanel implements Tab {
 	// Lä‰ga till drinkar till databasen
 	public AddDrinks() {
 		super(new BorderLayout());
+		final Recipes recipes = Table.get(Recipes.class);
 
 		JPanel topOption = new JPanel(new FlowLayout());
 		JPanel centerField = new JPanel(new GridBagLayout());
@@ -167,7 +171,7 @@ public class AddDrinks extends JPanel implements Tab {
 					return;
 				}
 				if (content == null) {
-					content = new Content(Table.get(Recipes.class).getNextID());
+					content = new Content();
 				}
 				Ingredient ingredient = (Ingredient) alcoholBox
 						.getSelectedItem();
@@ -178,6 +182,13 @@ public class AddDrinks extends JPanel implements Tab {
 					content.add(item);
 					ingredientModel.addElement(item);
 					// Clear boxes
+					alcoholBox.setSelectedItem(null);
+					alcoholBox.setEnabled(false);
+					alcoholModel.removeAllElements();
+					subcategoryModel.removeAllElements();
+					subcategoryBox.setSelectedItem(null);
+					subcategoryBox.setVisible(false);
+					categoryBox.setSelectedItem(null);
 				}
 			}
 		});
@@ -203,18 +214,35 @@ public class AddDrinks extends JPanel implements Tab {
 						&& glassList.getSelectedItem() != null
 						&& !ingredientModel.isEmpty()
 						&& !drinkDescription.getText().equals("")) {
-					// TODO: Lä‰gg till drinken i DB
-
-					// Rensa fä‰lten
-					drinkName.setForeground(Color.gray);
-					drinkName.setText(Resources.NAME);
-					glassList.setSelectedItem(null);
-					categoryBox.setSelectedItem(null);
-					subcategoryBox.setSelectedItem(null);
-					ingredientModel.clear();
-					drinkDescription.setText("");
-					specific.setEnabled(false);
-					// TODO: Rensa spinner
+					// TODO: JOptionPane som s‰ger vilka f‰lt som saknar input
+					if (content == null) {
+						return;
+					}
+					if (!(glassList.getSelectedItem() instanceof Glass)) {
+						return;
+					}
+					Glass g = (Glass) glassList.getSelectedItem();
+					Recipe r = new Recipe.Builder().ID(-1)
+							.name(drinkName.getText())
+							.instructions(drinkDescription.getText())
+							.glassID(g.getID()).build();
+					try {
+						recipes.insert(r);
+						Table.get(Contents.class).insert(recipes.getPreviousID(), content);
+						content = null;
+						// Rensa fä‰lten
+						drinkName.setForeground(Color.gray);
+						drinkName.setText(Resources.NAME);
+						glassList.setSelectedItem(null);
+						categoryBox.setSelectedItem(null);
+						subcategoryBox.setSelectedItem(null);
+						ingredientModel.clear();
+						drinkDescription.setText("");
+						specific.setEnabled(false);
+						volumeSpinner.setValue(Integer.toString(4));
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		});

@@ -11,12 +11,12 @@ import com.inda.drinks.tools.Formatter;
 
 /**
  * Represents all the content for one recipe; the ID is the same as that of the
- * recipe it represents. This class is immutable.
+ * recipe it represents. This class is NOT immutable.
  * 
  * @author Fredrik Sommar
  */
 public class Content {
-	private final int id;
+	private int id;
 	private final Set<Content.Item> ingredients;
 
 	/**
@@ -25,9 +25,18 @@ public class Content {
 	 * @param id
 	 *            the id of the recipe these contents are linked to.
 	 */
-	public Content(int id) {
-		this.id = id;
+	public Content() {
 		this.ingredients = new HashSet<Content.Item>();
+	}
+
+	/**
+	 * Sets the recipe ID that this content object represents.
+	 * 
+	 * @param id
+	 *            the ID of the recipe this content belongs to.
+	 */
+	public void setID(int id) {
+		this.id = id;
 	}
 
 	/**
@@ -91,7 +100,7 @@ public class Content {
 
 	/**
 	 * Represents a row in the Contents table, i.e. an ingredient linked to a
-	 * recipe.
+	 * recipe. This class is immutable.
 	 * 
 	 * @author Fredrik Sommar
 	 */
@@ -133,6 +142,7 @@ public class Content {
 					&& i.volume == this.volume && i.specific == this.specific;
 		}
 
+		@Override
 		public String toString() {
 			String str = "";
 			if (specific) {

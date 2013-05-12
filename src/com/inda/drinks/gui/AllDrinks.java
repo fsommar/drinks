@@ -34,8 +34,9 @@ import com.inda.drinks.properties.Recipe;
 public class AllDrinks extends JPanel implements Tab {
 	private static final long serialVersionUID = 8015165371620920618L;
 	private DefaultListModel recipeModel = new DefaultListModel();
-	private JTextPane drinkInfo;
+	private JList recipeList = new JList(recipeModel);
 	private SimpleAttributeSet boldItalics;
+	private JTextPane drinkInfo;
 
 	// Visar samtliga drinkar i databasen
 	public AllDrinks() {
@@ -43,9 +44,8 @@ public class AllDrinks extends JPanel implements Tab {
 		GridBagConstraints c = new GridBagConstraints();
 
 		// Left drink menu
-		JList leftMenu = new JList(recipeModel);
-		leftMenu.setBorder(BorderFactory.createEtchedBorder());
-		JScrollPane scroll = new JScrollPane(leftMenu);
+		recipeList.setBorder(BorderFactory.createEtchedBorder());
+		JScrollPane scroll = new JScrollPane(recipeList);
 		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 0;
 		c.weighty = 1;
@@ -61,11 +61,11 @@ public class AllDrinks extends JPanel implements Tab {
 		StyleConstants.setItalic(boldItalics, true);
 		StyleConstants.setBold(boldItalics, true);
 
-		leftMenu.addListSelectionListener(new ListSelectionListener() {
+		recipeList.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				if (e.getSource() instanceof Recipe) {
-					final Recipe r = (Recipe) e.getSource();
+				if (recipeList.getSelectedValue() instanceof Recipe) {
+					final Recipe r = (Recipe) recipeList.getSelectedValue();
 					SwingUtilities.invokeLater(new Runnable() {
 						@Override
 						public void run() {
@@ -89,10 +89,11 @@ public class AllDrinks extends JPanel implements Tab {
 			doc.insertString(0, r.getName() + "\n", boldItalics);
 			Content c = Table.get(Contents.class).getContent(r.getID());
 			for (Content.Item item : c.getContents()) {
-				doc.insertString(doc.getLength(), " - " + item.getIngredient()
-						+ " " + item.getVolume() + " " + Resources.CL + "\n",
-						null);
+				doc.insertString(doc.getLength(), "    " + item.getVolume()
+						+ " " + Resources.CL + "  " + item.getIngredient()
+						+ "\n", null);
 			}
+			doc.insertString(doc.getLength(), "\n" + r.getInstructions(), null);
 		} catch (BadLocationException e) {
 			e.printStackTrace();
 		}
@@ -105,5 +106,7 @@ public class AllDrinks extends JPanel implements Tab {
 		for (Recipe r : recipes) {
 			recipeModel.addElement(r);
 		}
+		recipeList.requestFocus();
+		recipeList.setSelectedIndex(Math.min(0, recipeModel.size() - 1));
 	}
 }
