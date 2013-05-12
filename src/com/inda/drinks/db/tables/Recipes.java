@@ -11,13 +11,15 @@ import com.inda.drinks.db.Table;
 import com.inda.drinks.properties.Recipe;
 
 public class Recipes extends Table<Recipe> {
-	private PreparedStatement insert;
+	private PreparedStatement insert, remove;
 
 	public Recipes(Database db) throws SQLException {
 		super(db, "Recipes", 1);
 		super.addDependency(Glasses.class);
 		insert = db.prepare("INSERT INTO " + super.TABLE_NAME
 				+ " VALUES(default, ?, ?, ?)");
+		remove = db.prepare("DELETE FROM " + super.TABLE_NAME
+				+ " WHERE id = ?;");
 	}
 
 	@Override
@@ -42,6 +44,26 @@ public class Recipes extends Table<Recipe> {
 		insert.executeUpdate();
 	}
 
+	/**
+	 * Removes the Recipe with the supplied id. Also removes the associated
+	 * contents from the database.
+	 * 
+	 * @param id
+	 *            the Recipe id of the Recipe to be removed.
+	 * @throws SQLException
+	 */
+	public void remove(int id) throws SQLException {
+		Table.get(Contents.class).remove(id);
+		remove.setInt(1, id);
+		remove.executeUpdate();
+	}
+
+	/**
+	 * Queries the database for all recipes and returns them in an unsorted set.
+	 * 
+	 * @return the set of Recipe objects, which is empty if no entries are
+	 *         found.
+	 */
 	public Set<Recipe> getAll() {
 		Set<Recipe> recipes = new HashSet<Recipe>();
 		try {
@@ -59,10 +81,10 @@ public class Recipes extends Table<Recipe> {
 		}
 		return recipes;
 	}
-	
+
 	/**
-	 * Returns the previously used ID, useful when inserting new
-	 * categories into the database.
+	 * Returns the previously used ID, useful when inserting new categories into
+	 * the database.
 	 * 
 	 * @return the previously used ID for recipes, or -1 if it fails.
 	 */

@@ -47,14 +47,12 @@ public class PersonalDrinkList extends JPanel implements Tab {
 		super(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 
-		recipeList.setBorder(BorderFactory.createEtchedBorder());
-		JScrollPane scroll = new JScrollPane(recipeList);
 		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 0;
 		c.weighty = 1;
 		c.gridx = 1;
 		c.gridy = 1;
-		add(scroll, c);
+		add(new JScrollPane(recipeList), c);
 
 		// Center Drink info
 		drinkInfo = new JTextPane();
@@ -87,6 +85,9 @@ public class PersonalDrinkList extends JPanel implements Tab {
 
 	private void displayInfo(Recipe r) {
 		drinkInfo.setText("");
+		if (r == null) {
+			return;
+		}
 		StyledDocument doc = drinkInfo.getStyledDocument();
 		try {
 			doc.insertString(0, r.getName() + "\n", boldItalics);

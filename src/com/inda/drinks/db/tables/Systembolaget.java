@@ -34,6 +34,14 @@ public class Systembolaget extends Table<Systembolaget.Item> {
 		preparedExecute(insert, e);
 	}
 
+	/**
+	 * Like {@link#insert(Systembolaget.Item)} but updates the item if it happens
+	 * to already exist.
+	 * 
+	 * @param e
+	 *            the Systembolaget Item to insert.
+	 * @throws SQLException
+	 */
 	public void merge(Item e) throws SQLException {
 		preparedExecute(merge, e);
 	}
@@ -107,7 +115,6 @@ public class Systembolaget extends Table<Systembolaget.Item> {
 		}
 
 		public Systembolaget.Item build() {
-			// TODO: Check for validity
 			return new Systembolaget.Item(_partNumber, _price, _volume);
 		}
 

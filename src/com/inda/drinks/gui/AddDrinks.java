@@ -14,6 +14,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Set;
 
 import javax.swing.DefaultComboBoxModel;
@@ -56,7 +57,6 @@ public class AddDrinks extends JPanel implements Tab {
 	private JComboBox alcoholBox = new JComboBox(alcoholModel);
 	private JTextField drinkName = new JTextField();
 	private JCheckBox specific = new JCheckBox(Resources.SPECIFIC);
-	private Content content;
 
 	// Lä‰ga till drinkar till databasen
 	public AddDrinks() {
@@ -172,16 +172,12 @@ public class AddDrinks extends JPanel implements Tab {
 						|| !(alcoholBox.getSelectedItem() instanceof Ingredient)) {
 					return;
 				}
-				if (content == null) {
-					content = new Content();
-				}
 				Ingredient ingredient = (Ingredient) alcoholBox
 						.getSelectedItem();
 				int volume = Integer.parseInt((String) volumeSpinner.getValue());
 				Content.Item item = new Content.Item(ingredient, volume,
 						specific.isSelected());
 				if (!ingredientModel.contains(item)) {
-					content.add(item);
 					ingredientModel.addElement(item);
 					// Clear boxes
 					alcoholBox.setSelectedItem(null);
@@ -225,9 +221,14 @@ public class AddDrinks extends JPanel implements Tab {
 							.glassID(g.getID()).build();
 					try {
 						recipes.insert(r);
-						Table.get(Contents.class).insert(
-								recipes.getPreviousID(), content);
-						content = null;
+						Content content = new Content();
+						content.setID(recipes.getPreviousID());
+						for (Enumeration<?> enu = ingredientModel.elements(); enu
+								.hasMoreElements();) {
+							content.add((Content.Item) enu.nextElement());
+						}
+						Table.get(Contents.class).insert(content);
+
 						// Rensa fä‰lten
 						drinkName.setForeground(Color.gray);
 						drinkName.setText(Resources.NAME);
@@ -268,8 +269,8 @@ public class AddDrinks extends JPanel implements Tab {
 						}
 						errorMessage += " och " + errors.get(errors.size() - 1)
 								+ Resources.ERROR_LAST;
-						JOptionPane
-								.showMessageDialog(AddDrinks.this, errorMessage);
+						JOptionPane.showMessageDialog(AddDrinks.this,
+								errorMessage);
 					}
 				}
 			}

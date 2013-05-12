@@ -46,11 +46,20 @@ public class Ingredients extends Table<Ingredient> {
 		preparedExecute(insert, e);
 	}
 
+	/**
+	 * Like {@link#insert(Ingredient)} but updates the Ingredient if it happens
+	 * to already exist.
+	 * 
+	 * @param e
+	 *            the Ingredient to insert.
+	 * @throws SQLException
+	 */
 	public void merge(Ingredient e) throws SQLException {
 		preparedExecute(merge, e);
 	}
-	
-	private static void preparedExecute(PreparedStatement ps, Ingredient e) throws SQLException {
+
+	private static void preparedExecute(PreparedStatement ps, Ingredient e)
+			throws SQLException {
 		ps.setString(1, e.getName());
 		ps.setString(2, e.getSubtitle());
 		ps.setDouble(3, e.getABV());
@@ -78,8 +87,7 @@ public class Ingredients extends Table<Ingredient> {
 						.category(
 								Table.get(Categories.class).getCategory(
 										res.getInt(5)))
-						.partNumber(res.getInt(6))
-						.build();
+						.partNumber(res.getInt(6)).build();
 				ingredients.add(ingredient);
 			}
 		} catch (SQLException e) {
@@ -87,12 +95,20 @@ public class Ingredients extends Table<Ingredient> {
 		}
 		return ingredients;
 	}
-	
+
+	/**
+	 * Queries the database for all Ingredients belonging to the specified
+	 * category id.
+	 * 
+	 * @param categoryID
+	 *            the category id to query for.
+	 * @return a set of all the Ingredients belonging to the category id.
+	 */
 	public Set<Ingredient> getAllWithCategory(int categoryID) {
 		Set<Ingredient> ingredients = new HashSet<Ingredient>();
 		try {
 			ResultSet res = super.db.query("SELECT * FROM " + super.TABLE_NAME
-					+ " WHERE category = "+categoryID+";");
+					+ " WHERE category = " + categoryID + ";");
 			Ingredient.Builder builder = new Ingredient.Builder();
 			while (res.next()) {
 				Ingredient ingredient = builder
@@ -103,8 +119,7 @@ public class Ingredients extends Table<Ingredient> {
 						.category(
 								Table.get(Categories.class).getCategory(
 										res.getInt(5)))
-						.partNumber(res.getInt(6))
-						.build();
+						.partNumber(res.getInt(6)).build();
 				ingredients.add(ingredient);
 			}
 		} catch (SQLException e) {

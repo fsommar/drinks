@@ -38,6 +38,16 @@ public class Bar extends Table<Integer> {
 		insert.setInt(1, e);
 		insert.executeUpdate();
 	}
+	
+	/**
+	 * Removes the bar ingredient with the supplied id.
+	 * @param id the ingredient id of the ingredient to be removed.
+	 * @throws SQLException
+	 */
+	public void remove(int id) throws SQLException {
+		remove.setInt(1, id);
+		remove.executeUpdate();
+	}
 
 	/**
 	 * Returns a set of all the ingredients currently in the user's bar.
@@ -68,15 +78,5 @@ public class Bar extends Table<Integer> {
 			e.printStackTrace();
 		}
 		return ingredients;
-	}
-
-	/**
-	 * Removs the bar ingredient with the supplied id.
-	 * @param id the ingredient id of the ingredient to be removed.
-	 * @throws SQLException
-	 */
-	public void remove(int id) throws SQLException {
-		remove.setInt(1, id);
-		remove.executeUpdate();
 	}
 }

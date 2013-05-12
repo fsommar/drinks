@@ -10,7 +10,7 @@ import com.inda.drinks.properties.Content;
 import com.inda.drinks.properties.Ingredient;
 
 public class Contents extends Table<Content> {
-	private final PreparedStatement insert;
+	private final PreparedStatement insert, remove;
 
 	public Contents(Database db) throws SQLException {
 		super(db, "Contents", 1);
@@ -18,6 +18,8 @@ public class Contents extends Table<Content> {
 		super.addDependency(Ingredients.class);
 		insert = db.prepare("INSERT INTO " + super.TABLE_NAME
 				+ " VALUES(?, ?, ?, ?)");
+		remove = db.prepare("DELETE FROM " + super.TABLE_NAME
+				+ " WHERE recipe_id = ?;");
 	}
 
 	@Override
@@ -48,17 +50,26 @@ public class Contents extends Table<Content> {
 			insert.executeUpdate();
 		}
 	}
-	
-	public void insert(int id, Content e) throws SQLException {
-		for (Content.Item ci : e.getContents()) {
-			insert.setInt(1, id);
-			insert.setInt(2, ci.getIngredient().getID());
-			insert.setBoolean(3, ci.isSpecific());
-			insert.setInt(4, ci.getVolume());
-			insert.executeUpdate();
-		}
+
+	/**
+	 * Removes the Contents with the supplied id.
+	 * 
+	 * @param id
+	 *            the recipe id of the contents to be removed.
+	 * @throws SQLException
+	 */
+	public void remove(int id) throws SQLException {
+		remove.setInt(1, id);
+		remove.executeUpdate();
 	}
 
+	/**
+	 * Returns the Content object associated to the supplied recipe id.
+	 * 
+	 * @param id
+	 *            the id of the Recipe this Content is associated to.
+	 * @return a Content object.
+	 */
 	public Content getContent(int id) {
 		Content c = new Content();
 		c.setID(id);
