@@ -29,6 +29,7 @@ import com.inda.drinks.gui.Window;
  *  [ ] Error handling
  *    [ ] Check input before building objects (e.g. recipe name length <= 30)
  *  [ ] Combine AllDrinks and PersonalDrinkList (they're almost the same) 
+ *  [ ] Generalise getAll methods (DIE)
  * LEGEND: [ ] not done, [x] done, [-] skipped.
  */
 public class Main {
@@ -43,9 +44,6 @@ public class Main {
 				SystembolagetAPI.fetchXML();
 				SystembolagetAPI.parseXML();
 			}
-			// for (Ingredient i : Table.get(Ingredients.class).getAll()) {
-			// System.out.println(i);
-			// }
 		} catch (Exception e) {
 			e.printStackTrace();
 			// Show JOptionPane; Unable to open database. Perhaps it's already

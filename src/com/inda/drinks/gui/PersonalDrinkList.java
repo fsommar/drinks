@@ -5,7 +5,6 @@ import java.awt.GridBagLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
-import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -30,14 +29,15 @@ import com.inda.drinks.properties.Recipe;
  * 
  */
 
-public class PersonalDrinkList implements Tab {
+public class PersonalDrinkList extends JPanel implements Tab {
+	private static final long serialVersionUID = 1772643430818816788L;
 	private DefaultListModel recipeModel = new DefaultListModel();
 	private JTextPane drinkInfo;
 	private SimpleAttributeSet boldItalics;
 
 	// Drinklista genererad utifrån användarens förråd
-	public JComponent showWindow() {
-		JPanel panel = new JPanel(new GridBagLayout());
+	public PersonalDrinkList() {
+		super(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 
 		// Left drink menu
@@ -49,7 +49,7 @@ public class PersonalDrinkList implements Tab {
 		c.weighty = 1;
 		c.gridx = 1;
 		c.gridy = 1;
-		panel.add(scroll, c);
+		add(scroll, c);
 
 		// Center Drink info
 		drinkInfo = new JTextPane();
@@ -77,10 +77,7 @@ public class PersonalDrinkList implements Tab {
 		c.weightx = 1;
 		c.gridx = 2;
 		c.gridwidth = 2;
-		panel.add(drinkInfo, c);
-
-		update();
-		return panel;
+		add(drinkInfo, c);
 	}
 
 	private void displayInfo(Recipe r) {

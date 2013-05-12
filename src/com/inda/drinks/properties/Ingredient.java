@@ -43,8 +43,8 @@ public final class Ingredient {
 	}
 
 	public String toString() {
-		return String.format("Ingredient[%d, %s, %s, %2.1f, %s, %d]", getID(), getName(),
-				getSubtitle(), getABV(), getCategory(), getPartNumber());
+//		return String.format("Ingredient[%d, %s, %s, %2.1f, %s, %d]", getID(), getName(), getSubtitle(), getABV(), getCategory(), getPartNumber());
+		return name + (subtitle != null ? " - " + subtitle : "");
 	}
 
 	/**

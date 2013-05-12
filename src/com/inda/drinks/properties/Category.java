@@ -43,8 +43,8 @@ public final class Category {
 	}
 
 	public String toString() {
-		return String.format("Category[%d, %s, %d]", getID(), getName(),
-				getParentID());
+//		return String.format("Category[%d, %s, %d]", getID(), getName(), getParentID());
+		return name;
 	}
 
 	/**

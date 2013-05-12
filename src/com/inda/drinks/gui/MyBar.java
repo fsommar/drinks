@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.Set;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
@@ -17,6 +18,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import com.inda.drinks.db.Table;
+import com.inda.drinks.db.tables.Bar;
 import com.inda.drinks.db.tables.Categories;
 import com.inda.drinks.db.tables.Ingredients;
 import com.inda.drinks.properties.Category;
@@ -32,18 +34,18 @@ import com.inda.drinks.properties.Ingredient;
 
 public class MyBar extends JPanel implements Tab {
 	private static final long serialVersionUID = 268354442820169093L;
+	private DefaultListModel listModel = new DefaultListModel();
+	private DefaultComboBoxModel alcoholModel = new DefaultComboBoxModel();
 
 	// Fšönster däŠr användaren läŠgger till/tar bort fråŒn sitt fšörråŒd
 	public MyBar() {
-		// final JPanel panel = new JPanel(new GridBagLayout());
 		super(new GridBagLayout());
 
 		// Drink list
-		final DefaultListModel listModel = new DefaultListModel();
-		String[] data = { "one", "two", "three", "four" };
-		for (String s : data) {
-			listModel.addElement(s);
-		}
+		/*
+		 * String[] data = { "one", "two", "three", "four" }; for (String s :
+		 * data) { listModel.addElement(s); }
+		 */
 
 		// Right drink list area
 		final JList rightDrinkList = new JList(listModel);
@@ -54,7 +56,6 @@ public class MyBar extends JPanel implements Tab {
 		c.gridx = 2;
 		c.gridy = 1;
 		c.fill = GridBagConstraints.BOTH;
-		// panel.add(rightDrinkList, c);
 		add(rightDrinkList, c);
 
 		// Left options panel
@@ -79,10 +80,18 @@ public class MyBar extends JPanel implements Tab {
 						&& categoryBox.getSelectedIndex() != -1) {
 					if (event.getItem() instanceof Category) {
 						subcategoryModel.removeAllElements();
-						for (Category category : Table.get(Categories.class)
-								.getAllWithParent(
-										((Category) event.getItem()).getID())) {
-							subcategoryModel.addElement(category);
+						Set<Category> subCategories = Table.get(
+								Categories.class).getAllWithParent(
+								((Category) event.getItem()).getID());
+						if (subCategories.isEmpty()) {
+							subcategoryBox.setEnabled(false);
+							fillIngredientList(((Category) event.getItem()).getID());
+						} else {
+							// subcategoryBox.setVisible(true);
+							subcategoryBox.setEnabled(true);
+							for (Category category : subCategories) {
+								subcategoryModel.addElement(category);
+							}
 						}
 					}
 				}
@@ -91,7 +100,6 @@ public class MyBar extends JPanel implements Tab {
 		leftOptions.add(subcategoryBox);
 
 		// Liqueur box
-		final DefaultComboBoxModel alcoholModel = new DefaultComboBoxModel();
 		final JComboBox alcohol = new JComboBox(alcoholModel);
 		leftOptions.add(alcohol, c);
 		c.weighty = 1;
@@ -105,12 +113,7 @@ public class MyBar extends JPanel implements Tab {
 				if (event.getStateChange() == ItemEvent.SELECTED
 						&& subcategoryBox.getSelectedIndex() != -1) {
 					if (event.getItem() instanceof Category) {
-						alcoholModel.removeAllElements();
-						for (Ingredient ingredient : Table.get(
-								Ingredients.class).getAllWithCategory(
-								((Category) event.getItem()).getID())) {
-							alcoholModel.addElement(ingredient);
-						}
+						fillIngredientList(((Category) event.getItem()).getID());
 					}
 				}
 			}
@@ -164,13 +167,23 @@ public class MyBar extends JPanel implements Tab {
 		// Add left options to panel
 		c.gridx = 1;
 		c.gridy = 1;
-		// panel.add(leftOptions, c);
 		add(leftOptions, c);
+	}
+
+	private void fillIngredientList(int categoryID) {
+		alcoholModel.removeAllElements();
+		for (Ingredient ingredient : Table.get(Ingredients.class)
+				.getAllWithCategory(categoryID)) {
+			alcoholModel.addElement(ingredient);
+		}
 	}
 
 	@Override
 	public void update() {
-		// Fill list with items from Bar -- Table.get(Bar.class).getAll();
-		System.out.println("Sup?!");
+		listModel.removeAllElements();
+		for (Ingredient ingredient : Table.get(Bar.class).getAllIngredients()) {
+			listModel.addElement(ingredient);
+		}
+
 	}
 }

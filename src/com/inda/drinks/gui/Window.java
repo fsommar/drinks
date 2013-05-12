@@ -33,18 +33,15 @@ public class Window extends JFrame {
 				Resources.BAR_INFO);
 		tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
 		
-		PersonalDrinkList userDrinkWindow = new PersonalDrinkList();
-		tabbedPane.addTab(Resources.DRINK_LIST, null, userDrinkWindow.showWindow(),
+		tabbedPane.addTab(Resources.DRINK_LIST, null, new PersonalDrinkList(),
 				Resources.DRINK_LIST_INFO);
 		tabbedPane.setMnemonicAt(1, KeyEvent.VK_2);
 		
-		AllDrinks drinkWindow = new AllDrinks();
-		tabbedPane.addTab(Resources.ALL_DRINKS, null, drinkWindow.showWindow(),
+		tabbedPane.addTab(Resources.ALL_DRINKS, null, new AllDrinks(),
 				Resources.ALL_DRINKS_INFO);
 		tabbedPane.setMnemonicAt(2, KeyEvent.VK_3);
 
-		AddDrinks drinkCreator = new AddDrinks();
-		tabbedPane.addTab(Resources.ADD_DRINK, null, drinkCreator.showWindow(),
+		tabbedPane.addTab(Resources.ADD_DRINK, null, new AddDrinks(),
 				Resources.ADD_DRINK);
 		tabbedPane.setMnemonicAt(3, KeyEvent.VK_4);
 

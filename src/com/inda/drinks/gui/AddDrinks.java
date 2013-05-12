@@ -22,13 +22,13 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerListModel;
+
 import com.inda.drinks.properties.Glass;
 
 /**
@@ -38,11 +38,12 @@ import com.inda.drinks.properties.Glass;
  * 
  */
 
-public class AddDrinks implements Tab {
+public class AddDrinks extends JPanel implements Tab {
+	private static final long serialVersionUID = 1425527818076719715L;
 
 	// Lä‰ga till drinkar till databasen
-	public JComponent showWindow() {
-		JPanel panel = new JPanel(new BorderLayout());
+	public AddDrinks() {
+		super(new BorderLayout());
 
 		// Top Options
 		JPanel topOption = new JPanel(new FlowLayout());
@@ -53,7 +54,6 @@ public class AddDrinks implements Tab {
 		drinkName.setForeground(Color.gray);
 		drinkName.setText(Resources.NAME);
 		drinkName.addFocusListener(new FocusListener() {
-
 			@Override
 			public void focusGained(FocusEvent arg0) {
 				drinkName.setForeground(Color.black);
@@ -103,6 +103,7 @@ public class AddDrinks implements Tab {
 		final JComboBox subcategoryBox = new JComboBox(model);
 		subcategoryBox.setSelectedItem(null);
 		categoryBox.addItemListener(new ItemListener() {
+			@Override
 			public void itemStateChanged(ItemEvent event) {
 				if (event.getStateChange() == ItemEvent.SELECTED) {
 					for (String s : data3) { // tempor‰är
@@ -154,7 +155,6 @@ public class AddDrinks implements Tab {
 		c.gridy = 4;
 
 		specific.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (specific.isSelected()) {
@@ -202,7 +202,7 @@ public class AddDrinks implements Tab {
 
 		// If user adds drink
 		addDrink.addActionListener(new ActionListener() {
-
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO: if (spriten inte finns i ingredienslistan ‰nnu)
 				if (specific.isSelected()) {
@@ -219,13 +219,11 @@ public class AddDrinks implements Tab {
 				categoryBox.setSelectedItem(null);
 				model2.removeAllElements();
 				subcategoryBox.setSelectedItem(null);
-				// }
 			}
 		});
 
 		// If user removes drink
 		removeDrink.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (!ingredientList.isEmpty()
@@ -274,7 +272,7 @@ public class AddDrinks implements Tab {
 						&& glaswareList.getSelectedItem() != null
 						&& !ingredientList.isEmpty()
 						&& !drinkDescription.getText().equals("")) {
-					// Lä‰gg till drinken i DB
+					// TODO: Lä‰gg till drinken i DB
 
 					// Rensa fä‰lten
 					drinkName.setForeground(Color.gray);
@@ -292,9 +290,8 @@ public class AddDrinks implements Tab {
 		topOption.add(addWholeDrink);
 
 		// Add top meny to panel
-		panel.add(topOption, BorderLayout.NORTH);
-		panel.add(centerField, BorderLayout.CENTER);
-		return panel;
+		add(centerField, BorderLayout.CENTER);
+		add(topOption, BorderLayout.NORTH);
 	}
 
 	@Override
