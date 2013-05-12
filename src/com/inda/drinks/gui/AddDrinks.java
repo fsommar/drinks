@@ -191,6 +191,7 @@ public class AddDrinks extends JPanel implements Tab {
 					subcategoryBox.setSelectedItem(null);
 					subcategoryBox.setVisible(false);
 					categoryBox.setSelectedItem(null);
+					ingredientList.setSelectedIndex(ingredientModel.size() - 1);
 				}
 			}
 		});
@@ -230,17 +231,25 @@ public class AddDrinks extends JPanel implements Tab {
 						errors.add(Resources.DRINK_DESCRIPTION);
 					}
 					String errorMessage = Resources.ERROR_FIRST;
-					if(errors.size() == 1) {
+					if (errors.size() == 1) {
 						errorMessage += errors.get(0) + Resources.ERROR_LAST;
 					} else {
 						errorMessage += errors.get(0);
-						for(int i = 1; i < errors.size()-1; i++) { //Lägger till alla errors utom första och sista
+						for (int i = 1; i < errors.size() - 1; i++) { // Lägger
+																		// till
+																		// alla
+																		// errors
+																		// utom
+																		// första
+																		// och
+																		// sista
 							errorMessage += ", " + errors.get(i);
 						}
-						errorMessage += " och " + errors.get(errors.size()-1) + Resources.ERROR_LAST;
+						errorMessage += " och " + errors.get(errors.size() - 1)
+								+ Resources.ERROR_LAST;
 					}
 					JOptionPane.showMessageDialog(centerField, errorMessage);
-					
+
 					if (content == null) {
 						return;
 					}
@@ -303,6 +312,8 @@ public class AddDrinks extends JPanel implements Tab {
 		centerField.add(volumeSpinner, c);
 		c.gridx++;
 		centerField.add(addContent, c);
+		c.gridx++;
+		centerField.add(removeContent, c);
 		/**/
 		c.gridx = 1;
 		c.gridy++;
