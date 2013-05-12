@@ -34,7 +34,9 @@ import javax.swing.event.ChangeListener;
 import com.inda.drinks.db.Table;
 import com.inda.drinks.db.tables.Categories;
 import com.inda.drinks.db.tables.Ingredients;
+import com.inda.drinks.db.tables.Recipes;
 import com.inda.drinks.properties.Category;
+import com.inda.drinks.properties.Content;
 import com.inda.drinks.properties.Glass;
 import com.inda.drinks.properties.Ingredient;
 
@@ -50,6 +52,7 @@ public class AddDrinks extends JPanel implements Tab {
 	private JComboBox alcoholBox = new JComboBox(alcoholModel);
 	private JTextField drinkName = new JTextField();
 	private JCheckBox specific = new JCheckBox(Resources.SPECIFIC);
+	private Content content;
 
 	// LŠäga till drinkar till databasen
 	public AddDrinks() {
@@ -133,12 +136,10 @@ public class AddDrinks extends JPanel implements Tab {
 								Categories.class).getAllWithParent(
 								((Category) event.getItem()).getID());
 						if (subCategories.isEmpty()) {
-							// subcategoryBox.setEnabled(false);
 							subcategoryBox.setVisible(false);
 							fillList(((Category) event.getItem()).getID());
 						} else {
 							subcategoryBox.setVisible(true);
-							// subcategoryBox.setEnabled(true);
 							for (Category category : subCategories) {
 								subcategoryModel.addElement(category);
 							}
@@ -161,28 +162,30 @@ public class AddDrinks extends JPanel implements Tab {
 		addContent.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO: if (spriten inte finns i ingredienslistan ännu)
-				// if (specific.isSelected()) {
-				// String temp = ((String) alcohol.getSelectedItem() + " "
-				// + (String) centilitres.getValue() + " cl");
-				// ingredientList.addElement(temp);
-				// } else {
-				// String temp = ((String) categoryBox.getSelectedItem() + " "
-				// + (String) subcategoryBox.getSelectedItem() + " "
-				// + (String) centilitres.getValue() + " cl");
-				// ingredientList.addElement(temp);
-				// }
-				// model.removeAllElements();
-				// categoryBox.setSelectedItem(null);
-				// model2.removeAllElements();
-				// subcategoryBox.setSelectedItem(null);
+				if (alcoholBox.getSelectedIndex() == -1
+						|| !(alcoholBox.getSelectedItem() instanceof Ingredient)) {
+					return;
+				}
+				if (content == null) {
+					content = new Content(Table.get(Recipes.class).getNextID());
+				}
+				Ingredient ingredient = (Ingredient) alcoholBox
+						.getSelectedItem();
+				int volume = Integer.parseInt((String) volumeSpinner.getValue());
+				Content.Item item = new Content.Item(ingredient, volume,
+						specific.isSelected());
+				if (!ingredientModel.contains(item)) {
+					content.add(item);
+					ingredientModel.addElement(item);
+					// Clear boxes
+				}
 			}
 		});
 
 		// If user removes drink
 		removeContent.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent e) {
 				if (!ingredientModel.isEmpty()
 						&& ingredientList.getSelectedIndex() != -1) {
 					int removeIndex = ingredientList.getSelectedIndex();

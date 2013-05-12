@@ -1,8 +1,12 @@
 package com.inda.drinks.properties;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.inda.drinks.db.Table;
+import com.inda.drinks.db.tables.Categories;
+import com.inda.drinks.gui.Resources;
 import com.inda.drinks.tools.Formatter;
 
 /**
@@ -44,7 +48,18 @@ public class Content {
 	 *            whether to use this specific ingredient or just its category.
 	 */
 	public void add(Ingredient ingredient, int volume, boolean specific) {
-		ingredients.add(new Item(ingredient, volume, specific));
+		add(new Item(ingredient, volume, specific));
+	}
+
+	/**
+	 * Adds a content item to contents. Functionalitywise the same as
+	 * {@link#add(Ingredient, int, boolean)}.
+	 * 
+	 * @param item
+	 *            the content item to add to contents.
+	 */
+	public void add(Content.Item item) {
+		ingredients.add(item);
 	}
 
 	/**
@@ -85,7 +100,7 @@ public class Content {
 		private final int volume;
 		private final boolean specific;
 
-		private Item(Ingredient ingredient, int volume, boolean specific) {
+		public Item(Ingredient ingredient, int volume, boolean specific) {
 			this.ingredient = ingredient;
 			this.volume = volume;
 			this.specific = specific;
@@ -101,6 +116,41 @@ public class Content {
 
 		public boolean isSpecific() {
 			return specific;
+		}
+
+		@Override
+		public boolean equals(Object e) {
+			if (!(e instanceof Item)) {
+				return false;
+			}
+			Item i = (Item) e;
+			if (!specific /* If not specific and categories don't match */
+					&& i.ingredient.getCategory().equals(
+							this.ingredient.getCategory())) {
+				return true;
+			}
+			return i.ingredient.equals(this.ingredient)
+					&& i.volume == this.volume && i.specific == this.specific;
+		}
+
+		public String toString() {
+			String str = "";
+			if (specific) {
+				str = ingredient.toString();
+			} else {
+				ArrayList<Category> l = new ArrayList<Category>();
+				Category c = ingredient.getCategory();
+				l.add(c);
+				while (c.getParentID() != Category.NO_PARENT) {
+					c = Table.get(Categories.class)
+							.getCategory(c.getParentID());
+					l.add(c);
+				}
+				for (int i = l.size() - 1; i >= 0; i--) {
+					str += l.get(i).getName() + " ";
+				}
+			}
+			return volume + " " + Resources.CL + " " + str;
 		}
 
 	}

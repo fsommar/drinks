@@ -59,4 +59,23 @@ public class Recipes extends Table<Recipe> {
 		}
 		return recipes;
 	}
+	
+	/**
+	 * Returns the next valid ID for categories, useful when inserting new
+	 * categories into the database.
+	 * 
+	 * @return the next valid id for categories, or -1 if it fails.
+	 */
+	public int getNextID() {
+		try {
+			ResultSet res = super.db.query("SELECT MAX(id) FROM "
+					+ super.TABLE_NAME + ";");
+			if (res.next()) {
+				return res.getInt(1) + 1;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return -1;
+	}
 }

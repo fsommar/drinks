@@ -42,8 +42,23 @@ public final class Ingredient {
 		return partNumber;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof Ingredient)) {
+			return false;
+		}
+		Ingredient i = (Ingredient) o;
+		return i.id == this.id && i.name.equals(this.name)
+				&& i.subtitle.equals(this.subtitle) && i.ABV == this.ABV
+				&& i.getCategory().equals(this.getCategory())
+				&& i.partNumber == this.partNumber;
+	}
+
+	@Override
 	public String toString() {
-//		return String.format("Ingredient[%d, %s, %s, %2.1f, %s, %d]", getID(), getName(), getSubtitle(), getABV(), getCategory(), getPartNumber());
+		// return String.format("Ingredient[%d, %s, %s, %2.1f, %s, %d]",
+		// getID(), getName(), getSubtitle(), getABV(), getCategory(),
+		// getPartNumber());
 		return name + (subtitle != null ? " - " + subtitle : "");
 	}
 

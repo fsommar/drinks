@@ -1,6 +1,5 @@
 package com.inda.drinks.gui;
 
-import javax.swing.Icon;
 
 public class Resources {
 

@@ -42,8 +42,20 @@ public final class Category {
 		return parent;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof Category)) {
+			return false;
+		}
+		Category c = (Category) o;
+		return c.id == this.id && c.name.equals(this.name)
+				&& c.parent == this.parent;
+	}
+
+	@Override
 	public String toString() {
-//		return String.format("Category[%d, %s, %d]", getID(), getName(), getParentID());
+		// return String.format("Category[%d, %s, %d]", getID(), getName(),
+		// getParentID());
 		return name;
 	}
 
