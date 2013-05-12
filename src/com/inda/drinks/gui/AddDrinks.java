@@ -172,7 +172,7 @@ public class AddDrinks extends JPanel implements Tab {
 					JOptionPane.showMessageDialog(AddDrinks.this, Resources.SELECTION_ERROR);
 					return;
 				}
-				if (alcoholBox.getSelectedItem() instanceof Ingredient) {
+				if (!(alcoholBox.getSelectedItem() instanceof Ingredient)) {
 					JOptionPane.showMessageDialog(AddDrinks.this, Resources.addIngredientError(alcoholBox.getSelectedItem().toString()));
 					return;
 				}
