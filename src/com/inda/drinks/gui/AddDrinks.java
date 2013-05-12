@@ -15,7 +15,7 @@ import java.awt.event.ItemListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.Set;
+import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
@@ -138,7 +138,7 @@ public class AddDrinks extends JPanel implements Tab {
 						&& categoryBox.getSelectedIndex() != -1) {
 					if (event.getItem() instanceof Category) {
 						subcategoryModel.removeAllElements();
-						Set<Category> subCategories = Table.get(
+						List<Category> subCategories = Table.get(
 								Categories.class).getAllWithParent(
 								((Category) event.getItem()).getID());
 						if (subCategories.isEmpty()) {

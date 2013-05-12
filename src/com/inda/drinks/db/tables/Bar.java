@@ -3,8 +3,8 @@ package com.inda.drinks.db.tables;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.inda.drinks.db.Database;
 import com.inda.drinks.db.Table;
@@ -55,12 +55,12 @@ public class Bar extends Table<Integer> {
 	 * @return a set of ingredients, which is empty if there's nothing in the
 	 *         bar.
 	 */
-	public Set<Ingredient> getAllIngredients() {
-		Set<Ingredient> ingredients = new HashSet<Ingredient>();
+	public List<Ingredient> getAllIngredients() {
+		List<Ingredient> ingredients = new ArrayList<Ingredient>();
 		try {
 			ResultSet res = super.db.query("SELECT i.* FROM "
 					+ super.TABLE_NAME
-					+ " as b JOIN Ingredients AS i ON b.id = i.id;");
+					+ " as b JOIN Ingredients AS i ON b.id = i.id ORDER BY i.name;");
 			Ingredient.Builder builder = new Ingredient.Builder();
 			while (res.next()) {
 				Ingredient ingredient = builder

@@ -3,7 +3,9 @@ package com.inda.drinks.db.tables;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.inda.drinks.db.Database;
@@ -118,11 +120,11 @@ public class Categories extends Table<Category> {
 	 * @return a set of Category objects, which is empty if no Categories with
 	 *         the supplied parent id exist.
 	 */
-	public Set<Category> getAllWithParent(int parentID) {
-		Set<Category> categories = new HashSet<Category>();
+	public List<Category> getAllWithParent(int parentID) {
+		List<Category> categories = new ArrayList<Category>();
 		try {
 			ResultSet res = super.db.query("SELECT * FROM " + super.TABLE_NAME
-					+ " WHERE parent = " + parentID + ";");
+					+ " WHERE parent = " + parentID + " ORDER BY name;");
 			Category.Builder builder = new Category.Builder();
 			while (res.next()) {
 				Category category = builder.ID(res.getInt(1))
