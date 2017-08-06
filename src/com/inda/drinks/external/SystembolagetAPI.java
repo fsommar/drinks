@@ -27,7 +27,7 @@ public class SystembolagetAPI {
 	public static final String URL = "http://www.systembolaget.se/Assortment.aspx?Format=Xml";
 	public static final File FILE = new File("data/systembolaget");
 	private static final String[] SPECIAL_CASES = { "druvigt", "friskt",
-			"fylligt", "l‰tt" };
+			"fylligt", "l√§tt" };
 
 	/**
 	 * Downloads an XML file to data/systembolaget.
@@ -111,7 +111,7 @@ public class SystembolagetAPI {
 				sb.price(Formatter.oneDecHalfEven(val));
 				prisinklmoms = false;
 			} else if (volymiml) {
-				sb.volume(Integer.parseInt(val));
+				sb.volume((int) Double.parseDouble(val));
 				volymiml = false;
 			}
 

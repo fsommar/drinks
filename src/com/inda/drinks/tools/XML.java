@@ -1,12 +1,12 @@
 package com.inda.drinks.tools;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
@@ -32,7 +32,13 @@ public class XML {
 			throws ParserConfigurationException, SAXException, IOException {
 		SAXParserFactory spf = SAXParserFactory.newInstance();
 		SAXParser sp = spf.newSAXParser();
-		sp.parse(file, handler);
+		InputStream inputStream = new FileInputStream(file);
+		Reader reader = new InputStreamReader(inputStream,"UTF-8");
+
+		InputSource is = new InputSource(reader);
+		is.setEncoding("UTF-8");
+
+		sp.parse(is, handler);
 	}
 
 }

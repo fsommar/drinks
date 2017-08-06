@@ -17,7 +17,7 @@ import com.inda.drinks.gui.AllDrinks;
 public class Window extends JFrame {
 
 	public Window() {
-		super("#w‰ng");
+		super("#w√§ng");
 		// Top tab meny
 		final JTabbedPane tabbedPane = new JTabbedPane();
 		tabbedPane.addChangeListener(new ChangeListener() {
